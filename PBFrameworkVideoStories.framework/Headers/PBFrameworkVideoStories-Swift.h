@@ -259,8 +259,19 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories14PBPhotoService")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
-@protocol UIViewControllerTransitionCoordinator;
 @class NSCoder;
+@class UIImage;
+
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories25PBSpinnerLoadingImageView")
+@interface PBSpinnerLoadingImageView : UIImageView
+- (nonnull instancetype)initWithFrame:(CGRect)frame OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder SWIFT_UNAVAILABLE;
+@property (nonatomic, getter=isHidden) BOOL hidden;
+- (nonnull instancetype)initWithImage:(UIImage * _Nullable)image SWIFT_UNAVAILABLE;
+- (nonnull instancetype)initWithImage:(UIImage * _Nullable)image highlightedImage:(UIImage * _Nullable)highlightedImage SWIFT_UNAVAILABLE;
+@end
+
+@protocol UIViewControllerTransitionCoordinator;
 
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 @interface PBThemeDetailsViewController : UIViewController
