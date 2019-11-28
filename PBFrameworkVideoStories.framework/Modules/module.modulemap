@@ -1,0 +1,11 @@
+framework module PBFrameworkVideoStories {
+  umbrella header "PBFrameworkVideoStories.h"
+
+  export *
+  module * { export * }
+}
+
+module PBFrameworkVideoStories.Swift {
+    header "PBFrameworkVideoStories-Swift.h"
+    requires objc
+}
