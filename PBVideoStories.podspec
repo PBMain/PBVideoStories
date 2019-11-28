@@ -14,7 +14,7 @@ This pod allows the implementor to make use of Photo Butler's wrapper functions 
 
   s.ios.deployment_target = '9.3'
   
-  s.ios.vendored_frameworks = 'PBVideoStories.framework'
+  s.ios.vendored_frameworks = 'PBFrameworkVideoStories.framework'
 
   s.dependency "PBServices"
   s.dependency "PBUILibraries"
