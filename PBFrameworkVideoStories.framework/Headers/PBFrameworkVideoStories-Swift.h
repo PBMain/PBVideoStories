@@ -206,6 +206,14 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 # pragma pop_macro("any")
 #endif
 
+@class NSCoder;
+
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories22BaseLoadingFromXIBView")
+@interface BaseLoadingFromXIBView : UIView
+- (nonnull instancetype)initWithFrame:(CGRect)frame SWIFT_UNAVAILABLE;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder SWIFT_UNAVAILABLE;
+@end
+
 
 
 @class NSManagedObjectContext;
@@ -217,7 +225,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories9CDManager") SWIFT_AVAILABILITY(ios,in
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CDManager * _Nonnull shared;)
 + (CDManager * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<Theme *> * _Nonnull)fetchAllThemesIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
-- (Theme * _Nullable)fetchThemeByID:(NSString * _Nonnull)id in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (Theme * _Nullable)fetchThemeByID:(NSString * _Nonnull)id in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByAssetLocationURL:(NSString * _Nonnull)assetLocationURL in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
 - (void)saveWithContext:(NSManagedObjectContext * _Nullable)context;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
@@ -241,6 +249,30 @@ SWIFT_CLASS_NAMED("Filter")
 @end
 
 
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories31PBAdjustContainerViewController")
+@interface PBAdjustContainerViewController : UIViewController
+- (void)viewWillAppear:(BOOL)animated;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+
+@class UIImage;
+
+SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories21PBAdjustImageDelegate_")
+@protocol PBAdjustImageDelegate <NSObject>
+- (void)didAdjustWithImages:(NSArray<UIImage *> * _Nonnull)images controller:(PBAdjustContainerViewController * _Nonnull)controller;
+@end
+
+
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories15PBAnimationView")
+@interface PBAnimationView : BaseLoadingFromXIBView
+- (void)removeFromSuperview;
+- (void)layoutSubviews;
+@end
+
+
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories12PBBibService")
 @interface PBBibService : NSObject
 @property (nonatomic) double pThreshold;
@@ -249,6 +281,63 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories12PBBibService")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 - (void)getRaceMetaWithRaceMetaLoaded:(void (^ _Nullable)(BOOL, id _Nullable))raceMetaLoaded;
 - (void)searchPhotosWithBib:(NSString * _Nonnull)bib completion:(void (^ _Nullable)(NSArray<NSDictionary<NSString *, id> *> * _Nonnull))completion;
+@end
+
+@class PBImageSelectionListController;
+
+SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories24PBImageSelectionDelegate_")
+@protocol PBImageSelectionDelegate <NSObject>
+- (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
+- (void)didCancelWithPicker:(PBImageSelectionListController * _Nonnull)picker;
+@end
+
+
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
+@interface PBImageSelectionListController : UIViewController
+- (void)viewDidLoad;
+- (void)viewWillAppear:(BOOL)animated;
+- (void)viewDidAppear:(BOOL)animated;
+- (void)viewWillLayoutSubviews;
+- (void)viewDidLayoutSubviews;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
+@end
+
+@class UITextField;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITextFieldDelegate>
+- (BOOL)textFieldShouldReturn:(UITextField * _Nonnull)textField SWIFT_WARN_UNUSED_RESULT;
+@end
+
+@class UICollectionView;
+@class UICollectionViewCell;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UICollectionViewDataSource>
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView * _Nonnull)collectionView SWIFT_WARN_UNUSED_RESULT;
+- (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+- (UICollectionViewCell * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView cellForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+@end
+
+@class UICollectionViewLayout;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UICollectionViewDelegateFlowLayout>
+- (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+- (CGFloat)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+- (CGFloat)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+- (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+@end
+
+@class UICollectionReusableView;
+@class UIScrollView;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UICollectionViewDelegate>
+- (UICollectionReusableView * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView viewForSupplementaryElementOfKind:(NSString * _Nonnull)kind atIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+- (void)collectionView:(UICollectionView * _Nonnull)collectionView willDisplayCell:(UICollectionViewCell * _Nonnull)cell forItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+- (void)collectionView:(UICollectionView * _Nonnull)collectionView didSelectItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+- (void)scrollViewDidScroll:(UIScrollView * _Nonnull)scrollView;
+- (void)scrollViewDidEndDecelerating:(UIScrollView * _Nonnull)scrollView;
+- (void)scrollViewDidEndDragging:(UIScrollView * _Nonnull)scrollView willDecelerate:(BOOL)decelerate;
+- (void)scrollViewWillBeginDragging:(UIScrollView * _Nonnull)scrollView;
 @end
 
 
@@ -262,16 +351,16 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories14PBPhotoService")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
-@class NSCoder;
-@class UIImage;
 
-SWIFT_CLASS("_TtC23PBFrameworkVideoStories25PBSpinnerLoadingImageView")
-@interface PBSpinnerLoadingImageView : UIImageView
-- (nonnull instancetype)initWithFrame:(CGRect)frame OBJC_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder SWIFT_UNAVAILABLE;
-@property (nonatomic, getter=isHidden) BOOL hidden;
-- (nonnull instancetype)initWithImage:(UIImage * _Nullable)image SWIFT_UNAVAILABLE;
-- (nonnull instancetype)initWithImage:(UIImage * _Nullable)image highlightedImage:(UIImage * _Nullable)highlightedImage SWIFT_UNAVAILABLE;
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories17PBPodVideoStories")
+@interface PBPodVideoStories : NSObject
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
+@interface PBPodVideoStories (SWIFT_EXTENSION(PBFrameworkVideoStories)) <PBAdjustImageDelegate>
+- (void)didAdjustWithImages:(NSArray<UIImage *> * _Nonnull)images controller:(PBAdjustContainerViewController * _Nonnull)controller;
 @end
 
 @protocol UIViewControllerTransitionCoordinator;
@@ -299,6 +388,10 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 @end
 
 
+@interface PBThemeDetailsViewController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <PBImageSelectionDelegate>
+- (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
+- (void)didCancelWithPicker:(PBImageSelectionListController * _Nonnull)picker;
+@end
 
 
 
@@ -324,7 +417,8 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories29PBVideoStoryDownloaderService")
 
 
 @interface PBVideoStoryDownloaderService (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)downloadVideoStoryAndUpdateImagesWithVideoStoryThemeURL:(NSURL * _Nonnull)videoStoryThemeURL imagesToCopy:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)imagesToCopy successBlock:(void (^ _Nullable)(NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSDictionary<NSString *, id> * _Nullable))successBlock failureBlock:(void (^ _Nullable)(NSError * _Nullable))failureBlock;
+- (void)downloadVideoStoryAndUpdateImagesWithVideoStoryThemeURL:(NSURL * _Nonnull)videoStoryThemeURL imagesToCopy:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)imagesToCopy progressBlock:(void (^ _Nullable)(float))progressBlock successBlock:(void (^ _Nullable)(NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSDictionary<NSString *, id> * _Nullable))successBlock failureBlock:(void (^ _Nullable)(NSError * _Nullable))failureBlock;
+- (void)bundleLoadVideoStoryAndUpdateImagesWithVideoStoryPath:(NSString * _Nonnull)videoStoryPath imagesToCopy:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)imagesToCopy progressBlock:(void (^ _Nullable)(float))progressBlock successBlock:(void (^ _Nullable)(NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSDictionary<NSString *, id> * _Nullable))successBlock failureBlock:(void (^ _Nullable)(NSError * _Nullable))failureBlock;
 @end
 
 
@@ -636,6 +730,14 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 # pragma pop_macro("any")
 #endif
 
+@class NSCoder;
+
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories22BaseLoadingFromXIBView")
+@interface BaseLoadingFromXIBView : UIView
+- (nonnull instancetype)initWithFrame:(CGRect)frame SWIFT_UNAVAILABLE;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder SWIFT_UNAVAILABLE;
+@end
+
 
 
 @class NSManagedObjectContext;
@@ -647,7 +749,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories9CDManager") SWIFT_AVAILABILITY(ios,in
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CDManager * _Nonnull shared;)
 + (CDManager * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<Theme *> * _Nonnull)fetchAllThemesIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
-- (Theme * _Nullable)fetchThemeByID:(NSString * _Nonnull)id in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (Theme * _Nullable)fetchThemeByID:(NSString * _Nonnull)id in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByAssetLocationURL:(NSString * _Nonnull)assetLocationURL in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
 - (void)saveWithContext:(NSManagedObjectContext * _Nullable)context;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
@@ -671,6 +773,30 @@ SWIFT_CLASS_NAMED("Filter")
 @end
 
 
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories31PBAdjustContainerViewController")
+@interface PBAdjustContainerViewController : UIViewController
+- (void)viewWillAppear:(BOOL)animated;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+
+@class UIImage;
+
+SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories21PBAdjustImageDelegate_")
+@protocol PBAdjustImageDelegate <NSObject>
+- (void)didAdjustWithImages:(NSArray<UIImage *> * _Nonnull)images controller:(PBAdjustContainerViewController * _Nonnull)controller;
+@end
+
+
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories15PBAnimationView")
+@interface PBAnimationView : BaseLoadingFromXIBView
+- (void)removeFromSuperview;
+- (void)layoutSubviews;
+@end
+
+
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories12PBBibService")
 @interface PBBibService : NSObject
 @property (nonatomic) double pThreshold;
@@ -679,6 +805,63 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories12PBBibService")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 - (void)getRaceMetaWithRaceMetaLoaded:(void (^ _Nullable)(BOOL, id _Nullable))raceMetaLoaded;
 - (void)searchPhotosWithBib:(NSString * _Nonnull)bib completion:(void (^ _Nullable)(NSArray<NSDictionary<NSString *, id> *> * _Nonnull))completion;
+@end
+
+@class PBImageSelectionListController;
+
+SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories24PBImageSelectionDelegate_")
+@protocol PBImageSelectionDelegate <NSObject>
+- (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
+- (void)didCancelWithPicker:(PBImageSelectionListController * _Nonnull)picker;
+@end
+
+
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
+@interface PBImageSelectionListController : UIViewController
+- (void)viewDidLoad;
+- (void)viewWillAppear:(BOOL)animated;
+- (void)viewDidAppear:(BOOL)animated;
+- (void)viewWillLayoutSubviews;
+- (void)viewDidLayoutSubviews;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
+@end
+
+@class UITextField;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITextFieldDelegate>
+- (BOOL)textFieldShouldReturn:(UITextField * _Nonnull)textField SWIFT_WARN_UNUSED_RESULT;
+@end
+
+@class UICollectionView;
+@class UICollectionViewCell;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UICollectionViewDataSource>
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView * _Nonnull)collectionView SWIFT_WARN_UNUSED_RESULT;
+- (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+- (UICollectionViewCell * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView cellForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+@end
+
+@class UICollectionViewLayout;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UICollectionViewDelegateFlowLayout>
+- (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+- (CGFloat)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+- (CGFloat)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+- (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+@end
+
+@class UICollectionReusableView;
+@class UIScrollView;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UICollectionViewDelegate>
+- (UICollectionReusableView * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView viewForSupplementaryElementOfKind:(NSString * _Nonnull)kind atIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+- (void)collectionView:(UICollectionView * _Nonnull)collectionView willDisplayCell:(UICollectionViewCell * _Nonnull)cell forItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+- (void)collectionView:(UICollectionView * _Nonnull)collectionView didSelectItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+- (void)scrollViewDidScroll:(UIScrollView * _Nonnull)scrollView;
+- (void)scrollViewDidEndDecelerating:(UIScrollView * _Nonnull)scrollView;
+- (void)scrollViewDidEndDragging:(UIScrollView * _Nonnull)scrollView willDecelerate:(BOOL)decelerate;
+- (void)scrollViewWillBeginDragging:(UIScrollView * _Nonnull)scrollView;
 @end
 
 
@@ -692,16 +875,16 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories14PBPhotoService")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
-@class NSCoder;
-@class UIImage;
 
-SWIFT_CLASS("_TtC23PBFrameworkVideoStories25PBSpinnerLoadingImageView")
-@interface PBSpinnerLoadingImageView : UIImageView
-- (nonnull instancetype)initWithFrame:(CGRect)frame OBJC_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder SWIFT_UNAVAILABLE;
-@property (nonatomic, getter=isHidden) BOOL hidden;
-- (nonnull instancetype)initWithImage:(UIImage * _Nullable)image SWIFT_UNAVAILABLE;
-- (nonnull instancetype)initWithImage:(UIImage * _Nullable)image highlightedImage:(UIImage * _Nullable)highlightedImage SWIFT_UNAVAILABLE;
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories17PBPodVideoStories")
+@interface PBPodVideoStories : NSObject
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
+@interface PBPodVideoStories (SWIFT_EXTENSION(PBFrameworkVideoStories)) <PBAdjustImageDelegate>
+- (void)didAdjustWithImages:(NSArray<UIImage *> * _Nonnull)images controller:(PBAdjustContainerViewController * _Nonnull)controller;
 @end
 
 @protocol UIViewControllerTransitionCoordinator;
@@ -729,6 +912,10 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 @end
 
 
+@interface PBThemeDetailsViewController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <PBImageSelectionDelegate>
+- (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
+- (void)didCancelWithPicker:(PBImageSelectionListController * _Nonnull)picker;
+@end
 
 
 
@@ -754,7 +941,8 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories29PBVideoStoryDownloaderService")
 
 
 @interface PBVideoStoryDownloaderService (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)downloadVideoStoryAndUpdateImagesWithVideoStoryThemeURL:(NSURL * _Nonnull)videoStoryThemeURL imagesToCopy:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)imagesToCopy successBlock:(void (^ _Nullable)(NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSDictionary<NSString *, id> * _Nullable))successBlock failureBlock:(void (^ _Nullable)(NSError * _Nullable))failureBlock;
+- (void)downloadVideoStoryAndUpdateImagesWithVideoStoryThemeURL:(NSURL * _Nonnull)videoStoryThemeURL imagesToCopy:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)imagesToCopy progressBlock:(void (^ _Nullable)(float))progressBlock successBlock:(void (^ _Nullable)(NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSDictionary<NSString *, id> * _Nullable))successBlock failureBlock:(void (^ _Nullable)(NSError * _Nullable))failureBlock;
+- (void)bundleLoadVideoStoryAndUpdateImagesWithVideoStoryPath:(NSString * _Nonnull)videoStoryPath imagesToCopy:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)imagesToCopy progressBlock:(void (^ _Nullable)(float))progressBlock successBlock:(void (^ _Nullable)(NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSDictionary<NSString *, id> * _Nullable))successBlock failureBlock:(void (^ _Nullable)(NSError * _Nullable))failureBlock;
 @end
 
 
@@ -1070,6 +1258,14 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 # pragma pop_macro("any")
 #endif
 
+@class NSCoder;
+
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories22BaseLoadingFromXIBView")
+@interface BaseLoadingFromXIBView : UIView
+- (nonnull instancetype)initWithFrame:(CGRect)frame SWIFT_UNAVAILABLE;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder SWIFT_UNAVAILABLE;
+@end
+
 
 
 @class NSManagedObjectContext;
@@ -1081,7 +1277,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories9CDManager") SWIFT_AVAILABILITY(ios,in
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CDManager * _Nonnull shared;)
 + (CDManager * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<Theme *> * _Nonnull)fetchAllThemesIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
-- (Theme * _Nullable)fetchThemeByID:(NSString * _Nonnull)id in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (Theme * _Nullable)fetchThemeByID:(NSString * _Nonnull)id in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByAssetLocationURL:(NSString * _Nonnull)assetLocationURL in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
 - (void)saveWithContext:(NSManagedObjectContext * _Nullable)context;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
@@ -1105,6 +1301,30 @@ SWIFT_CLASS_NAMED("Filter")
 @end
 
 
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories31PBAdjustContainerViewController")
+@interface PBAdjustContainerViewController : UIViewController
+- (void)viewWillAppear:(BOOL)animated;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+
+@class UIImage;
+
+SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories21PBAdjustImageDelegate_")
+@protocol PBAdjustImageDelegate <NSObject>
+- (void)didAdjustWithImages:(NSArray<UIImage *> * _Nonnull)images controller:(PBAdjustContainerViewController * _Nonnull)controller;
+@end
+
+
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories15PBAnimationView")
+@interface PBAnimationView : BaseLoadingFromXIBView
+- (void)removeFromSuperview;
+- (void)layoutSubviews;
+@end
+
+
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories12PBBibService")
 @interface PBBibService : NSObject
 @property (nonatomic) double pThreshold;
@@ -1113,6 +1333,63 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories12PBBibService")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 - (void)getRaceMetaWithRaceMetaLoaded:(void (^ _Nullable)(BOOL, id _Nullable))raceMetaLoaded;
 - (void)searchPhotosWithBib:(NSString * _Nonnull)bib completion:(void (^ _Nullable)(NSArray<NSDictionary<NSString *, id> *> * _Nonnull))completion;
+@end
+
+@class PBImageSelectionListController;
+
+SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories24PBImageSelectionDelegate_")
+@protocol PBImageSelectionDelegate <NSObject>
+- (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
+- (void)didCancelWithPicker:(PBImageSelectionListController * _Nonnull)picker;
+@end
+
+
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
+@interface PBImageSelectionListController : UIViewController
+- (void)viewDidLoad;
+- (void)viewWillAppear:(BOOL)animated;
+- (void)viewDidAppear:(BOOL)animated;
+- (void)viewWillLayoutSubviews;
+- (void)viewDidLayoutSubviews;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
+@end
+
+@class UITextField;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITextFieldDelegate>
+- (BOOL)textFieldShouldReturn:(UITextField * _Nonnull)textField SWIFT_WARN_UNUSED_RESULT;
+@end
+
+@class UICollectionView;
+@class UICollectionViewCell;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UICollectionViewDataSource>
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView * _Nonnull)collectionView SWIFT_WARN_UNUSED_RESULT;
+- (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+- (UICollectionViewCell * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView cellForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+@end
+
+@class UICollectionViewLayout;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UICollectionViewDelegateFlowLayout>
+- (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+- (CGFloat)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+- (CGFloat)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+- (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+@end
+
+@class UICollectionReusableView;
+@class UIScrollView;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UICollectionViewDelegate>
+- (UICollectionReusableView * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView viewForSupplementaryElementOfKind:(NSString * _Nonnull)kind atIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+- (void)collectionView:(UICollectionView * _Nonnull)collectionView willDisplayCell:(UICollectionViewCell * _Nonnull)cell forItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+- (void)collectionView:(UICollectionView * _Nonnull)collectionView didSelectItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+- (void)scrollViewDidScroll:(UIScrollView * _Nonnull)scrollView;
+- (void)scrollViewDidEndDecelerating:(UIScrollView * _Nonnull)scrollView;
+- (void)scrollViewDidEndDragging:(UIScrollView * _Nonnull)scrollView willDecelerate:(BOOL)decelerate;
+- (void)scrollViewWillBeginDragging:(UIScrollView * _Nonnull)scrollView;
 @end
 
 
@@ -1126,16 +1403,16 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories14PBPhotoService")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
-@class NSCoder;
-@class UIImage;
 
-SWIFT_CLASS("_TtC23PBFrameworkVideoStories25PBSpinnerLoadingImageView")
-@interface PBSpinnerLoadingImageView : UIImageView
-- (nonnull instancetype)initWithFrame:(CGRect)frame OBJC_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder SWIFT_UNAVAILABLE;
-@property (nonatomic, getter=isHidden) BOOL hidden;
-- (nonnull instancetype)initWithImage:(UIImage * _Nullable)image SWIFT_UNAVAILABLE;
-- (nonnull instancetype)initWithImage:(UIImage * _Nullable)image highlightedImage:(UIImage * _Nullable)highlightedImage SWIFT_UNAVAILABLE;
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories17PBPodVideoStories")
+@interface PBPodVideoStories : NSObject
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
+@interface PBPodVideoStories (SWIFT_EXTENSION(PBFrameworkVideoStories)) <PBAdjustImageDelegate>
+- (void)didAdjustWithImages:(NSArray<UIImage *> * _Nonnull)images controller:(PBAdjustContainerViewController * _Nonnull)controller;
 @end
 
 @protocol UIViewControllerTransitionCoordinator;
@@ -1163,6 +1440,10 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 @end
 
 
+@interface PBThemeDetailsViewController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <PBImageSelectionDelegate>
+- (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
+- (void)didCancelWithPicker:(PBImageSelectionListController * _Nonnull)picker;
+@end
 
 
 
@@ -1188,7 +1469,8 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories29PBVideoStoryDownloaderService")
 
 
 @interface PBVideoStoryDownloaderService (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)downloadVideoStoryAndUpdateImagesWithVideoStoryThemeURL:(NSURL * _Nonnull)videoStoryThemeURL imagesToCopy:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)imagesToCopy successBlock:(void (^ _Nullable)(NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSDictionary<NSString *, id> * _Nullable))successBlock failureBlock:(void (^ _Nullable)(NSError * _Nullable))failureBlock;
+- (void)downloadVideoStoryAndUpdateImagesWithVideoStoryThemeURL:(NSURL * _Nonnull)videoStoryThemeURL imagesToCopy:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)imagesToCopy progressBlock:(void (^ _Nullable)(float))progressBlock successBlock:(void (^ _Nullable)(NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSDictionary<NSString *, id> * _Nullable))successBlock failureBlock:(void (^ _Nullable)(NSError * _Nullable))failureBlock;
+- (void)bundleLoadVideoStoryAndUpdateImagesWithVideoStoryPath:(NSString * _Nonnull)videoStoryPath imagesToCopy:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)imagesToCopy progressBlock:(void (^ _Nullable)(float))progressBlock successBlock:(void (^ _Nullable)(NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSDictionary<NSString *, id> * _Nullable))successBlock failureBlock:(void (^ _Nullable)(NSError * _Nullable))failureBlock;
 @end
 
 
@@ -1500,6 +1782,14 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 # pragma pop_macro("any")
 #endif
 
+@class NSCoder;
+
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories22BaseLoadingFromXIBView")
+@interface BaseLoadingFromXIBView : UIView
+- (nonnull instancetype)initWithFrame:(CGRect)frame SWIFT_UNAVAILABLE;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder SWIFT_UNAVAILABLE;
+@end
+
 
 
 @class NSManagedObjectContext;
@@ -1511,7 +1801,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories9CDManager") SWIFT_AVAILABILITY(ios,in
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CDManager * _Nonnull shared;)
 + (CDManager * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<Theme *> * _Nonnull)fetchAllThemesIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
-- (Theme * _Nullable)fetchThemeByID:(NSString * _Nonnull)id in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (Theme * _Nullable)fetchThemeByID:(NSString * _Nonnull)id in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByAssetLocationURL:(NSString * _Nonnull)assetLocationURL in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
 - (void)saveWithContext:(NSManagedObjectContext * _Nullable)context;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
@@ -1535,6 +1825,30 @@ SWIFT_CLASS_NAMED("Filter")
 @end
 
 
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories31PBAdjustContainerViewController")
+@interface PBAdjustContainerViewController : UIViewController
+- (void)viewWillAppear:(BOOL)animated;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+
+@class UIImage;
+
+SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories21PBAdjustImageDelegate_")
+@protocol PBAdjustImageDelegate <NSObject>
+- (void)didAdjustWithImages:(NSArray<UIImage *> * _Nonnull)images controller:(PBAdjustContainerViewController * _Nonnull)controller;
+@end
+
+
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories15PBAnimationView")
+@interface PBAnimationView : BaseLoadingFromXIBView
+- (void)removeFromSuperview;
+- (void)layoutSubviews;
+@end
+
+
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories12PBBibService")
 @interface PBBibService : NSObject
 @property (nonatomic) double pThreshold;
@@ -1543,6 +1857,63 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories12PBBibService")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 - (void)getRaceMetaWithRaceMetaLoaded:(void (^ _Nullable)(BOOL, id _Nullable))raceMetaLoaded;
 - (void)searchPhotosWithBib:(NSString * _Nonnull)bib completion:(void (^ _Nullable)(NSArray<NSDictionary<NSString *, id> *> * _Nonnull))completion;
+@end
+
+@class PBImageSelectionListController;
+
+SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories24PBImageSelectionDelegate_")
+@protocol PBImageSelectionDelegate <NSObject>
+- (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
+- (void)didCancelWithPicker:(PBImageSelectionListController * _Nonnull)picker;
+@end
+
+
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
+@interface PBImageSelectionListController : UIViewController
+- (void)viewDidLoad;
+- (void)viewWillAppear:(BOOL)animated;
+- (void)viewDidAppear:(BOOL)animated;
+- (void)viewWillLayoutSubviews;
+- (void)viewDidLayoutSubviews;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
+@end
+
+@class UITextField;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITextFieldDelegate>
+- (BOOL)textFieldShouldReturn:(UITextField * _Nonnull)textField SWIFT_WARN_UNUSED_RESULT;
+@end
+
+@class UICollectionView;
+@class UICollectionViewCell;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UICollectionViewDataSource>
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView * _Nonnull)collectionView SWIFT_WARN_UNUSED_RESULT;
+- (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+- (UICollectionViewCell * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView cellForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+@end
+
+@class UICollectionViewLayout;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UICollectionViewDelegateFlowLayout>
+- (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+- (CGFloat)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+- (CGFloat)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+- (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+@end
+
+@class UICollectionReusableView;
+@class UIScrollView;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UICollectionViewDelegate>
+- (UICollectionReusableView * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView viewForSupplementaryElementOfKind:(NSString * _Nonnull)kind atIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+- (void)collectionView:(UICollectionView * _Nonnull)collectionView willDisplayCell:(UICollectionViewCell * _Nonnull)cell forItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+- (void)collectionView:(UICollectionView * _Nonnull)collectionView didSelectItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+- (void)scrollViewDidScroll:(UIScrollView * _Nonnull)scrollView;
+- (void)scrollViewDidEndDecelerating:(UIScrollView * _Nonnull)scrollView;
+- (void)scrollViewDidEndDragging:(UIScrollView * _Nonnull)scrollView willDecelerate:(BOOL)decelerate;
+- (void)scrollViewWillBeginDragging:(UIScrollView * _Nonnull)scrollView;
 @end
 
 
@@ -1556,16 +1927,16 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories14PBPhotoService")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
-@class NSCoder;
-@class UIImage;
 
-SWIFT_CLASS("_TtC23PBFrameworkVideoStories25PBSpinnerLoadingImageView")
-@interface PBSpinnerLoadingImageView : UIImageView
-- (nonnull instancetype)initWithFrame:(CGRect)frame OBJC_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder SWIFT_UNAVAILABLE;
-@property (nonatomic, getter=isHidden) BOOL hidden;
-- (nonnull instancetype)initWithImage:(UIImage * _Nullable)image SWIFT_UNAVAILABLE;
-- (nonnull instancetype)initWithImage:(UIImage * _Nullable)image highlightedImage:(UIImage * _Nullable)highlightedImage SWIFT_UNAVAILABLE;
+SWIFT_CLASS("_TtC23PBFrameworkVideoStories17PBPodVideoStories")
+@interface PBPodVideoStories : NSObject
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
+@interface PBPodVideoStories (SWIFT_EXTENSION(PBFrameworkVideoStories)) <PBAdjustImageDelegate>
+- (void)didAdjustWithImages:(NSArray<UIImage *> * _Nonnull)images controller:(PBAdjustContainerViewController * _Nonnull)controller;
 @end
 
 @protocol UIViewControllerTransitionCoordinator;
@@ -1593,6 +1964,10 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 @end
 
 
+@interface PBThemeDetailsViewController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <PBImageSelectionDelegate>
+- (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
+- (void)didCancelWithPicker:(PBImageSelectionListController * _Nonnull)picker;
+@end
 
 
 
@@ -1618,7 +1993,8 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories29PBVideoStoryDownloaderService")
 
 
 @interface PBVideoStoryDownloaderService (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)downloadVideoStoryAndUpdateImagesWithVideoStoryThemeURL:(NSURL * _Nonnull)videoStoryThemeURL imagesToCopy:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)imagesToCopy successBlock:(void (^ _Nullable)(NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSDictionary<NSString *, id> * _Nullable))successBlock failureBlock:(void (^ _Nullable)(NSError * _Nullable))failureBlock;
+- (void)downloadVideoStoryAndUpdateImagesWithVideoStoryThemeURL:(NSURL * _Nonnull)videoStoryThemeURL imagesToCopy:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)imagesToCopy progressBlock:(void (^ _Nullable)(float))progressBlock successBlock:(void (^ _Nullable)(NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSDictionary<NSString *, id> * _Nullable))successBlock failureBlock:(void (^ _Nullable)(NSError * _Nullable))failureBlock;
+- (void)bundleLoadVideoStoryAndUpdateImagesWithVideoStoryPath:(NSString * _Nonnull)videoStoryPath imagesToCopy:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)imagesToCopy progressBlock:(void (^ _Nullable)(float))progressBlock successBlock:(void (^ _Nullable)(NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSURL * _Nullable, NSDictionary<NSString *, id> * _Nullable))successBlock failureBlock:(void (^ _Nullable)(NSError * _Nullable))failureBlock;
 @end
 
 
