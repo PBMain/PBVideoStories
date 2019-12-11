@@ -249,6 +249,7 @@ SWIFT_CLASS_NAMED("Filter")
 @end
 
 
+/// The class used to access all of the functionality of the PBAdjustContainerViewController, which allows the user to crop and resize images using aspect ratios defined in the selected and initialized Theme object.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories31PBAdjustContainerViewController")
 @interface PBAdjustContainerViewController : UIViewController
 - (void)viewWillAppear:(BOOL)animated;
@@ -260,12 +261,14 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories31PBAdjustContainerViewController")
 
 @class UIImage;
 
+/// Delegate protocol for the PBAdjustContainerViewController. Allows the implementor to receive a callback from the image adjuster when images are done being cropped and resized.
 SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories21PBAdjustImageDelegate_")
 @protocol PBAdjustImageDelegate <NSObject>
 - (void)didAdjustWithImages:(NSArray<UIImage *> * _Nonnull)images controller:(PBAdjustContainerViewController * _Nonnull)controller;
 @end
 
 
+/// The class used to access all of the functionality of the PBAnimationView, which controls instant video playback of the compiled Theme, using user generated content.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories15PBAnimationView")
 @interface PBAnimationView : BaseLoadingFromXIBView
 - (void)removeFromSuperview;
@@ -285,6 +288,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories12PBBibService")
 
 @class PBImageSelectionListController;
 
+/// Delegate protocol for the PBImageSelectionListController. Allows the implementor to receive callbacks from the image picker when images are selected or the picker is cancelled.
 SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories24PBImageSelectionDelegate_")
 @protocol PBImageSelectionDelegate <NSObject>
 - (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
@@ -292,6 +296,7 @@ SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories24PBImageSelectionDelegate_")
 @end
 
 
+/// The class used to access all of the functionality of the PBImageSelectionListController, which allows the user to select images from their Camera Roll and albums.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 @interface PBImageSelectionListController : UIViewController
 - (void)viewDidLoad;
@@ -341,6 +346,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 @end
 
 
+/// :nodoc:
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories14PBPhotoService")
 @interface PBPhotoService : NSObject
 + (void)setupTempJSONsWithTheme:(Theme * _Nonnull)theme completion:(void (^ _Nullable)(void))completion;
@@ -352,6 +358,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories14PBPhotoService")
 @end
 
 
+/// The class used to access all of the functionality of the PBVideoStories CocoaPod.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories17PBPodVideoStories")
 @interface PBPodVideoStories : NSObject
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
@@ -365,6 +372,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories17PBPodVideoStories")
 
 @protocol UIViewControllerTransitionCoordinator;
 
+/// :nodoc:
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 @interface PBThemeDetailsViewController : UIViewController
 + (PBThemeDetailsViewController * _Nonnull)createWith:(Theme * _Nonnull)theme themeFilePathURL:(NSURL * _Nullable)themeFilePathURL dataJSONFilePathURL:(NSURL * _Nullable)dataJSONFilePathURL audioFilePathURL:(NSURL * _Nullable)audioFilePathURL indexHTMLFilePathURL:(NSURL * _Nullable)indexHTMLFilePathURL SWIFT_WARN_UNUSED_RESULT;
@@ -410,6 +418,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 
 
 
+/// :nodoc:
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories29PBVideoStoryDownloaderService")
 @interface PBVideoStoryDownloaderService : NSObject
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
@@ -773,6 +782,7 @@ SWIFT_CLASS_NAMED("Filter")
 @end
 
 
+/// The class used to access all of the functionality of the PBAdjustContainerViewController, which allows the user to crop and resize images using aspect ratios defined in the selected and initialized Theme object.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories31PBAdjustContainerViewController")
 @interface PBAdjustContainerViewController : UIViewController
 - (void)viewWillAppear:(BOOL)animated;
@@ -784,12 +794,14 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories31PBAdjustContainerViewController")
 
 @class UIImage;
 
+/// Delegate protocol for the PBAdjustContainerViewController. Allows the implementor to receive a callback from the image adjuster when images are done being cropped and resized.
 SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories21PBAdjustImageDelegate_")
 @protocol PBAdjustImageDelegate <NSObject>
 - (void)didAdjustWithImages:(NSArray<UIImage *> * _Nonnull)images controller:(PBAdjustContainerViewController * _Nonnull)controller;
 @end
 
 
+/// The class used to access all of the functionality of the PBAnimationView, which controls instant video playback of the compiled Theme, using user generated content.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories15PBAnimationView")
 @interface PBAnimationView : BaseLoadingFromXIBView
 - (void)removeFromSuperview;
@@ -809,6 +821,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories12PBBibService")
 
 @class PBImageSelectionListController;
 
+/// Delegate protocol for the PBImageSelectionListController. Allows the implementor to receive callbacks from the image picker when images are selected or the picker is cancelled.
 SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories24PBImageSelectionDelegate_")
 @protocol PBImageSelectionDelegate <NSObject>
 - (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
@@ -816,6 +829,7 @@ SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories24PBImageSelectionDelegate_")
 @end
 
 
+/// The class used to access all of the functionality of the PBImageSelectionListController, which allows the user to select images from their Camera Roll and albums.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 @interface PBImageSelectionListController : UIViewController
 - (void)viewDidLoad;
@@ -865,6 +879,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 @end
 
 
+/// :nodoc:
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories14PBPhotoService")
 @interface PBPhotoService : NSObject
 + (void)setupTempJSONsWithTheme:(Theme * _Nonnull)theme completion:(void (^ _Nullable)(void))completion;
@@ -876,6 +891,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories14PBPhotoService")
 @end
 
 
+/// The class used to access all of the functionality of the PBVideoStories CocoaPod.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories17PBPodVideoStories")
 @interface PBPodVideoStories : NSObject
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
@@ -889,6 +905,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories17PBPodVideoStories")
 
 @protocol UIViewControllerTransitionCoordinator;
 
+/// :nodoc:
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 @interface PBThemeDetailsViewController : UIViewController
 + (PBThemeDetailsViewController * _Nonnull)createWith:(Theme * _Nonnull)theme themeFilePathURL:(NSURL * _Nullable)themeFilePathURL dataJSONFilePathURL:(NSURL * _Nullable)dataJSONFilePathURL audioFilePathURL:(NSURL * _Nullable)audioFilePathURL indexHTMLFilePathURL:(NSURL * _Nullable)indexHTMLFilePathURL SWIFT_WARN_UNUSED_RESULT;
@@ -934,6 +951,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 
 
 
+/// :nodoc:
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories29PBVideoStoryDownloaderService")
 @interface PBVideoStoryDownloaderService : NSObject
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
@@ -1049,8 +1067,8 @@ SWIFT_CLASS_NAMED("ThemeAsset")
 #pragma clang diagnostic pop
 
 #endif
-
 #else
+
 #if 0
 #elif defined(__arm64__) && __arm64__
 // Generated by Apple Swift version 5.1 (swiftlang-1100.0.270.13 clang-1100.0.33.7)
@@ -1301,6 +1319,7 @@ SWIFT_CLASS_NAMED("Filter")
 @end
 
 
+/// The class used to access all of the functionality of the PBAdjustContainerViewController, which allows the user to crop and resize images using aspect ratios defined in the selected and initialized Theme object.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories31PBAdjustContainerViewController")
 @interface PBAdjustContainerViewController : UIViewController
 - (void)viewWillAppear:(BOOL)animated;
@@ -1312,12 +1331,14 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories31PBAdjustContainerViewController")
 
 @class UIImage;
 
+/// Delegate protocol for the PBAdjustContainerViewController. Allows the implementor to receive a callback from the image adjuster when images are done being cropped and resized.
 SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories21PBAdjustImageDelegate_")
 @protocol PBAdjustImageDelegate <NSObject>
 - (void)didAdjustWithImages:(NSArray<UIImage *> * _Nonnull)images controller:(PBAdjustContainerViewController * _Nonnull)controller;
 @end
 
 
+/// The class used to access all of the functionality of the PBAnimationView, which controls instant video playback of the compiled Theme, using user generated content.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories15PBAnimationView")
 @interface PBAnimationView : BaseLoadingFromXIBView
 - (void)removeFromSuperview;
@@ -1337,6 +1358,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories12PBBibService")
 
 @class PBImageSelectionListController;
 
+/// Delegate protocol for the PBImageSelectionListController. Allows the implementor to receive callbacks from the image picker when images are selected or the picker is cancelled.
 SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories24PBImageSelectionDelegate_")
 @protocol PBImageSelectionDelegate <NSObject>
 - (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
@@ -1344,6 +1366,7 @@ SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories24PBImageSelectionDelegate_")
 @end
 
 
+/// The class used to access all of the functionality of the PBImageSelectionListController, which allows the user to select images from their Camera Roll and albums.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 @interface PBImageSelectionListController : UIViewController
 - (void)viewDidLoad;
@@ -1393,6 +1416,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 @end
 
 
+/// :nodoc:
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories14PBPhotoService")
 @interface PBPhotoService : NSObject
 + (void)setupTempJSONsWithTheme:(Theme * _Nonnull)theme completion:(void (^ _Nullable)(void))completion;
@@ -1404,6 +1428,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories14PBPhotoService")
 @end
 
 
+/// The class used to access all of the functionality of the PBVideoStories CocoaPod.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories17PBPodVideoStories")
 @interface PBPodVideoStories : NSObject
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
@@ -1417,6 +1442,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories17PBPodVideoStories")
 
 @protocol UIViewControllerTransitionCoordinator;
 
+/// :nodoc:
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 @interface PBThemeDetailsViewController : UIViewController
 + (PBThemeDetailsViewController * _Nonnull)createWith:(Theme * _Nonnull)theme themeFilePathURL:(NSURL * _Nullable)themeFilePathURL dataJSONFilePathURL:(NSURL * _Nullable)dataJSONFilePathURL audioFilePathURL:(NSURL * _Nullable)audioFilePathURL indexHTMLFilePathURL:(NSURL * _Nullable)indexHTMLFilePathURL SWIFT_WARN_UNUSED_RESULT;
@@ -1462,6 +1488,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 
 
 
+/// :nodoc:
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories29PBVideoStoryDownloaderService")
 @interface PBVideoStoryDownloaderService : NSObject
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
@@ -1825,6 +1852,7 @@ SWIFT_CLASS_NAMED("Filter")
 @end
 
 
+/// The class used to access all of the functionality of the PBAdjustContainerViewController, which allows the user to crop and resize images using aspect ratios defined in the selected and initialized Theme object.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories31PBAdjustContainerViewController")
 @interface PBAdjustContainerViewController : UIViewController
 - (void)viewWillAppear:(BOOL)animated;
@@ -1836,12 +1864,14 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories31PBAdjustContainerViewController")
 
 @class UIImage;
 
+/// Delegate protocol for the PBAdjustContainerViewController. Allows the implementor to receive a callback from the image adjuster when images are done being cropped and resized.
 SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories21PBAdjustImageDelegate_")
 @protocol PBAdjustImageDelegate <NSObject>
 - (void)didAdjustWithImages:(NSArray<UIImage *> * _Nonnull)images controller:(PBAdjustContainerViewController * _Nonnull)controller;
 @end
 
 
+/// The class used to access all of the functionality of the PBAnimationView, which controls instant video playback of the compiled Theme, using user generated content.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories15PBAnimationView")
 @interface PBAnimationView : BaseLoadingFromXIBView
 - (void)removeFromSuperview;
@@ -1861,6 +1891,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories12PBBibService")
 
 @class PBImageSelectionListController;
 
+/// Delegate protocol for the PBImageSelectionListController. Allows the implementor to receive callbacks from the image picker when images are selected or the picker is cancelled.
 SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories24PBImageSelectionDelegate_")
 @protocol PBImageSelectionDelegate <NSObject>
 - (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
@@ -1868,6 +1899,7 @@ SWIFT_PROTOCOL("_TtP23PBFrameworkVideoStories24PBImageSelectionDelegate_")
 @end
 
 
+/// The class used to access all of the functionality of the PBImageSelectionListController, which allows the user to select images from their Camera Roll and albums.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 @interface PBImageSelectionListController : UIViewController
 - (void)viewDidLoad;
@@ -1917,6 +1949,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 @end
 
 
+/// :nodoc:
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories14PBPhotoService")
 @interface PBPhotoService : NSObject
 + (void)setupTempJSONsWithTheme:(Theme * _Nonnull)theme completion:(void (^ _Nullable)(void))completion;
@@ -1928,6 +1961,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories14PBPhotoService")
 @end
 
 
+/// The class used to access all of the functionality of the PBVideoStories CocoaPod.
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories17PBPodVideoStories")
 @interface PBPodVideoStories : NSObject
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
@@ -1941,6 +1975,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories17PBPodVideoStories")
 
 @protocol UIViewControllerTransitionCoordinator;
 
+/// :nodoc:
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 @interface PBThemeDetailsViewController : UIViewController
 + (PBThemeDetailsViewController * _Nonnull)createWith:(Theme * _Nonnull)theme themeFilePathURL:(NSURL * _Nullable)themeFilePathURL dataJSONFilePathURL:(NSURL * _Nullable)dataJSONFilePathURL audioFilePathURL:(NSURL * _Nullable)audioFilePathURL indexHTMLFilePathURL:(NSURL * _Nullable)indexHTMLFilePathURL SWIFT_WARN_UNUSED_RESULT;
@@ -1986,6 +2021,7 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 
 
 
+/// :nodoc:
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories29PBVideoStoryDownloaderService")
 @interface PBVideoStoryDownloaderService : NSObject
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
