@@ -295,15 +295,15 @@ public enum PBVideoQuality : Swift.Float {
 }
 extension Filter {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.Filter>
-  @objc @NSManaged dynamic public var displayOrder: Swift.Int16 {
+  @objc dynamic public var displayOrder: Swift.Int16 {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var name: Swift.String? {
+  @objc dynamic public var name: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var themeAsset: PBFrameworkVideoStories.ThemeAsset? {
+  @objc dynamic public var themeAsset: PBFrameworkVideoStories.ThemeAsset? {
     @objc get
     @objc set
   }
@@ -314,91 +314,91 @@ extension Filter {
 }
 extension Theme {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.Theme>
-  @objc @NSManaged dynamic public var assetLocationURL: Swift.String? {
+  @objc dynamic public var assetLocationURL: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var audioTrackFileName: Swift.String? {
+  @objc dynamic public var audioTrackFileName: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var audioTrackFileType: Swift.String? {
+  @objc  dynamic public var audioTrackFileType: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var audioTrackTitle: Swift.String? {
+  @objc  dynamic public var audioTrackTitle: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var creationDate: Swift.String? {
+  @objc  dynamic public var creationDate: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var currentDownloadedVersion: Swift.String? {
+  @objc  dynamic public var currentDownloadedVersion: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var heroURL: Swift.String? {
+  @objc  dynamic public var heroURL: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var id: Swift.String? {
+  @objc  dynamic public var id: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var isEnabled: Swift.Bool {
+  @objc  dynamic public var isEnabled: Swift.Bool {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var isFromZIP: Swift.Bool {
+  @objc  dynamic public var isFromZIP: Swift.Bool {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var isHidden: Swift.Bool {
+  @objc  dynamic public var isHidden: Swift.Bool {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var isNative: Swift.Bool {
+  @objc  dynamic public var isNative: Swift.Bool {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var jsonFileName: Swift.String? {
+  @objc  dynamic public var jsonFileName: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var lengthInMS: Swift.String? {
+  @objc  dynamic public var lengthInMS: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var nm: Swift.String? {
+  @objc  dynamic public var nm: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var photoNames: [[Swift.String : Any]]? {
+  @objc  dynamic public var photoNames: [[Swift.String : Any]]? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var postrollCoverURL: Swift.String? {
+  @objc  dynamic public var postrollCoverURL: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var prerollCoverURL: Swift.String? {
+  @objc  dynamic public var prerollCoverURL: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var title: Swift.String? {
+  @objc  dynamic public var title: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var version: Swift.String? {
+  @objc  dynamic public var version: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var webFiles: [[Swift.String : Any]]? {
+  @objc  dynamic public var webFiles: [[Swift.String : Any]]? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var themeAsset: Foundation.NSSet? {
+  @objc  dynamic public var themeAsset: Foundation.NSSet? {
     @objc get
     @objc set
   }
@@ -415,31 +415,31 @@ extension Theme {
 }
 extension ThemeAsset {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.ThemeAsset>
-  @objc @NSManaged dynamic public var displayOrder: Swift.Int16 {
+  @objc  dynamic public var displayOrder: Swift.Int16 {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var filename: Swift.String? {
+  @objc  dynamic public var filename: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var previewFrame: Swift.Int32 {
+  @objc  dynamic public var previewFrame: Swift.Int32 {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var sizeHeight: Swift.Int16 {
+  @objc  dynamic public var sizeHeight: Swift.Int16 {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var sizeWidth: Swift.Int16 {
+  @objc  dynamic public var sizeWidth: Swift.Int16 {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var filter: Foundation.NSSet? {
+  @objc  dynamic public var filter: Foundation.NSSet? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var theme: PBFrameworkVideoStories.Theme? {
+  @objc  dynamic public var theme: PBFrameworkVideoStories.Theme? {
     @objc get
     @objc set
   }
@@ -450,7 +450,6 @@ extension ThemeAsset {
   @objc(addFilter:) @NSManaged dynamic public func addToFilter(_ values: Foundation.NSSet)
   @objc(removeFilter:) @NSManaged dynamic public func removeFromFilter(_ values: Foundation.NSSet)
 }
-extension PBFrameworkVideoStories.PBAdjustContainerViewController : ObjectiveC.NSObjectProtocol {}
 extension PBFrameworkVideoStories.PBVideoStoriesError : Swift.Equatable {}
 extension PBFrameworkVideoStories.PBVideoStoriesError : Swift.Hashable {}
 extension PBFrameworkVideoStories.PBThemeDownloadStatus : Swift.Equatable {}
