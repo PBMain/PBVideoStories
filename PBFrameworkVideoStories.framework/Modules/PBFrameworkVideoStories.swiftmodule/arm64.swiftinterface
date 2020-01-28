@@ -1,5 +1,5 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.1 (swiftlang-1100.0.270.13 clang-1100.0.33.7)
+// swift-compiler-version: Apple Swift version 5.1.3 (swiftlang-1100.0.282.1 clang-1100.0.33.15)
 // swift-module-flags: -target arm64-apple-ios10.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name PBFrameworkVideoStories
 import AVFoundation
 import AVKit
@@ -25,10 +25,10 @@ public struct FilePath {
   @objc public class func setupTempJSONs(theme: PBFrameworkVideoStories.Theme, completion: (() -> ())?)
   public class func imageIsReadyForShowing(imageName: Swift.String, themeName: Swift.String) -> Swift.Bool
   public class func resetForNewTheme()
-  public class func moveNewThemeFilesToLocal(theme: [Swift.String : Any], isNative: Swift.Bool, version: Swift.String)
+  public class func moveNewThemeFilesToLocal(theme: PBFrameworkVideoStories.Theme, json: [Swift.String : Any], isNative: Swift.Bool, version: Swift.String)
   public class func moveUserImagesToLocal(images: [[Swift.String : Any]], themeName: Swift.String)
-  public class func getThemeJSONPathURL(theme: [Swift.String : Any]) -> Foundation.URL?
-  public class func getThemeDocumentsSubDirectoryPathURL(theme: [Swift.String : Any]) -> Foundation.URL?
+  public class func getThemeJSONPathURL(theme: PBFrameworkVideoStories.Theme) -> Foundation.URL?
+  public class func getThemeDocumentsSubDirectoryPathURL(theme: PBFrameworkVideoStories.Theme) -> Foundation.URL?
   public func deleteAllThemes(except: [PBFrameworkVideoStories.Theme], completion: (() -> ())?)
   public class func delete(theme: PBFrameworkVideoStories.Theme) -> Swift.Error?
   public class func createJSONForImageAdjust(path: Swift.String, photoName: Swift.String, frame: Swift.Int, imagesToReplace: [[Swift.String : Any]]) -> Swift.String?
@@ -52,9 +52,11 @@ extension UIImage {
   @objc dynamic public func aspectFittedToSizeCentered(size: CoreGraphics.CGSize) -> UIKit.UIImage?
   public func aspectFilledToSize(newSize: CoreGraphics.CGSize) -> UIKit.UIImage
   public func aspectFittedToHeight(newSize: CoreGraphics.CGSize) -> UIKit.UIImage
+  public class func image(color: UIKit.UIColor, rectToDraw: CoreGraphics.CGRect) -> UIKit.UIImage
 }
 @objc public protocol PBAdjustImageDelegate : ObjectiveC.NSObjectProtocol {
   @objc func didAdjust(images: [UIKit.UIImage], controller: PBFrameworkVideoStories.PBAdjustContainerViewController)
+  @objc func didEdited(image: UIKit.UIImage, position: Swift.Int, controller: PBFrameworkVideoStories.PBAdjustContainerViewController)
 }
 @objc public class PBAdjustContainerViewController : UIKit.UIViewController {
   weak public var delegate: PBFrameworkVideoStories.PBAdjustImageDelegate?
@@ -116,8 +118,12 @@ public enum PBThemeDownloadStatus {
   public class var token: Swift.String {
     get
   }
+  public class var email: Swift.String {
+    get
+  }
   public class func send(email: Swift.String, success: (() -> ())?, failure: @escaping (Swift.Error?) -> Swift.Void?)
   public class func verify(email: Swift.String, code: Swift.String, success: @escaping ([[Swift.String : Any]]?) -> Swift.Void?, failure: @escaping (Swift.Error?) -> Swift.Void?)
+  public class func logout()
   public class func themes() -> [PBFrameworkVideoStories.Theme]
   public class func isThemeDownloaded(themeId: Swift.String, failure: ((Swift.Error?) -> Swift.Void)?) -> Swift.Bool
   public class func downloadTheme(by themeId: Swift.String, progress: ((Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
@@ -125,6 +131,11 @@ public enum PBThemeDownloadStatus {
   public class func loadThemeFromBundle(filename: Swift.String, bundle: Foundation.Bundle, progress: ((Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
   public class func setTheme(themeId: Swift.String, isVisible: Swift.Bool, success: (() -> Swift.Void)?, failure: ((Swift.Error?) -> Swift.Void)?)
   public class func deleteTheme(themeId: Swift.String, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
+  public class func loadPendingThemesIfNeeded(progress: ((Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
+  public class func pendingThemesCount() -> Swift.Int
+  public var theme: PBFrameworkVideoStories.Theme? {
+    get
+  }
   public init(themeId: Swift.String, success: ((PBFrameworkVideoStories.PBPodVideoStories) -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
   public func dismantle()
   public func getAnimationView(success: ((PBFrameworkVideoStories.PBAnimationView) -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
@@ -132,13 +143,19 @@ public enum PBThemeDownloadStatus {
   public func getImagePickerController(photosCount: Swift.Int, success: ((PBFrameworkVideoStories.PBImageSelectionListController) -> Swift.Void)?, failure: ((Swift.Error?) -> Swift.Void)?)
   public func getImagePickerController(success: ((PBFrameworkVideoStories.PBImageSelectionListController) -> Swift.Void)?, failure: ((Swift.Error?) -> Swift.Void)?)
   public func getAdjustImagesController(images: [UIKit.UIImage]) -> PBFrameworkVideoStories.PBAdjustContainerViewController?
+  public func getAdjustSingleImageController(image: UIKit.UIImage, position: Swift.Int) -> PBFrameworkVideoStories.PBAdjustContainerViewController?
   public func saveImagesLocally(images: [UIKit.UIImage], success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
   public func save(image: UIKit.UIImage, index: Swift.Int, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
   public func createVideoStory(quality: PBFrameworkVideoStories.PBVideoQuality, progress: ((Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
   public func saveVideoStoryToCameraRoll(quality: PBFrameworkVideoStories.PBVideoQuality, progress: ((Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
+  public func clearUsedVideoStoryParts()
+  public func stopProcessingVideoStories()
+  public func playAudio(theme: PBFrameworkVideoStories.Theme)
+  public func stopAudio()
   @objc deinit
 }
 extension PBPodVideoStories : PBFrameworkVideoStories.PBAdjustImageDelegate {
+  @objc dynamic public func didEdited(image: UIKit.UIImage, position: Swift.Int, controller: PBFrameworkVideoStories.PBAdjustContainerViewController)
   @objc dynamic public func didAdjust(images: [UIKit.UIImage], controller: PBFrameworkVideoStories.PBAdjustContainerViewController)
 }
 @objc public class PBAnimationView : PBFrameworkVideoStories.BaseLoadingFromXIBView {
@@ -193,7 +210,10 @@ extension PBThemeDetailsViewController : PBFrameworkVideoStories.PBImageSelectio
 @objc @available(iOS 10.0, *)
 public class CDManager : ObjectiveC.NSObject {
   @objc public static let shared: PBFrameworkVideoStories.CDManager
+  @objc public func fetchAllModularThemes(in context: CoreData.NSManagedObjectContext? = nil, predicate: Foundation.NSPredicate? = nil) -> [PBFrameworkVideoStories.ModularTheme]
   @objc public func fetchAllThemes(in context: CoreData.NSManagedObjectContext? = nil, predicate: Foundation.NSPredicate? = nil) -> [PBFrameworkVideoStories.Theme]
+  @objc public func fetchModularTheme(byUUID uuid: Swift.String, in context: CoreData.NSManagedObjectContext? = nil, failure: ((Swift.Error?) -> Swift.Void)? = nil) -> PBFrameworkVideoStories.ModularTheme?
+  @objc public func fetchTheme(byUUID uuid: Swift.String, in context: CoreData.NSManagedObjectContext? = nil, failure: ((Swift.Error?) -> Swift.Void)? = nil) -> PBFrameworkVideoStories.Theme?
   @objc public func fetchTheme(byID id: Swift.String, in context: CoreData.NSManagedObjectContext? = nil, failure: ((Swift.Error?) -> Swift.Void)? = nil) -> PBFrameworkVideoStories.Theme?
   @objc public func fetchTheme(byAssetLocationURL assetLocationURL: Swift.String, in context: CoreData.NSManagedObjectContext? = nil) -> PBFrameworkVideoStories.Theme?
   @objc public func save(context: CoreData.NSManagedObjectContext? = nil)
@@ -202,6 +222,14 @@ public class CDManager : ObjectiveC.NSObject {
 }
 @objc public class BaseLoadingFromXIBView : UIKit.UIView {
   @objc deinit
+}
+extension Theme {
+  public func mixProperties() -> [Swift.String : Swift.String]
+  public func pathComponent() -> Swift.String?
+}
+extension ModularTheme {
+  public func mixProperties() -> [Swift.String : Swift.String]
+  public func themesObjs() -> [PBFrameworkVideoStories.Theme]
 }
 @available(iOS 10.0, *)
 extension UIView {
@@ -215,6 +243,26 @@ extension UIView {
   public init(urlString: Swift.String)
   @objc public func getRaceMeta(raceMetaLoaded: ((Swift.Bool, Any?) -> ())? = nil)
   @objc public func searchPhotos(bib: Swift.String, completion: (([[Swift.String : Any]]) -> ())?)
+  @objc deinit
+}
+@objc public class PBDefaultsService : ObjectiveC.NSObject {
+  @objc public class var buildType: PBFrameworkVideoStories.PBEnvironment {
+    @objc get
+    @objc set
+  }
+  public class func unfinishedTaskExistsForQuality(quality: Swift.String) -> Swift.Bool
+  public class func unfinishedTaskSetExistsForQuality(quality: Swift.String, exists: Swift.Bool)
+  public class func unfinishedTaskLastFrameForQuality(quality: Swift.String) -> Swift.Int?
+  public class func unfinishedTaskSetLastFrameForQuality(quality: Swift.String, frame: Swift.Int)
+  public class func clearFinishedTaskVideoFiles()
+  public class func clearUnfinishedTasks()
+  public class func startedLoading(url: Swift.String)
+  public class func didFinishLoading(url: Swift.String)
+  public class var failedURLs: [Swift.String] {
+    get
+    set
+  }
+  @objc override dynamic public init()
   @objc deinit
 }
 @objc public protocol PBImageSelectionDelegate : ObjectiveC.NSObjectProtocol {
@@ -255,6 +303,16 @@ extension PBImageSelectionListController : UIKit.UICollectionViewDelegate {
 extension PBImageSelectionListController : UIKit.UITextFieldDelegate {
   @objc dynamic public func textFieldShouldReturn(_ textField: UIKit.UITextField) -> Swift.Bool
 }
+@objc public enum PBEnvironment : Swift.Int {
+  case prod
+  case qa
+  case dev
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+  public init?(rawValue: Swift.Int)
+}
 public enum PBVideoFileName : Swift.String {
   case temp
   case unfinished
@@ -266,28 +324,88 @@ public enum PBVideoFileName : Swift.String {
   }
   public init?(rawValue: Swift.String)
 }
+@objc public class PBVideoStoriesViewController : UIKit.UIViewController {
+  @objc public static func create() -> PBFrameworkVideoStories.PBVideoStoriesViewController
+  @objc override dynamic public func viewDidLoad()
+  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @objc override dynamic public func viewWillLayoutSubviews()
+  @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  @objc override dynamic public func viewWillTransition(to size: CoreGraphics.CGSize, with coordinator: UIKit.UIViewControllerTransitionCoordinator)
+  @objc deinit
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+extension PBVideoStoriesViewController : PBFrameworkUILibraries.iCarouselDataSource {
+  @objc dynamic public func numberOfItems(in carousel: PBFrameworkUILibraries.iCarousel) -> Swift.Int
+  @objc dynamic public func carousel(_ carousel: PBFrameworkUILibraries.iCarousel, viewForItemAt index: Swift.Int, reusing view: UIKit.UIView?) -> UIKit.UIView
+}
+extension PBVideoStoriesViewController : PBFrameworkUILibraries.iCarouselDelegate {
+  @objc dynamic public func carouselItemWidth(_ carousel: PBFrameworkUILibraries.iCarousel) -> CoreGraphics.CGFloat
+  @objc dynamic public func carousel(_ carousel: PBFrameworkUILibraries.iCarousel, itemTransformForOffset offset: CoreGraphics.CGFloat, baseTransform transform: QuartzCore.CATransform3D) -> QuartzCore.CATransform3D
+  @objc dynamic public func carouselCurrentItemIndexDidChange(_ carousel: PBFrameworkUILibraries.iCarousel)
+  @objc dynamic public func carousel(_ carousel: PBFrameworkUILibraries.iCarousel, valueFor option: PBFrameworkUILibraries.iCarouselOption, withDefault value: CoreGraphics.CGFloat) -> CoreGraphics.CGFloat
+  @objc dynamic public func carousel(_ carousel: PBFrameworkUILibraries.iCarousel, didSelectItemAt index: Swift.Int)
+  @objc dynamic public func carouselDidScroll(_ carousel: PBFrameworkUILibraries.iCarousel)
+}
+extension PBVideoStoriesViewController {
+  @objc override dynamic public func touchesBegan(_ touches: Swift.Set<UIKit.UITouch>, with event: UIKit.UIEvent?)
+}
 public typealias VideoStoryDownloaderSuccessBlock = (Foundation.URL?, Foundation.URL?, Foundation.URL?, Foundation.URL?, Foundation.URL?, Swift.Dictionary<Swift.String, Any>?) -> Swift.Void
-@objc public class PBVideoStoryDownloaderService : ObjectiveC.NSObject {
+@objc public class PBVideoStoryDownloaderService : ObjectiveC.NSObject, Foundation.URLSessionDownloadDelegate, Foundation.URLSessionDelegate, Foundation.URLSessionTaskDelegate {
+  public var progressClosure: ((Swift.Float, Swift.Float) -> Swift.Void)?
+  public var downloadFailureBlock: ((Swift.Error?) -> Swift.Void)?
+  public var downloadSuccessBlockFromZIP: (PBFrameworkVideoStories.VideoStoryDownloaderSuccessBlock)?
+  public var downloadSuccessBlockFromTheme: (() -> Swift.Void)?
+  public var isDownloading: Swift.Bool {
+    get
+    set
+  }
+  @objc public func urlSession(_ session: Foundation.URLSession, downloadTask: Foundation.URLSessionDownloadTask, didWriteData bytesWritten: Swift.Int64, totalBytesWritten: Swift.Int64, totalBytesExpectedToWrite: Swift.Int64)
+  @objc public func urlSession(_ session: Foundation.URLSession, didBecomeInvalidWithError error: Swift.Error?)
+  @objc public func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didCompleteWithError error: Swift.Error?)
+  @objc public func urlSession(_ session: Foundation.URLSession, downloadTask: Foundation.URLSessionDownloadTask, didFinishDownloadingTo location: Foundation.URL)
   public func downloadTheme(jsonUrl: Foundation.URL, successBlock: ((PBFrameworkVideoStories.Theme) -> ())?, failureBlock: ((Swift.Error?) -> Swift.Void)?)
-  public func downloadZip(zipUrl: Foundation.URL, themeObj: PBFrameworkVideoStories.Theme, progressBlock: ((Swift.Float) -> Swift.Void)?, successBlock: @escaping ((PBFrameworkVideoStories.Theme) -> ()), failureBlock: ((Swift.Error?) -> Swift.Void)?)
+  public func downloadZip(zipUrl: Foundation.URL, themeObj: PBFrameworkVideoStories.Theme, successBlock: @escaping ((PBFrameworkVideoStories.Theme) -> ()), failureBlock: ((Swift.Error?) -> Swift.Void)?, progressBlock: ((Swift.Float, Swift.Float) -> Swift.Void)?)
   @objc override dynamic public init()
   @objc deinit
 }
 extension PBVideoStoryDownloaderService {
-  @objc dynamic public func downloadVideoStoryAndUpdateImages(videoStoryThemeURL: Foundation.URL, imagesToCopy: [Swift.Dictionary<Swift.String, Any>]? = nil, progressBlock: ((Swift.Float) -> Swift.Void)?, successBlock: (PBFrameworkVideoStories.VideoStoryDownloaderSuccessBlock)?, failureBlock: ((Swift.Error?) -> Swift.Void)?)
-  @objc dynamic public func bundleLoadVideoStoryAndUpdateImages(videoStoryPath: Swift.String, imagesToCopy: [Swift.Dictionary<Swift.String, Any>]? = nil, progressBlock: ((Swift.Float) -> Swift.Void)?, successBlock: (PBFrameworkVideoStories.VideoStoryDownloaderSuccessBlock)?, failureBlock: ((Swift.Error?) -> Swift.Void)?)
-  public func unzipFiles(from archiveName: Swift.String?, imagesToCopy: [Swift.Dictionary<Swift.String, Any>]? = nil, progressBlock: ((Swift.Float) -> Swift.Void)?, successBlock: (PBFrameworkVideoStories.VideoStoryDownloaderSuccessBlock)?, failureBlock: ((Swift.Error?) -> Swift.Void)?)
+  @objc dynamic public func downloadVideoStoryAndUpdateImages(videoStoryThemeURL: Foundation.URL, uuid: Swift.String, imagesToCopy: [Swift.Dictionary<Swift.String, Any>]? = nil, successBlock: (PBFrameworkVideoStories.VideoStoryDownloaderSuccessBlock)?, failureBlock: ((Swift.Error?) -> Swift.Void)?, progressBlock: ((Swift.Float, Swift.Float) -> Swift.Void)?)
 }
 public enum PBVideoQuality : Swift.Float {
   case q360
   case q480
   case q720
   case q1080
+  public var descriptor: Swift.String {
+    get
+  }
   public typealias RawValue = Swift.Float
   public var rawValue: Swift.Float {
     get
   }
   public init?(rawValue: Swift.Float)
+}
+public class PBVideoQualityService {
+  public var quality: PBFrameworkVideoStories.PBVideoQuality
+  public var allQualities: [PBFrameworkVideoStories.PBVideoQuality] {
+    get
+  }
+  public init()
+  public func tempFileName(quality: PBFrameworkVideoStories.PBVideoQuality) -> Swift.String
+  public func tempFileExists(quality: PBFrameworkVideoStories.PBVideoQuality) -> Swift.Bool
+  public func tempFileURL(quality: PBFrameworkVideoStories.PBVideoQuality) -> Foundation.URL
+  public func unfinishedFileName(quality: PBFrameworkVideoStories.PBVideoQuality) -> Swift.String
+  public func unfinishedFileExists(quality: PBFrameworkVideoStories.PBVideoQuality) -> Swift.Bool
+  public func unfinishedFileURL(quality: PBFrameworkVideoStories.PBVideoQuality) -> Foundation.URL
+  public func finishedNoAudioFileName(quality: PBFrameworkVideoStories.PBVideoQuality) -> Swift.String
+  public func finishedNoAudioFileExists(quality: PBFrameworkVideoStories.PBVideoQuality) -> Swift.Bool
+  public func finishedNoAudioFileURL(quality: PBFrameworkVideoStories.PBVideoQuality) -> Foundation.URL
+  public func finishedFileName(quality: PBFrameworkVideoStories.PBVideoQuality) -> Swift.String
+  public func finishedFileExists(quality: PBFrameworkVideoStories.PBVideoQuality) -> Swift.Bool
+  public func finishedFileURL(quality: PBFrameworkVideoStories.PBVideoQuality) -> Foundation.URL
+  @objc deinit
 }
 @objc(Filter) public class Filter : CoreData.NSManagedObject {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
@@ -295,18 +413,97 @@ public enum PBVideoQuality : Swift.Float {
 }
 extension Filter {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.Filter>
-  @objc dynamic public var displayOrder: Swift.Int16 {
+  @objc @NSManaged dynamic public var displayOrder: Swift.Int16 {
     @objc get
     @objc set
   }
-  @objc dynamic public var name: Swift.String? {
+  @objc @NSManaged dynamic public var name: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var themeAsset: PBFrameworkVideoStories.ThemeAsset? {
+  @objc @NSManaged dynamic public var themeAsset: PBFrameworkVideoStories.ThemeAsset? {
     @objc get
     @objc set
   }
+}
+@objc(ModularTheme) public class ModularTheme : CoreData.NSManagedObject {
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  @objc deinit
+}
+extension ModularTheme {
+  @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.ModularTheme>
+  @objc @NSManaged dynamic public var audioTrackFileName: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var audioTrackFileType: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var heroURL: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var id: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var isEnabled: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var prerollCoverURL: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var saveDate: Foundation.Date? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var title: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var uuid: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var version: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var themes: Foundation.NSOrderedSet? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var videos: Foundation.NSOrderedSet? {
+    @objc get
+    @objc set
+  }
+}
+extension ModularTheme {
+  @objc(insertObject:inThemesAtIndex:) @NSManaged dynamic public func insertIntoThemes(_ value: PBFrameworkVideoStories.Theme, at idx: Swift.Int)
+  @objc(removeObjectFromThemesAtIndex:) @NSManaged dynamic public func removeFromThemes(at idx: Swift.Int)
+  @objc(insertThemes:atIndexes:) @NSManaged dynamic public func insertIntoThemes(_ values: [PBFrameworkVideoStories.Theme], at indexes: Foundation.NSIndexSet)
+  @objc(removeThemesAtIndexes:) @NSManaged dynamic public func removeFromThemes(at indexes: Foundation.NSIndexSet)
+  @objc(replaceObjectInThemesAtIndex:withObject:) @NSManaged dynamic public func replaceThemes(at idx: Swift.Int, with value: PBFrameworkVideoStories.Theme)
+  @objc(replaceThemesAtIndexes:withThemes:) @NSManaged dynamic public func replaceThemes(at indexes: Foundation.NSIndexSet, with values: [PBFrameworkVideoStories.Theme])
+  @objc(addThemesObject:) @NSManaged dynamic public func addToThemes(_ value: PBFrameworkVideoStories.Theme)
+  @objc(removeThemesObject:) @NSManaged dynamic public func removeFromThemes(_ value: PBFrameworkVideoStories.Theme)
+  @objc(addThemes:) @NSManaged dynamic public func addToThemes(_ values: Foundation.NSOrderedSet)
+  @objc(removeThemes:) @NSManaged dynamic public func removeFromThemes(_ values: Foundation.NSOrderedSet)
+}
+extension ModularTheme {
+  @objc(insertObject:inVideosAtIndex:) @NSManaged dynamic public func insertIntoVideos(_ value: PBFrameworkVideoStories.Video, at idx: Swift.Int)
+  @objc(removeObjectFromVideosAtIndex:) @NSManaged dynamic public func removeFromVideos(at idx: Swift.Int)
+  @objc(insertVideos:atIndexes:) @NSManaged dynamic public func insertIntoVideos(_ values: [PBFrameworkVideoStories.Video], at indexes: Foundation.NSIndexSet)
+  @objc(removeVideosAtIndexes:) @NSManaged dynamic public func removeFromVideos(at indexes: Foundation.NSIndexSet)
+  @objc(replaceObjectInVideosAtIndex:withObject:) @NSManaged dynamic public func replaceVideos(at idx: Swift.Int, with value: PBFrameworkVideoStories.Video)
+  @objc(replaceVideosAtIndexes:withVideos:) @NSManaged dynamic public func replaceVideos(at indexes: Foundation.NSIndexSet, with values: [PBFrameworkVideoStories.Video])
+  @objc(addVideosObject:) @NSManaged dynamic public func addToVideos(_ value: PBFrameworkVideoStories.Video)
+  @objc(removeVideosObject:) @NSManaged dynamic public func removeFromVideos(_ value: PBFrameworkVideoStories.Video)
+  @objc(addVideos:) @NSManaged dynamic public func addToVideos(_ values: Foundation.NSOrderedSet)
+  @objc(removeVideos:) @NSManaged dynamic public func removeFromVideos(_ values: Foundation.NSOrderedSet)
 }
 @objc(Theme) public class Theme : CoreData.NSManagedObject {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
@@ -314,91 +511,103 @@ extension Filter {
 }
 extension Theme {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.Theme>
-  @objc dynamic public var assetLocationURL: Swift.String? {
+  @objc @NSManaged dynamic public var assetLocationURL: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var audioTrackFileName: Swift.String? {
+  @objc @NSManaged dynamic public var audioTrackFileName: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var audioTrackFileType: Swift.String? {
+  @objc @NSManaged dynamic public var audioTrackFileType: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var audioTrackTitle: Swift.String? {
+  @objc @NSManaged dynamic public var audioTrackTitle: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var creationDate: Swift.String? {
+  @objc @NSManaged dynamic public var creationDate: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var currentDownloadedVersion: Swift.String? {
+  @objc @NSManaged dynamic public var currentDownloadedVersion: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var heroURL: Swift.String? {
+  @objc @NSManaged dynamic public var heroURL: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var id: Swift.String? {
+  @objc @NSManaged dynamic public var id: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var isEnabled: Swift.Bool {
+  @objc @NSManaged dynamic public var isEnabled: Swift.Bool {
     @objc get
     @objc set
   }
-  @objc dynamic public var isFromZIP: Swift.Bool {
+  @objc @NSManaged dynamic public var isFromZIP: Swift.Bool {
     @objc get
     @objc set
   }
-  @objc dynamic public var isHidden: Swift.Bool {
+  @objc @NSManaged dynamic public var isHidden: Swift.Bool {
     @objc get
     @objc set
   }
-  @objc dynamic public var isNative: Swift.Bool {
+  @objc @NSManaged dynamic public var isNative: Swift.Bool {
     @objc get
     @objc set
   }
-  @objc dynamic public var jsonFileName: Swift.String? {
+  @objc @NSManaged dynamic public var jsonFileName: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var lengthInMS: Swift.String? {
+  @objc @NSManaged dynamic public var lengthInMS: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var nm: Swift.String? {
+  @objc @NSManaged dynamic public var nm: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var photoNames: [[Swift.String : Any]]? {
+  @objc @NSManaged dynamic public var photoNames: [[Swift.String : Any]]? {
     @objc get
     @objc set
   }
-  @objc dynamic public var postrollCoverURL: Swift.String? {
+  @objc @NSManaged dynamic public var postrollCoverURL: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var prerollCoverURL: Swift.String? {
+  @objc @NSManaged dynamic public var prerollCoverURL: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var title: Swift.String? {
+  @objc @NSManaged dynamic public var saveDate: Foundation.Date? {
     @objc get
     @objc set
   }
-  @objc dynamic public var version: Swift.String? {
+  @objc @NSManaged dynamic public var title: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var webFiles: [[Swift.String : Any]]? {
+  @objc @NSManaged dynamic public var uuid: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var themeAsset: Foundation.NSSet? {
+  @objc @NSManaged dynamic public var version: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var webFiles: [[Swift.String : Any]]? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var modularTheme: PBFrameworkVideoStories.ModularTheme? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var themeAsset: Foundation.NSSet? {
     @objc get
     @objc set
   }
@@ -415,31 +624,31 @@ extension Theme {
 }
 extension ThemeAsset {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.ThemeAsset>
-  @objc dynamic public var displayOrder: Swift.Int16 {
+  @objc @NSManaged dynamic public var displayOrder: Swift.Int16 {
     @objc get
     @objc set
   }
-  @objc dynamic public var filename: Swift.String? {
+  @objc @NSManaged dynamic public var filename: Swift.String? {
     @objc get
     @objc set
   }
-  @objc dynamic public var previewFrame: Swift.Int32 {
+  @objc @NSManaged dynamic public var previewFrame: Swift.Int32 {
     @objc get
     @objc set
   }
-  @objc dynamic public var sizeHeight: Swift.Int16 {
+  @objc @NSManaged dynamic public var sizeHeight: Swift.Int16 {
     @objc get
     @objc set
   }
-  @objc dynamic public var sizeWidth: Swift.Int16 {
+  @objc @NSManaged dynamic public var sizeWidth: Swift.Int16 {
     @objc get
     @objc set
   }
-  @objc dynamic public var filter: Foundation.NSSet? {
+  @objc @NSManaged dynamic public var filter: Foundation.NSSet? {
     @objc get
     @objc set
   }
-  @objc dynamic public var theme: PBFrameworkVideoStories.Theme? {
+  @objc @NSManaged dynamic public var theme: PBFrameworkVideoStories.Theme? {
     @objc get
     @objc set
   }
@@ -450,11 +659,33 @@ extension ThemeAsset {
   @objc(addFilter:) @NSManaged dynamic public func addToFilter(_ values: Foundation.NSSet)
   @objc(removeFilter:) @NSManaged dynamic public func removeFromFilter(_ values: Foundation.NSSet)
 }
- 
+@objc(Video) public class Video : CoreData.NSManagedObject {
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  @objc deinit
+}
+extension Video {
+  @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.Video>
+  @objc @NSManaged dynamic public var maxLength: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var minLength: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var modularTheme: PBFrameworkVideoStories.ModularTheme? {
+    @objc get
+    @objc set
+  }
+}
+extension PBFrameworkVideoStories.PBAdjustContainerViewController : ObjectiveC.NSObjectProtocol {}
 extension PBFrameworkVideoStories.PBVideoStoriesError : Swift.Equatable {}
 extension PBFrameworkVideoStories.PBVideoStoriesError : Swift.Hashable {}
 extension PBFrameworkVideoStories.PBThemeDownloadStatus : Swift.Equatable {}
 extension PBFrameworkVideoStories.PBThemeDownloadStatus : Swift.Hashable {}
+extension PBFrameworkVideoStories.PBEnvironment : Swift.Equatable {}
+extension PBFrameworkVideoStories.PBEnvironment : Swift.Hashable {}
+extension PBFrameworkVideoStories.PBEnvironment : Swift.RawRepresentable {}
 extension PBFrameworkVideoStories.PBVideoFileName : Swift.Equatable {}
 extension PBFrameworkVideoStories.PBVideoFileName : Swift.Hashable {}
 extension PBFrameworkVideoStories.PBVideoFileName : Swift.RawRepresentable {}

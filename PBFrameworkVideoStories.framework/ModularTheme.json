@@ -1,0 +1,18 @@
+{
+  "themes":[
+    {"url": "https://s3.amazonaws.com/partners-prod.photobutler.com/video_themes/z/Test_001.zip"},
+    {"url": "https://s3.amazonaws.com/partners-prod.photobutler.com/video_themes/z/Test_002.zip"},
+    {"url": "https://s3.amazonaws.com/partners-prod.photobutler.com/video_themes/z/Test_003.zip"},
+    {
+      "type":"video",
+      "maxLength":20000,
+      "minLength":0
+    }
+  ],
+  "audioTrackName": "filename",
+  "audioTrackType": "mp3",
+  "version": "1.0",
+  "themeTitle": "Testing Modular Themes",
+  "heroImageURL": "https://s3.amazonaws.com/partners-prod.photobutler.com/video_themes/i/carousel/20200105/PhotoButler_CES.jpg",
+  "prerollCoverURL": "https://s3.amazonaws.com/partners-prod.photobutler.com/video_themes/i/preplay/20200105/PhotoButler_CES.jpg"
+}
