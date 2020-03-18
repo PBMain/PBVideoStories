@@ -222,17 +222,30 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories22BaseLoadingFromXIBView")
 @class NSPredicate;
 @class ModularTheme;
 @class Theme;
+@class Tag;
+@class NSManagedObject;
 
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories9CDManager") SWIFT_AVAILABILITY(ios,introduced=10.0)
 @interface CDManager : NSObject
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CDManager * _Nonnull shared;)
 + (CDManager * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, copy) NSString * _Nonnull uncategorizedTagName;)
++ (NSString * _Nonnull)uncategorizedTagName SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<ModularTheme *> * _Nonnull)fetchAllModularThemesIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<Theme *> * _Nonnull)fetchAllThemesIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
 - (ModularTheme * _Nullable)fetchModularThemeByUUID:(NSString * _Nonnull)uuid in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByUUID:(NSString * _Nonnull)uuid in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByID:(NSString * _Nonnull)id in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByAssetLocationURL:(NSString * _Nonnull)assetLocationURL in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<Tag *> * _Nonnull)fetchAllTagsWithIncludeUncategorized:(BOOL)includeUncategorized in:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<Tag *> * _Nonnull)fetchAllTagsIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
+- (NSInteger)fetchThemeCountForTagBy:(NSString * _Nonnull)name context:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<Theme *> * _Nonnull)fetchUntaggedThemesWithContext:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (void)addTagToThemeBy:(NSString * _Nonnull)tagName themeUUID:(NSString * _Nonnull)themeUUID context:(NSManagedObjectContext * _Nullable)context;
+- (void)createTagWith:(NSString * _Nonnull)tagName context:(NSManagedObjectContext * _Nullable)context;
+- (void)removeTagFromThemeBy:(NSString * _Nonnull)tagName themeUUID:(NSString * _Nonnull)themeUUID context:(NSManagedObjectContext * _Nullable)context;
+- (Tag * _Nullable)fetchTagBy:(NSString * _Nonnull)name in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (NSError * _Nullable)deleteWithTag:(NSManagedObject * _Nonnull)tag in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
 - (void)saveWithContext:(NSManagedObjectContext * _Nullable)context;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
@@ -262,23 +275,9 @@ SWIFT_CLASS_NAMED("ModularTheme")
 
 
 
+@class Video;
 @class NSIndexSet;
 @class NSOrderedSet;
-
-@interface ModularTheme (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)insertObject:(Theme * _Nonnull)value inThemesAtIndex:(NSInteger)idx;
-- (void)removeObjectFromThemesAtIndex:(NSInteger)idx;
-- (void)insertThemes:(NSArray<Theme *> * _Nonnull)values atIndexes:(NSIndexSet * _Nonnull)indexes;
-- (void)removeThemesAtIndexes:(NSIndexSet * _Nonnull)indexes;
-- (void)replaceObjectInThemesAtIndex:(NSInteger)idx withObject:(Theme * _Nonnull)value;
-- (void)replaceThemesAtIndexes:(NSIndexSet * _Nonnull)indexes withThemes:(NSArray<Theme *> * _Nonnull)values;
-- (void)addThemesObject:(Theme * _Nonnull)value;
-- (void)removeThemesObject:(Theme * _Nonnull)value;
-- (void)addThemes:(NSOrderedSet * _Nonnull)values;
-- (void)removeThemes:(NSOrderedSet * _Nonnull)values;
-@end
-
-@class Video;
 
 @interface ModularTheme (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)insertObject:(Video * _Nonnull)value inVideosAtIndex:(NSInteger)idx;
@@ -291,6 +290,20 @@ SWIFT_CLASS_NAMED("ModularTheme")
 - (void)removeVideosObject:(Video * _Nonnull)value;
 - (void)addVideos:(NSOrderedSet * _Nonnull)values;
 - (void)removeVideos:(NSOrderedSet * _Nonnull)values;
+@end
+
+
+@interface ModularTheme (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)insertObject:(Theme * _Nonnull)value inThemesAtIndex:(NSInteger)idx;
+- (void)removeObjectFromThemesAtIndex:(NSInteger)idx;
+- (void)insertThemes:(NSArray<Theme *> * _Nonnull)values atIndexes:(NSIndexSet * _Nonnull)indexes;
+- (void)removeThemesAtIndexes:(NSIndexSet * _Nonnull)indexes;
+- (void)replaceObjectInThemesAtIndex:(NSInteger)idx withObject:(Theme * _Nonnull)value;
+- (void)replaceThemesAtIndexes:(NSIndexSet * _Nonnull)indexes withThemes:(NSArray<Theme *> * _Nonnull)values;
+- (void)addThemesObject:(Theme * _Nonnull)value;
+- (void)removeThemesObject:(Theme * _Nonnull)value;
+- (void)addThemes:(NSOrderedSet * _Nonnull)values;
+- (void)removeThemes:(NSOrderedSet * _Nonnull)values;
 @end
 
 
@@ -386,6 +399,12 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class UITextField;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITextFieldDelegate>
+- (BOOL)textFieldShouldReturn:(UITextField * _Nonnull)textField SWIFT_WARN_UNUSED_RESULT;
+@end
+
 @class UICollectionView;
 @class UICollectionViewCell;
 
@@ -393,12 +412,6 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView * _Nonnull)collectionView SWIFT_WARN_UNUSED_RESULT;
 - (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (UICollectionViewCell * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView cellForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
-@end
-
-@class UITextField;
-
-@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITextFieldDelegate>
-- (BOOL)textFieldShouldReturn:(UITextField * _Nonnull)textField SWIFT_WARN_UNUSED_RESULT;
 @end
 
 @class UICollectionViewLayout;
@@ -466,6 +479,8 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
+
 @class UITableView;
 @class UITableViewCell;
 
@@ -479,8 +494,6 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 - (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
 - (void)didCancelWithPicker:(PBImageSelectionListController * _Nonnull)picker;
 @end
-
-
 
 
 @interface PBThemeDetailsViewController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITableViewDelegate>
@@ -517,6 +530,13 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBVideoStoriesViewController")
 - (UIView * _Nonnull)carousel:(iCarousel * _Nonnull)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView * _Nullable)view SWIFT_WARN_UNUSED_RESULT;
 @end
 
+@class UITouch;
+@class UIEvent;
+
+@interface PBVideoStoriesViewController (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)touchesBegan:(NSSet<UITouch *> * _Nonnull)touches withEvent:(UIEvent * _Nullable)event;
+@end
+
 
 @interface PBVideoStoriesViewController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <iCarouselDelegate>
 - (CGFloat)carouselItemWidth:(iCarousel * _Nonnull)carousel SWIFT_WARN_UNUSED_RESULT;
@@ -528,13 +548,6 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBVideoStoriesViewController")
 @end
 
 
-
-@class UITouch;
-@class UIEvent;
-
-@interface PBVideoStoriesViewController (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)touchesBegan:(NSSet<UITouch *> * _Nonnull)touches withEvent:(UIEvent * _Nullable)event;
-@end
 
 
 
@@ -561,6 +574,29 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories29PBVideoStoryDownloaderService")
 @end
 
 
+SWIFT_CLASS_NAMED("Tag")
+@interface Tag : NSManagedObject
+- (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
+@end
+
+@class NSSet;
+
+@interface Tag (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)addThemesObject:(Theme * _Nonnull)value;
+- (void)removeThemesObject:(Theme * _Nonnull)value;
+- (void)addThemes:(NSSet * _Nonnull)values;
+- (void)removeThemes:(NSSet * _Nonnull)values;
+@end
+
+
+@interface Tag (SWIFT_EXTENSION(PBFrameworkVideoStories))
+@property (nonatomic) BOOL isEnabled;
+@property (nonatomic) BOOL isExpanded;
+@property (nonatomic, copy) NSString * _Nullable name;
+@property (nonatomic, strong) NSSet * _Nullable themes;
+@end
+
+
 SWIFT_CLASS_NAMED("Theme")
 @interface Theme : NSManagedObject
 - (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
@@ -568,13 +604,20 @@ SWIFT_CLASS_NAMED("Theme")
 
 
 
-@class NSSet;
 
 @interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)addThemeAssetObject:(ThemeAsset * _Nonnull)value;
 - (void)removeThemeAssetObject:(ThemeAsset * _Nonnull)value;
 - (void)addThemeAsset:(NSSet * _Nonnull)values;
 - (void)removeThemeAsset:(NSSet * _Nonnull)values;
+@end
+
+
+@interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)addTagsObject:(Tag * _Nonnull)value;
+- (void)removeTagsObject:(Tag * _Nonnull)value;
+- (void)addTags:(NSSet * _Nonnull)values;
+- (void)removeTags:(NSSet * _Nonnull)values;
 @end
 
 
@@ -603,6 +646,7 @@ SWIFT_CLASS_NAMED("Theme")
 @property (nonatomic, copy) NSString * _Nullable version;
 @property (nonatomic, copy) NSArray<NSDictionary<NSString *, id> *> * _Nullable webFiles;
 @property (nonatomic, strong) ModularTheme * _Nullable modularTheme;
+@property (nonatomic, strong) NSSet * _Nullable tags;
 @property (nonatomic, strong) NSSet * _Nullable themeAsset;
 @end
 
@@ -636,16 +680,22 @@ SWIFT_CLASS_NAMED("ThemeAsset")
 
 
 
+
+
+
+
 @interface UIImage (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (UIImage * _Nullable)aspectFittedToSizeCenteredWithSize:(CGSize)size SWIFT_WARN_UNUSED_RESULT;
 @end
 
 
+
+
+
+
 @interface UIImageView (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)awakeFromNib;
 @end
-
-
 
 
 
@@ -897,17 +947,30 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories22BaseLoadingFromXIBView")
 @class NSPredicate;
 @class ModularTheme;
 @class Theme;
+@class Tag;
+@class NSManagedObject;
 
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories9CDManager") SWIFT_AVAILABILITY(ios,introduced=10.0)
 @interface CDManager : NSObject
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CDManager * _Nonnull shared;)
 + (CDManager * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, copy) NSString * _Nonnull uncategorizedTagName;)
++ (NSString * _Nonnull)uncategorizedTagName SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<ModularTheme *> * _Nonnull)fetchAllModularThemesIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<Theme *> * _Nonnull)fetchAllThemesIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
 - (ModularTheme * _Nullable)fetchModularThemeByUUID:(NSString * _Nonnull)uuid in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByUUID:(NSString * _Nonnull)uuid in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByID:(NSString * _Nonnull)id in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByAssetLocationURL:(NSString * _Nonnull)assetLocationURL in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<Tag *> * _Nonnull)fetchAllTagsWithIncludeUncategorized:(BOOL)includeUncategorized in:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<Tag *> * _Nonnull)fetchAllTagsIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
+- (NSInteger)fetchThemeCountForTagBy:(NSString * _Nonnull)name context:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<Theme *> * _Nonnull)fetchUntaggedThemesWithContext:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (void)addTagToThemeBy:(NSString * _Nonnull)tagName themeUUID:(NSString * _Nonnull)themeUUID context:(NSManagedObjectContext * _Nullable)context;
+- (void)createTagWith:(NSString * _Nonnull)tagName context:(NSManagedObjectContext * _Nullable)context;
+- (void)removeTagFromThemeBy:(NSString * _Nonnull)tagName themeUUID:(NSString * _Nonnull)themeUUID context:(NSManagedObjectContext * _Nullable)context;
+- (Tag * _Nullable)fetchTagBy:(NSString * _Nonnull)name in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (NSError * _Nullable)deleteWithTag:(NSManagedObject * _Nonnull)tag in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
 - (void)saveWithContext:(NSManagedObjectContext * _Nullable)context;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
@@ -937,23 +1000,9 @@ SWIFT_CLASS_NAMED("ModularTheme")
 
 
 
+@class Video;
 @class NSIndexSet;
 @class NSOrderedSet;
-
-@interface ModularTheme (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)insertObject:(Theme * _Nonnull)value inThemesAtIndex:(NSInteger)idx;
-- (void)removeObjectFromThemesAtIndex:(NSInteger)idx;
-- (void)insertThemes:(NSArray<Theme *> * _Nonnull)values atIndexes:(NSIndexSet * _Nonnull)indexes;
-- (void)removeThemesAtIndexes:(NSIndexSet * _Nonnull)indexes;
-- (void)replaceObjectInThemesAtIndex:(NSInteger)idx withObject:(Theme * _Nonnull)value;
-- (void)replaceThemesAtIndexes:(NSIndexSet * _Nonnull)indexes withThemes:(NSArray<Theme *> * _Nonnull)values;
-- (void)addThemesObject:(Theme * _Nonnull)value;
-- (void)removeThemesObject:(Theme * _Nonnull)value;
-- (void)addThemes:(NSOrderedSet * _Nonnull)values;
-- (void)removeThemes:(NSOrderedSet * _Nonnull)values;
-@end
-
-@class Video;
 
 @interface ModularTheme (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)insertObject:(Video * _Nonnull)value inVideosAtIndex:(NSInteger)idx;
@@ -966,6 +1015,20 @@ SWIFT_CLASS_NAMED("ModularTheme")
 - (void)removeVideosObject:(Video * _Nonnull)value;
 - (void)addVideos:(NSOrderedSet * _Nonnull)values;
 - (void)removeVideos:(NSOrderedSet * _Nonnull)values;
+@end
+
+
+@interface ModularTheme (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)insertObject:(Theme * _Nonnull)value inThemesAtIndex:(NSInteger)idx;
+- (void)removeObjectFromThemesAtIndex:(NSInteger)idx;
+- (void)insertThemes:(NSArray<Theme *> * _Nonnull)values atIndexes:(NSIndexSet * _Nonnull)indexes;
+- (void)removeThemesAtIndexes:(NSIndexSet * _Nonnull)indexes;
+- (void)replaceObjectInThemesAtIndex:(NSInteger)idx withObject:(Theme * _Nonnull)value;
+- (void)replaceThemesAtIndexes:(NSIndexSet * _Nonnull)indexes withThemes:(NSArray<Theme *> * _Nonnull)values;
+- (void)addThemesObject:(Theme * _Nonnull)value;
+- (void)removeThemesObject:(Theme * _Nonnull)value;
+- (void)addThemes:(NSOrderedSet * _Nonnull)values;
+- (void)removeThemes:(NSOrderedSet * _Nonnull)values;
 @end
 
 
@@ -1061,6 +1124,12 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class UITextField;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITextFieldDelegate>
+- (BOOL)textFieldShouldReturn:(UITextField * _Nonnull)textField SWIFT_WARN_UNUSED_RESULT;
+@end
+
 @class UICollectionView;
 @class UICollectionViewCell;
 
@@ -1068,12 +1137,6 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView * _Nonnull)collectionView SWIFT_WARN_UNUSED_RESULT;
 - (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (UICollectionViewCell * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView cellForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
-@end
-
-@class UITextField;
-
-@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITextFieldDelegate>
-- (BOOL)textFieldShouldReturn:(UITextField * _Nonnull)textField SWIFT_WARN_UNUSED_RESULT;
 @end
 
 @class UICollectionViewLayout;
@@ -1141,6 +1204,8 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
+
 @class UITableView;
 @class UITableViewCell;
 
@@ -1154,8 +1219,6 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 - (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
 - (void)didCancelWithPicker:(PBImageSelectionListController * _Nonnull)picker;
 @end
-
-
 
 
 @interface PBThemeDetailsViewController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITableViewDelegate>
@@ -1192,6 +1255,13 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBVideoStoriesViewController")
 - (UIView * _Nonnull)carousel:(iCarousel * _Nonnull)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView * _Nullable)view SWIFT_WARN_UNUSED_RESULT;
 @end
 
+@class UITouch;
+@class UIEvent;
+
+@interface PBVideoStoriesViewController (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)touchesBegan:(NSSet<UITouch *> * _Nonnull)touches withEvent:(UIEvent * _Nullable)event;
+@end
+
 
 @interface PBVideoStoriesViewController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <iCarouselDelegate>
 - (CGFloat)carouselItemWidth:(iCarousel * _Nonnull)carousel SWIFT_WARN_UNUSED_RESULT;
@@ -1203,13 +1273,6 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBVideoStoriesViewController")
 @end
 
 
-
-@class UITouch;
-@class UIEvent;
-
-@interface PBVideoStoriesViewController (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)touchesBegan:(NSSet<UITouch *> * _Nonnull)touches withEvent:(UIEvent * _Nullable)event;
-@end
 
 
 
@@ -1236,6 +1299,29 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories29PBVideoStoryDownloaderService")
 @end
 
 
+SWIFT_CLASS_NAMED("Tag")
+@interface Tag : NSManagedObject
+- (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
+@end
+
+@class NSSet;
+
+@interface Tag (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)addThemesObject:(Theme * _Nonnull)value;
+- (void)removeThemesObject:(Theme * _Nonnull)value;
+- (void)addThemes:(NSSet * _Nonnull)values;
+- (void)removeThemes:(NSSet * _Nonnull)values;
+@end
+
+
+@interface Tag (SWIFT_EXTENSION(PBFrameworkVideoStories))
+@property (nonatomic) BOOL isEnabled;
+@property (nonatomic) BOOL isExpanded;
+@property (nonatomic, copy) NSString * _Nullable name;
+@property (nonatomic, strong) NSSet * _Nullable themes;
+@end
+
+
 SWIFT_CLASS_NAMED("Theme")
 @interface Theme : NSManagedObject
 - (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
@@ -1243,13 +1329,20 @@ SWIFT_CLASS_NAMED("Theme")
 
 
 
-@class NSSet;
 
 @interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)addThemeAssetObject:(ThemeAsset * _Nonnull)value;
 - (void)removeThemeAssetObject:(ThemeAsset * _Nonnull)value;
 - (void)addThemeAsset:(NSSet * _Nonnull)values;
 - (void)removeThemeAsset:(NSSet * _Nonnull)values;
+@end
+
+
+@interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)addTagsObject:(Tag * _Nonnull)value;
+- (void)removeTagsObject:(Tag * _Nonnull)value;
+- (void)addTags:(NSSet * _Nonnull)values;
+- (void)removeTags:(NSSet * _Nonnull)values;
 @end
 
 
@@ -1278,6 +1371,7 @@ SWIFT_CLASS_NAMED("Theme")
 @property (nonatomic, copy) NSString * _Nullable version;
 @property (nonatomic, copy) NSArray<NSDictionary<NSString *, id> *> * _Nullable webFiles;
 @property (nonatomic, strong) ModularTheme * _Nullable modularTheme;
+@property (nonatomic, strong) NSSet * _Nullable tags;
 @property (nonatomic, strong) NSSet * _Nullable themeAsset;
 @end
 
@@ -1311,16 +1405,22 @@ SWIFT_CLASS_NAMED("ThemeAsset")
 
 
 
+
+
+
+
 @interface UIImage (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (UIImage * _Nullable)aspectFittedToSizeCenteredWithSize:(CGSize)size SWIFT_WARN_UNUSED_RESULT;
 @end
 
 
+
+
+
+
 @interface UIImageView (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)awakeFromNib;
 @end
-
-
 
 
 
@@ -1576,17 +1676,30 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories22BaseLoadingFromXIBView")
 @class NSPredicate;
 @class ModularTheme;
 @class Theme;
+@class Tag;
+@class NSManagedObject;
 
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories9CDManager") SWIFT_AVAILABILITY(ios,introduced=10.0)
 @interface CDManager : NSObject
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CDManager * _Nonnull shared;)
 + (CDManager * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, copy) NSString * _Nonnull uncategorizedTagName;)
++ (NSString * _Nonnull)uncategorizedTagName SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<ModularTheme *> * _Nonnull)fetchAllModularThemesIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<Theme *> * _Nonnull)fetchAllThemesIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
 - (ModularTheme * _Nullable)fetchModularThemeByUUID:(NSString * _Nonnull)uuid in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByUUID:(NSString * _Nonnull)uuid in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByID:(NSString * _Nonnull)id in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByAssetLocationURL:(NSString * _Nonnull)assetLocationURL in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<Tag *> * _Nonnull)fetchAllTagsWithIncludeUncategorized:(BOOL)includeUncategorized in:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<Tag *> * _Nonnull)fetchAllTagsIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
+- (NSInteger)fetchThemeCountForTagBy:(NSString * _Nonnull)name context:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<Theme *> * _Nonnull)fetchUntaggedThemesWithContext:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (void)addTagToThemeBy:(NSString * _Nonnull)tagName themeUUID:(NSString * _Nonnull)themeUUID context:(NSManagedObjectContext * _Nullable)context;
+- (void)createTagWith:(NSString * _Nonnull)tagName context:(NSManagedObjectContext * _Nullable)context;
+- (void)removeTagFromThemeBy:(NSString * _Nonnull)tagName themeUUID:(NSString * _Nonnull)themeUUID context:(NSManagedObjectContext * _Nullable)context;
+- (Tag * _Nullable)fetchTagBy:(NSString * _Nonnull)name in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (NSError * _Nullable)deleteWithTag:(NSManagedObject * _Nonnull)tag in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
 - (void)saveWithContext:(NSManagedObjectContext * _Nullable)context;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
@@ -1616,23 +1729,9 @@ SWIFT_CLASS_NAMED("ModularTheme")
 
 
 
+@class Video;
 @class NSIndexSet;
 @class NSOrderedSet;
-
-@interface ModularTheme (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)insertObject:(Theme * _Nonnull)value inThemesAtIndex:(NSInteger)idx;
-- (void)removeObjectFromThemesAtIndex:(NSInteger)idx;
-- (void)insertThemes:(NSArray<Theme *> * _Nonnull)values atIndexes:(NSIndexSet * _Nonnull)indexes;
-- (void)removeThemesAtIndexes:(NSIndexSet * _Nonnull)indexes;
-- (void)replaceObjectInThemesAtIndex:(NSInteger)idx withObject:(Theme * _Nonnull)value;
-- (void)replaceThemesAtIndexes:(NSIndexSet * _Nonnull)indexes withThemes:(NSArray<Theme *> * _Nonnull)values;
-- (void)addThemesObject:(Theme * _Nonnull)value;
-- (void)removeThemesObject:(Theme * _Nonnull)value;
-- (void)addThemes:(NSOrderedSet * _Nonnull)values;
-- (void)removeThemes:(NSOrderedSet * _Nonnull)values;
-@end
-
-@class Video;
 
 @interface ModularTheme (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)insertObject:(Video * _Nonnull)value inVideosAtIndex:(NSInteger)idx;
@@ -1645,6 +1744,20 @@ SWIFT_CLASS_NAMED("ModularTheme")
 - (void)removeVideosObject:(Video * _Nonnull)value;
 - (void)addVideos:(NSOrderedSet * _Nonnull)values;
 - (void)removeVideos:(NSOrderedSet * _Nonnull)values;
+@end
+
+
+@interface ModularTheme (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)insertObject:(Theme * _Nonnull)value inThemesAtIndex:(NSInteger)idx;
+- (void)removeObjectFromThemesAtIndex:(NSInteger)idx;
+- (void)insertThemes:(NSArray<Theme *> * _Nonnull)values atIndexes:(NSIndexSet * _Nonnull)indexes;
+- (void)removeThemesAtIndexes:(NSIndexSet * _Nonnull)indexes;
+- (void)replaceObjectInThemesAtIndex:(NSInteger)idx withObject:(Theme * _Nonnull)value;
+- (void)replaceThemesAtIndexes:(NSIndexSet * _Nonnull)indexes withThemes:(NSArray<Theme *> * _Nonnull)values;
+- (void)addThemesObject:(Theme * _Nonnull)value;
+- (void)removeThemesObject:(Theme * _Nonnull)value;
+- (void)addThemes:(NSOrderedSet * _Nonnull)values;
+- (void)removeThemes:(NSOrderedSet * _Nonnull)values;
 @end
 
 
@@ -1740,6 +1853,12 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class UITextField;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITextFieldDelegate>
+- (BOOL)textFieldShouldReturn:(UITextField * _Nonnull)textField SWIFT_WARN_UNUSED_RESULT;
+@end
+
 @class UICollectionView;
 @class UICollectionViewCell;
 
@@ -1747,12 +1866,6 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView * _Nonnull)collectionView SWIFT_WARN_UNUSED_RESULT;
 - (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (UICollectionViewCell * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView cellForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
-@end
-
-@class UITextField;
-
-@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITextFieldDelegate>
-- (BOOL)textFieldShouldReturn:(UITextField * _Nonnull)textField SWIFT_WARN_UNUSED_RESULT;
 @end
 
 @class UICollectionViewLayout;
@@ -1820,6 +1933,8 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
+
 @class UITableView;
 @class UITableViewCell;
 
@@ -1833,8 +1948,6 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 - (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
 - (void)didCancelWithPicker:(PBImageSelectionListController * _Nonnull)picker;
 @end
-
-
 
 
 @interface PBThemeDetailsViewController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITableViewDelegate>
@@ -1871,6 +1984,13 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBVideoStoriesViewController")
 - (UIView * _Nonnull)carousel:(iCarousel * _Nonnull)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView * _Nullable)view SWIFT_WARN_UNUSED_RESULT;
 @end
 
+@class UITouch;
+@class UIEvent;
+
+@interface PBVideoStoriesViewController (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)touchesBegan:(NSSet<UITouch *> * _Nonnull)touches withEvent:(UIEvent * _Nullable)event;
+@end
+
 
 @interface PBVideoStoriesViewController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <iCarouselDelegate>
 - (CGFloat)carouselItemWidth:(iCarousel * _Nonnull)carousel SWIFT_WARN_UNUSED_RESULT;
@@ -1882,13 +2002,6 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBVideoStoriesViewController")
 @end
 
 
-
-@class UITouch;
-@class UIEvent;
-
-@interface PBVideoStoriesViewController (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)touchesBegan:(NSSet<UITouch *> * _Nonnull)touches withEvent:(UIEvent * _Nullable)event;
-@end
 
 
 
@@ -1915,6 +2028,29 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories29PBVideoStoryDownloaderService")
 @end
 
 
+SWIFT_CLASS_NAMED("Tag")
+@interface Tag : NSManagedObject
+- (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
+@end
+
+@class NSSet;
+
+@interface Tag (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)addThemesObject:(Theme * _Nonnull)value;
+- (void)removeThemesObject:(Theme * _Nonnull)value;
+- (void)addThemes:(NSSet * _Nonnull)values;
+- (void)removeThemes:(NSSet * _Nonnull)values;
+@end
+
+
+@interface Tag (SWIFT_EXTENSION(PBFrameworkVideoStories))
+@property (nonatomic) BOOL isEnabled;
+@property (nonatomic) BOOL isExpanded;
+@property (nonatomic, copy) NSString * _Nullable name;
+@property (nonatomic, strong) NSSet * _Nullable themes;
+@end
+
+
 SWIFT_CLASS_NAMED("Theme")
 @interface Theme : NSManagedObject
 - (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
@@ -1922,13 +2058,20 @@ SWIFT_CLASS_NAMED("Theme")
 
 
 
-@class NSSet;
 
 @interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)addThemeAssetObject:(ThemeAsset * _Nonnull)value;
 - (void)removeThemeAssetObject:(ThemeAsset * _Nonnull)value;
 - (void)addThemeAsset:(NSSet * _Nonnull)values;
 - (void)removeThemeAsset:(NSSet * _Nonnull)values;
+@end
+
+
+@interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)addTagsObject:(Tag * _Nonnull)value;
+- (void)removeTagsObject:(Tag * _Nonnull)value;
+- (void)addTags:(NSSet * _Nonnull)values;
+- (void)removeTags:(NSSet * _Nonnull)values;
 @end
 
 
@@ -1957,6 +2100,7 @@ SWIFT_CLASS_NAMED("Theme")
 @property (nonatomic, copy) NSString * _Nullable version;
 @property (nonatomic, copy) NSArray<NSDictionary<NSString *, id> *> * _Nullable webFiles;
 @property (nonatomic, strong) ModularTheme * _Nullable modularTheme;
+@property (nonatomic, strong) NSSet * _Nullable tags;
 @property (nonatomic, strong) NSSet * _Nullable themeAsset;
 @end
 
@@ -1990,16 +2134,22 @@ SWIFT_CLASS_NAMED("ThemeAsset")
 
 
 
+
+
+
+
 @interface UIImage (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (UIImage * _Nullable)aspectFittedToSizeCenteredWithSize:(CGSize)size SWIFT_WARN_UNUSED_RESULT;
 @end
 
 
+
+
+
+
 @interface UIImageView (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)awakeFromNib;
 @end
-
-
 
 
 
@@ -2251,17 +2401,30 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories22BaseLoadingFromXIBView")
 @class NSPredicate;
 @class ModularTheme;
 @class Theme;
+@class Tag;
+@class NSManagedObject;
 
 SWIFT_CLASS("_TtC23PBFrameworkVideoStories9CDManager") SWIFT_AVAILABILITY(ios,introduced=10.0)
 @interface CDManager : NSObject
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CDManager * _Nonnull shared;)
 + (CDManager * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, copy) NSString * _Nonnull uncategorizedTagName;)
++ (NSString * _Nonnull)uncategorizedTagName SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<ModularTheme *> * _Nonnull)fetchAllModularThemesIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<Theme *> * _Nonnull)fetchAllThemesIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
 - (ModularTheme * _Nullable)fetchModularThemeByUUID:(NSString * _Nonnull)uuid in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByUUID:(NSString * _Nonnull)uuid in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByID:(NSString * _Nonnull)id in:(NSManagedObjectContext * _Nullable)context failure:(void (^ _Nullable)(NSError * _Nullable))failure SWIFT_WARN_UNUSED_RESULT;
 - (Theme * _Nullable)fetchThemeByAssetLocationURL:(NSString * _Nonnull)assetLocationURL in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<Tag *> * _Nonnull)fetchAllTagsWithIncludeUncategorized:(BOOL)includeUncategorized in:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<Tag *> * _Nonnull)fetchAllTagsIn:(NSManagedObjectContext * _Nullable)context predicate:(NSPredicate * _Nullable)predicate SWIFT_WARN_UNUSED_RESULT;
+- (NSInteger)fetchThemeCountForTagBy:(NSString * _Nonnull)name context:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<Theme *> * _Nonnull)fetchUntaggedThemesWithContext:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (void)addTagToThemeBy:(NSString * _Nonnull)tagName themeUUID:(NSString * _Nonnull)themeUUID context:(NSManagedObjectContext * _Nullable)context;
+- (void)createTagWith:(NSString * _Nonnull)tagName context:(NSManagedObjectContext * _Nullable)context;
+- (void)removeTagFromThemeBy:(NSString * _Nonnull)tagName themeUUID:(NSString * _Nonnull)themeUUID context:(NSManagedObjectContext * _Nullable)context;
+- (Tag * _Nullable)fetchTagBy:(NSString * _Nonnull)name in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
+- (NSError * _Nullable)deleteWithTag:(NSManagedObject * _Nonnull)tag in:(NSManagedObjectContext * _Nullable)context SWIFT_WARN_UNUSED_RESULT;
 - (void)saveWithContext:(NSManagedObjectContext * _Nullable)context;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
@@ -2291,23 +2454,9 @@ SWIFT_CLASS_NAMED("ModularTheme")
 
 
 
+@class Video;
 @class NSIndexSet;
 @class NSOrderedSet;
-
-@interface ModularTheme (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)insertObject:(Theme * _Nonnull)value inThemesAtIndex:(NSInteger)idx;
-- (void)removeObjectFromThemesAtIndex:(NSInteger)idx;
-- (void)insertThemes:(NSArray<Theme *> * _Nonnull)values atIndexes:(NSIndexSet * _Nonnull)indexes;
-- (void)removeThemesAtIndexes:(NSIndexSet * _Nonnull)indexes;
-- (void)replaceObjectInThemesAtIndex:(NSInteger)idx withObject:(Theme * _Nonnull)value;
-- (void)replaceThemesAtIndexes:(NSIndexSet * _Nonnull)indexes withThemes:(NSArray<Theme *> * _Nonnull)values;
-- (void)addThemesObject:(Theme * _Nonnull)value;
-- (void)removeThemesObject:(Theme * _Nonnull)value;
-- (void)addThemes:(NSOrderedSet * _Nonnull)values;
-- (void)removeThemes:(NSOrderedSet * _Nonnull)values;
-@end
-
-@class Video;
 
 @interface ModularTheme (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)insertObject:(Video * _Nonnull)value inVideosAtIndex:(NSInteger)idx;
@@ -2320,6 +2469,20 @@ SWIFT_CLASS_NAMED("ModularTheme")
 - (void)removeVideosObject:(Video * _Nonnull)value;
 - (void)addVideos:(NSOrderedSet * _Nonnull)values;
 - (void)removeVideos:(NSOrderedSet * _Nonnull)values;
+@end
+
+
+@interface ModularTheme (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)insertObject:(Theme * _Nonnull)value inThemesAtIndex:(NSInteger)idx;
+- (void)removeObjectFromThemesAtIndex:(NSInteger)idx;
+- (void)insertThemes:(NSArray<Theme *> * _Nonnull)values atIndexes:(NSIndexSet * _Nonnull)indexes;
+- (void)removeThemesAtIndexes:(NSIndexSet * _Nonnull)indexes;
+- (void)replaceObjectInThemesAtIndex:(NSInteger)idx withObject:(Theme * _Nonnull)value;
+- (void)replaceThemesAtIndexes:(NSIndexSet * _Nonnull)indexes withThemes:(NSArray<Theme *> * _Nonnull)values;
+- (void)addThemesObject:(Theme * _Nonnull)value;
+- (void)removeThemesObject:(Theme * _Nonnull)value;
+- (void)addThemes:(NSOrderedSet * _Nonnull)values;
+- (void)removeThemes:(NSOrderedSet * _Nonnull)values;
 @end
 
 
@@ -2415,6 +2578,12 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class UITextField;
+
+@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITextFieldDelegate>
+- (BOOL)textFieldShouldReturn:(UITextField * _Nonnull)textField SWIFT_WARN_UNUSED_RESULT;
+@end
+
 @class UICollectionView;
 @class UICollectionViewCell;
 
@@ -2422,12 +2591,6 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories30PBImageSelectionListController")
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView * _Nonnull)collectionView SWIFT_WARN_UNUSED_RESULT;
 - (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (UICollectionViewCell * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView cellForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
-@end
-
-@class UITextField;
-
-@interface PBImageSelectionListController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITextFieldDelegate>
-- (BOOL)textFieldShouldReturn:(UITextField * _Nonnull)textField SWIFT_WARN_UNUSED_RESULT;
 @end
 
 @class UICollectionViewLayout;
@@ -2495,6 +2658,8 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
+
 @class UITableView;
 @class UITableViewCell;
 
@@ -2508,8 +2673,6 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBThemeDetailsViewController")
 - (void)didSelectWithImages:(NSArray<UIImage *> * _Nonnull)images picker:(PBImageSelectionListController * _Nonnull)picker;
 - (void)didCancelWithPicker:(PBImageSelectionListController * _Nonnull)picker;
 @end
-
-
 
 
 @interface PBThemeDetailsViewController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITableViewDelegate>
@@ -2546,6 +2709,13 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBVideoStoriesViewController")
 - (UIView * _Nonnull)carousel:(iCarousel * _Nonnull)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView * _Nullable)view SWIFT_WARN_UNUSED_RESULT;
 @end
 
+@class UITouch;
+@class UIEvent;
+
+@interface PBVideoStoriesViewController (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)touchesBegan:(NSSet<UITouch *> * _Nonnull)touches withEvent:(UIEvent * _Nullable)event;
+@end
+
 
 @interface PBVideoStoriesViewController (SWIFT_EXTENSION(PBFrameworkVideoStories)) <iCarouselDelegate>
 - (CGFloat)carouselItemWidth:(iCarousel * _Nonnull)carousel SWIFT_WARN_UNUSED_RESULT;
@@ -2557,13 +2727,6 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories28PBVideoStoriesViewController")
 @end
 
 
-
-@class UITouch;
-@class UIEvent;
-
-@interface PBVideoStoriesViewController (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)touchesBegan:(NSSet<UITouch *> * _Nonnull)touches withEvent:(UIEvent * _Nullable)event;
-@end
 
 
 
@@ -2590,6 +2753,29 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories29PBVideoStoryDownloaderService")
 @end
 
 
+SWIFT_CLASS_NAMED("Tag")
+@interface Tag : NSManagedObject
+- (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
+@end
+
+@class NSSet;
+
+@interface Tag (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)addThemesObject:(Theme * _Nonnull)value;
+- (void)removeThemesObject:(Theme * _Nonnull)value;
+- (void)addThemes:(NSSet * _Nonnull)values;
+- (void)removeThemes:(NSSet * _Nonnull)values;
+@end
+
+
+@interface Tag (SWIFT_EXTENSION(PBFrameworkVideoStories))
+@property (nonatomic) BOOL isEnabled;
+@property (nonatomic) BOOL isExpanded;
+@property (nonatomic, copy) NSString * _Nullable name;
+@property (nonatomic, strong) NSSet * _Nullable themes;
+@end
+
+
 SWIFT_CLASS_NAMED("Theme")
 @interface Theme : NSManagedObject
 - (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
@@ -2597,13 +2783,20 @@ SWIFT_CLASS_NAMED("Theme")
 
 
 
-@class NSSet;
 
 @interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)addThemeAssetObject:(ThemeAsset * _Nonnull)value;
 - (void)removeThemeAssetObject:(ThemeAsset * _Nonnull)value;
 - (void)addThemeAsset:(NSSet * _Nonnull)values;
 - (void)removeThemeAsset:(NSSet * _Nonnull)values;
+@end
+
+
+@interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)addTagsObject:(Tag * _Nonnull)value;
+- (void)removeTagsObject:(Tag * _Nonnull)value;
+- (void)addTags:(NSSet * _Nonnull)values;
+- (void)removeTags:(NSSet * _Nonnull)values;
 @end
 
 
@@ -2632,6 +2825,7 @@ SWIFT_CLASS_NAMED("Theme")
 @property (nonatomic, copy) NSString * _Nullable version;
 @property (nonatomic, copy) NSArray<NSDictionary<NSString *, id> *> * _Nullable webFiles;
 @property (nonatomic, strong) ModularTheme * _Nullable modularTheme;
+@property (nonatomic, strong) NSSet * _Nullable tags;
 @property (nonatomic, strong) NSSet * _Nullable themeAsset;
 @end
 
@@ -2665,16 +2859,22 @@ SWIFT_CLASS_NAMED("ThemeAsset")
 
 
 
+
+
+
+
 @interface UIImage (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (UIImage * _Nullable)aspectFittedToSizeCenteredWithSize:(CGSize)size SWIFT_WARN_UNUSED_RESULT;
 @end
 
 
+
+
+
+
 @interface UIImageView (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)awakeFromNib;
 @end
-
-
 
 
 

@@ -53,6 +53,8 @@ extension UIImage {
   public func aspectFilledToSize(newSize: CoreGraphics.CGSize) -> UIKit.UIImage
   public func aspectFittedToHeight(newSize: CoreGraphics.CGSize) -> UIKit.UIImage
   public class func image(color: UIKit.UIColor, rectToDraw: CoreGraphics.CGRect) -> UIKit.UIImage
+  public func resize(to size: CoreGraphics.CGSize) -> UIKit.UIImage?
+  public func addShadow(blurSize: CoreGraphics.CGFloat = 6.0) -> UIKit.UIImage
 }
 @objc public protocol PBAdjustImageDelegate : ObjectiveC.NSObjectProtocol {
   @objc func didAdjust(images: [UIKit.UIImage], controller: PBFrameworkVideoStories.PBAdjustContainerViewController)
@@ -210,12 +212,22 @@ extension PBThemeDetailsViewController : PBFrameworkVideoStories.PBImageSelectio
 @objc @available(iOS 10.0, *)
 public class CDManager : ObjectiveC.NSObject {
   @objc public static let shared: PBFrameworkVideoStories.CDManager
+  @objc public static let uncategorizedTagName: Swift.String
   @objc public func fetchAllModularThemes(in context: CoreData.NSManagedObjectContext? = nil, predicate: Foundation.NSPredicate? = nil) -> [PBFrameworkVideoStories.ModularTheme]
   @objc public func fetchAllThemes(in context: CoreData.NSManagedObjectContext? = nil, predicate: Foundation.NSPredicate? = nil) -> [PBFrameworkVideoStories.Theme]
   @objc public func fetchModularTheme(byUUID uuid: Swift.String, in context: CoreData.NSManagedObjectContext? = nil, failure: ((Swift.Error?) -> Swift.Void)? = nil) -> PBFrameworkVideoStories.ModularTheme?
   @objc public func fetchTheme(byUUID uuid: Swift.String, in context: CoreData.NSManagedObjectContext? = nil, failure: ((Swift.Error?) -> Swift.Void)? = nil) -> PBFrameworkVideoStories.Theme?
   @objc public func fetchTheme(byID id: Swift.String, in context: CoreData.NSManagedObjectContext? = nil, failure: ((Swift.Error?) -> Swift.Void)? = nil) -> PBFrameworkVideoStories.Theme?
   @objc public func fetchTheme(byAssetLocationURL assetLocationURL: Swift.String, in context: CoreData.NSManagedObjectContext? = nil) -> PBFrameworkVideoStories.Theme?
+  @objc public func fetchAllTags(includeUncategorized: Swift.Bool, in context: CoreData.NSManagedObjectContext? = nil, predicate: Foundation.NSPredicate? = nil) -> [PBFrameworkVideoStories.Tag]
+  @objc public func fetchAllTags(in context: CoreData.NSManagedObjectContext? = nil, predicate: Foundation.NSPredicate? = nil) -> [PBFrameworkVideoStories.Tag]
+  @objc public func fetchThemeCountForTag(by name: Swift.String, context: CoreData.NSManagedObjectContext? = nil) -> Swift.Int
+  @objc public func fetchUntaggedThemes(context: CoreData.NSManagedObjectContext? = nil) -> [PBFrameworkVideoStories.Theme]
+  @objc public func addTagToTheme(by tagName: Swift.String, themeUUID: Swift.String, context: CoreData.NSManagedObjectContext? = nil)
+  @objc public func createTag(with tagName: Swift.String, context: CoreData.NSManagedObjectContext? = nil)
+  @objc public func removeTagFromTheme(by tagName: Swift.String, themeUUID: Swift.String, context: CoreData.NSManagedObjectContext? = nil)
+  @objc public func fetchTag(by name: Swift.String, in context: CoreData.NSManagedObjectContext? = nil) -> PBFrameworkVideoStories.Tag?
+  @objc public func delete(tag: CoreData.NSManagedObject, in context: CoreData.NSManagedObjectContext? = nil) -> Swift.Error?
   @objc public func save(context: CoreData.NSManagedObjectContext? = nil)
   @objc override dynamic public init()
   @objc deinit
@@ -373,6 +385,19 @@ public typealias VideoStoryDownloaderSuccessBlock = (Foundation.URL?, Foundation
 extension PBVideoStoryDownloaderService {
   @objc dynamic public func downloadVideoStoryAndUpdateImages(videoStoryThemeURL: Foundation.URL, uuid: Swift.String, imagesToCopy: [Swift.Dictionary<Swift.String, Any>]? = nil, successBlock: (PBFrameworkVideoStories.VideoStoryDownloaderSuccessBlock)?, failureBlock: ((Swift.Error?) -> Swift.Void)?, progressBlock: ((Swift.Float, Swift.Float) -> Swift.Void)?)
 }
+public struct Marker {
+}
+public enum CropperStatusField : Swift.String {
+  case contentOffset
+  case zoom
+  case imageId
+  case aspectRatio
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+  public init?(rawValue: Swift.String)
+}
 public enum PBVideoQuality : Swift.Float {
   case q360
   case q480
@@ -505,6 +530,35 @@ extension ModularTheme {
   @objc(addVideos:) @NSManaged dynamic public func addToVideos(_ values: Foundation.NSOrderedSet)
   @objc(removeVideos:) @NSManaged dynamic public func removeFromVideos(_ values: Foundation.NSOrderedSet)
 }
+@objc(Tag) public class Tag : CoreData.NSManagedObject {
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  @objc deinit
+}
+extension Tag {
+  @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.Tag>
+  @objc @NSManaged dynamic public var isEnabled: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var isExpanded: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var name: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var themes: Foundation.NSSet? {
+    @objc get
+    @objc set
+  }
+}
+extension Tag {
+  @objc(addThemesObject:) @NSManaged dynamic public func addToThemes(_ value: PBFrameworkVideoStories.Theme)
+  @objc(removeThemesObject:) @NSManaged dynamic public func removeFromThemes(_ value: PBFrameworkVideoStories.Theme)
+  @objc(addThemes:) @NSManaged dynamic public func addToThemes(_ values: Foundation.NSSet)
+  @objc(removeThemes:) @NSManaged dynamic public func removeFromThemes(_ values: Foundation.NSSet)
+}
 @objc(Theme) public class Theme : CoreData.NSManagedObject {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
@@ -607,10 +661,20 @@ extension Theme {
     @objc get
     @objc set
   }
+  @objc @NSManaged dynamic public var tags: Foundation.NSSet? {
+    @objc get
+    @objc set
+  }
   @objc @NSManaged dynamic public var themeAsset: Foundation.NSSet? {
     @objc get
     @objc set
   }
+}
+extension Theme {
+  @objc(addTagsObject:) @NSManaged dynamic public func addToTags(_ value: PBFrameworkVideoStories.Tag)
+  @objc(removeTagsObject:) @NSManaged dynamic public func removeFromTags(_ value: PBFrameworkVideoStories.Tag)
+  @objc(addTags:) @NSManaged dynamic public func addToTags(_ values: Foundation.NSSet)
+  @objc(removeTags:) @NSManaged dynamic public func removeFromTags(_ values: Foundation.NSSet)
 }
 extension Theme {
   @objc(addThemeAssetObject:) @NSManaged dynamic public func addToThemeAsset(_ value: PBFrameworkVideoStories.ThemeAsset)
@@ -689,5 +753,8 @@ extension PBFrameworkVideoStories.PBEnvironment : Swift.RawRepresentable {}
 extension PBFrameworkVideoStories.PBVideoFileName : Swift.Equatable {}
 extension PBFrameworkVideoStories.PBVideoFileName : Swift.Hashable {}
 extension PBFrameworkVideoStories.PBVideoFileName : Swift.RawRepresentable {}
+extension PBFrameworkVideoStories.CropperStatusField : Swift.Equatable {}
+extension PBFrameworkVideoStories.CropperStatusField : Swift.Hashable {}
+extension PBFrameworkVideoStories.CropperStatusField : Swift.RawRepresentable {}
 extension PBFrameworkVideoStories.PBVideoQuality : Swift.Hashable {}
 extension PBFrameworkVideoStories.PBVideoQuality : Swift.RawRepresentable {}
