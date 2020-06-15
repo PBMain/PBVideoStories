@@ -1,26 +1,33 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.1.3 (swiftlang-1100.0.282.1 clang-1100.0.33.15)
+// swift-compiler-version: Apple Swift version 5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)
 // swift-module-flags: -target arm64-apple-ios10.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name PBFrameworkVideoStories
 import AVFoundation
 import AVKit
 import AssetsLibrary
 import CoreData
 import CoreGraphics
+import CoreImage
 import CoreMedia
 import Foundation
+import ImageIO
+import Metal
+import MobileCoreServices
 import PBFrameworkAnimation
 import PBFrameworkServices
 import PBFrameworkUILibraries
 @_exported import PBFrameworkVideoStories
 import Photos
 import SSZipArchive
+import Social
 import Swift
 import TOCropViewController
 import UIKit
 import WebKit
 public struct FilePath {
 }
-@objc public class PBPhotoService : ObjectiveC.NSObject {
+@_inheritsConvenienceInitializers @objc public class PBPhotoService : ObjectiveC.NSObject {
+  public static let shared: PBFrameworkVideoStories.PBPhotoService
+  public var theme: PBFrameworkVideoStories.Theme?
   public class func isReadyForShowing() -> Swift.Bool
   @objc public class func setupTempJSONs(theme: PBFrameworkVideoStories.Theme, completion: (() -> ())?)
   public class func imageIsReadyForShowing(imageName: Swift.String, themeName: Swift.String) -> Swift.Bool
@@ -44,11 +51,11 @@ public struct FilePath {
   @objc public class func audioFileURL(by name: Swift.String, fileName: Swift.String) -> Foundation.URL?
   @objc public class func themeDirectoryPath(by name: Swift.String) -> Foundation.URL?
   public class func replaceImageInTheme(imageDictionary: Swift.Dictionary<Swift.String, Any>, themeFilePathURL: Foundation.URL)
-  @objc override dynamic public init()
   @objc deinit
+  @objc override dynamic public init()
 }
 extension UIImage {
-  public func aspectFittedToSize(size: CoreGraphics.CGSize) -> UIKit.UIImage?
+  @objc dynamic public func aspectFittedToSize(size: CoreGraphics.CGSize) -> UIKit.UIImage?
   @objc dynamic public func aspectFittedToSizeCentered(size: CoreGraphics.CGSize) -> UIKit.UIImage?
   public func aspectFilledToSize(newSize: CoreGraphics.CGSize) -> UIKit.UIImage
   public func aspectFittedToHeight(newSize: CoreGraphics.CGSize) -> UIKit.UIImage
@@ -56,16 +63,19 @@ extension UIImage {
   public func resize(to size: CoreGraphics.CGSize) -> UIKit.UIImage?
   public func addShadow(blurSize: CoreGraphics.CGFloat = 6.0) -> UIKit.UIImage
 }
+extension UIWindow {
+  public func capture() -> UIKit.UIImage?
+}
 @objc public protocol PBAdjustImageDelegate : ObjectiveC.NSObjectProtocol {
   @objc func didAdjust(images: [UIKit.UIImage], controller: PBFrameworkVideoStories.PBAdjustContainerViewController)
   @objc func didEdited(image: UIKit.UIImage, position: Swift.Int, controller: PBFrameworkVideoStories.PBAdjustContainerViewController)
 }
-@objc public class PBAdjustContainerViewController : UIKit.UIViewController {
+@objc @_inheritsConvenienceInitializers public class PBAdjustContainerViewController : UIKit.UIViewController {
   weak public var delegate: PBFrameworkVideoStories.PBAdjustImageDelegate?
   @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @objc deinit
   @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
   @objc required dynamic public init?(coder: Foundation.NSCoder)
-  @objc deinit
 }
 public enum PBVideoStoriesError : Swift.Error {
   case pbAnimationNotInstanciated
@@ -104,7 +114,7 @@ public enum PBThemeDownloadStatus {
   }
   public func hash(into hasher: inout Swift.Hasher)
 }
-@objc public class PBPodVideoStories : ObjectiveC.NSObject {
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class PBPodVideoStories : ObjectiveC.NSObject {
   public class func initWithServer(success: (() -> ())?, failure: @escaping (Swift.Error?) -> Swift.Void?)
   public class func set(clientId: Swift.String, clientKey: Swift.String, clientName: Swift.String)
   public class func set(authHeader: Swift.String)
@@ -129,7 +139,7 @@ public enum PBThemeDownloadStatus {
   public class func themes() -> [PBFrameworkVideoStories.Theme]
   public class func isThemeDownloaded(themeId: Swift.String, failure: ((Swift.Error?) -> Swift.Void)?) -> Swift.Bool
   public class func downloadTheme(by themeId: Swift.String, progress: ((Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
-  public class func downloadTheme(url: Swift.String, progress: ((Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
+  public class func downloadTheme(url: Swift.String, progress: ((Swift.Float, Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
   public class func loadThemeFromBundle(filename: Swift.String, bundle: Foundation.Bundle, progress: ((Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
   public class func setTheme(themeId: Swift.String, isVisible: Swift.Bool, success: (() -> Swift.Void)?, failure: ((Swift.Error?) -> Swift.Void)?)
   public class func deleteTheme(themeId: Swift.String, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
@@ -160,7 +170,7 @@ extension PBPodVideoStories : PBFrameworkVideoStories.PBAdjustImageDelegate {
   @objc dynamic public func didEdited(image: UIKit.UIImage, position: Swift.Int, controller: PBFrameworkVideoStories.PBAdjustContainerViewController)
   @objc dynamic public func didAdjust(images: [UIKit.UIImage], controller: PBFrameworkVideoStories.PBAdjustContainerViewController)
 }
-@objc public class PBAnimationView : PBFrameworkVideoStories.BaseLoadingFromXIBView {
+@objc @_hasMissingDesignatedInitializers public class PBAnimationView : PBFrameworkVideoStories.BaseLoadingFromXIBView {
   public var autoplay: Swift.Bool
   @objc override dynamic public func removeFromSuperview()
   @objc deinit
@@ -182,7 +192,15 @@ extension PBPodVideoStories : PBFrameworkVideoStories.PBAdjustImageDelegate {
 extension UIImageView {
   @objc override dynamic open func awakeFromNib()
 }
-@objc public class PBThemeDetailsViewController : UIKit.UIViewController {
+@objc @_hasMissingDesignatedInitializers public class PBSpinnerLoadingImageView : UIKit.UIImageView {
+  public func baseInit()
+  public func reset()
+  @objc override dynamic public init(image: UIKit.UIImage?)
+  @available(iOS 3.0, *)
+  @objc override dynamic public init(image: UIKit.UIImage?, highlightedImage: UIKit.UIImage?)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class PBThemeDetailsViewController : UIKit.UIViewController {
   public var theme: PBFrameworkVideoStories.Theme!
   public var stream: [Swift.String : Any]?
   @objc public static func create(with theme: PBFrameworkVideoStories.Theme, themeFilePathURL: Foundation.URL? = nil, dataJSONFilePathURL: Foundation.URL? = nil, audioFilePathURL: Foundation.URL? = nil, indexHTMLFilePathURL: Foundation.URL? = nil) -> PBFrameworkVideoStories.PBThemeDetailsViewController
@@ -193,9 +211,9 @@ extension UIImageView {
   @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
   @objc override dynamic public func viewWillTransition(to size: CoreGraphics.CGSize, with coordinator: UIKit.UIViewControllerTransitionCoordinator)
   @objc override dynamic public func viewWillLayoutSubviews()
+  @objc deinit
   @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
   @objc required dynamic public init?(coder: Foundation.NSCoder)
-  @objc deinit
 }
 extension PBThemeDetailsViewController : UIKit.UITableViewDataSource {
   @objc dynamic public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
@@ -209,10 +227,12 @@ extension PBThemeDetailsViewController : PBFrameworkVideoStories.PBImageSelectio
   @objc dynamic public func didSelect(images: [UIKit.UIImage], picker: PBFrameworkVideoStories.PBImageSelectionListController)
   @objc dynamic public func didCancel(picker: PBFrameworkVideoStories.PBImageSelectionListController)
 }
-@objc @available(iOS 10.0, *)
+@objc @_inheritsConvenienceInitializers @available(iOS 10.0, *)
 public class CDManager : ObjectiveC.NSObject {
   @objc public static let shared: PBFrameworkVideoStories.CDManager
   @objc public static let uncategorizedTagName: Swift.String
+  public func fetchThemes(isVisible: Swift.Bool, in context: CoreData.NSManagedObjectContext? = nil) -> [PBFrameworkVideoStories.Theme]
+  public func fetchModularThemes(isVisible: Swift.Bool, in context: CoreData.NSManagedObjectContext? = nil) -> [PBFrameworkVideoStories.ModularTheme]
   @objc public func fetchAllModularThemes(in context: CoreData.NSManagedObjectContext? = nil, predicate: Foundation.NSPredicate? = nil) -> [PBFrameworkVideoStories.ModularTheme]
   @objc public func fetchAllThemes(in context: CoreData.NSManagedObjectContext? = nil, predicate: Foundation.NSPredicate? = nil) -> [PBFrameworkVideoStories.Theme]
   @objc public func fetchModularTheme(byUUID uuid: Swift.String, in context: CoreData.NSManagedObjectContext? = nil, failure: ((Swift.Error?) -> Swift.Void)? = nil) -> PBFrameworkVideoStories.ModularTheme?
@@ -232,7 +252,60 @@ public class CDManager : ObjectiveC.NSObject {
   @objc override dynamic public init()
   @objc deinit
 }
-@objc public class BaseLoadingFromXIBView : UIKit.UIView {
+@_hasMissingDesignatedInitializers open class Application {
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class AdjustAndPlay : UIKit.UIViewController, Foundation.FileManagerDelegate {
+  public var shareClosure: ((Foundation.URL) -> ())?
+  public var sendClosure: ((Foundation.URL) -> ())?
+  public var theme: PBFrameworkVideoStories.Theme!
+  public var touchViewIsEnabled: Swift.Bool {
+    get
+    set
+  }
+  public static func create(with theme: PBFrameworkVideoStories.Theme, themeFilePathURL: Foundation.URL? = nil, dataJSONFilePathURL: Foundation.URL? = nil, audioFilePathURL: Foundation.URL? = nil, indexHTMLFilePathURL: Foundation.URL? = nil) -> PBFrameworkVideoStories.AdjustAndPlay
+  @objc override dynamic public func didReceiveMemoryWarning()
+  @objc override dynamic public func viewDidLoad()
+  public func setPreviousScreenImage(img: UIKit.UIImage)
+  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @objc override dynamic public func viewDidLayoutSubviews()
+  @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  @objc override dynamic public var prefersHomeIndicatorAutoHidden: Swift.Bool {
+    @objc get
+  }
+  @objc override dynamic public var supportedInterfaceOrientations: UIKit.UIInterfaceOrientationMask {
+    @objc get
+  }
+  @objc override dynamic public var shouldAutorotate: Swift.Bool {
+    @objc get
+  }
+  @objc override dynamic public func viewWillTransition(to size: CoreGraphics.CGSize, with coordinator: UIKit.UIViewControllerTransitionCoordinator)
+  @objc public func viewDidRotate()
+  public func updateNextPreviousNavButtonsForEdit()
+  @objc override dynamic public func traitCollectionDidChange(_ previousTraitCollection: UIKit.UITraitCollection?)
+  public func getPixelColor(image: UIKit.UIImage, pos: CoreGraphics.CGPoint) -> UIKit.UIColor
+  public func saveVideosInBackground()
+  public func resetSavedVideos()
+  public func stopVideoGeneration()
+  @objc deinit
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+extension AdjustAndPlay : UIKit.UIImagePickerControllerDelegate, UIKit.UINavigationControllerDelegate {
+  @objc dynamic public func imagePickerControllerDidCancel(_ picker: UIKit.UIImagePickerController)
+  @objc dynamic public func imagePickerController(_ picker: UIKit.UIImagePickerController, didFinishPickingMediaWithInfo info: [UIKit.UIImagePickerController.InfoKey : Any])
+}
+extension AdjustAndPlay : UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegate, UIKit.UICollectionViewDelegateFlowLayout {
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumLineSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
+  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, insetForSectionAt section: Swift.Int) -> UIKit.UIEdgeInsets
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BaseLoadingFromXIBView : UIKit.UIView {
   @objc deinit
 }
 extension Theme {
@@ -247,7 +320,13 @@ extension ModularTheme {
 extension UIView {
   public func pbRemoveAllConstraints()
 }
-@objc public class PBBibService : ObjectiveC.NSObject {
+@_hasMissingDesignatedInitializers public class PBThemeManager {
+  public static let shared: PBFrameworkVideoStories.PBThemeManager
+  public var loadedJsons: [PBFrameworkVideoStories.Theme]
+  public var loadedModular: [PBFrameworkVideoStories.ModularTheme]
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc public class PBBibService : ObjectiveC.NSObject {
   @objc public var pThreshold: Swift.Double
   @objc public var pLowerThreshold: Swift.Double
   @objc public var urlString: Swift.String?
@@ -257,7 +336,7 @@ extension UIView {
   @objc public func searchPhotos(bib: Swift.String, completion: (([[Swift.String : Any]]) -> ())?)
   @objc deinit
 }
-@objc public class PBDefaultsService : ObjectiveC.NSObject {
+@_inheritsConvenienceInitializers @objc public class PBDefaultsService : ObjectiveC.NSObject {
   @objc public class var buildType: PBFrameworkVideoStories.PBEnvironment {
     @objc get
     @objc set
@@ -274,23 +353,58 @@ extension UIView {
     get
     set
   }
-  @objc override dynamic public init()
   @objc deinit
+  @objc override dynamic public init()
+}
+public protocol PBVideoStoryViewDelegate : AnyObject {
+  func reloadThemeInfo()
+  func playAudioButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, theme: PBFrameworkVideoStories.Theme?)
+  func selectPhotosButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, theme: PBFrameworkVideoStories.Theme?)
+  func selectPhotosButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, modularTheme: PBFrameworkVideoStories.ModularTheme?)
+}
+@objc @_inheritsConvenienceInitializers public class PBVideoStoryView : UIKit.UIView {
+  weak public var delegate: PBFrameworkVideoStories.PBVideoStoryViewDelegate?
+  public var isThemeDetailsViewShown: Swift.Bool {
+    get
+    set
+  }
+  @objc public static func create(with frame: CoreGraphics.CGRect, theme: PBFrameworkVideoStories.Theme) -> PBFrameworkVideoStories.PBVideoStoryView?
+  @objc public static func create(with frame: CoreGraphics.CGRect, modularTheme: PBFrameworkVideoStories.ModularTheme) -> PBFrameworkVideoStories.PBVideoStoryView?
+  @objc public static func createFailedDownload(with frame: CoreGraphics.CGRect) -> PBFrameworkVideoStories.PBVideoStoryView?
+  @objc public static var widthView: CoreGraphics.CGFloat {
+    @objc get
+  }
+  @objc override dynamic public func draw(_ rect: CoreGraphics.CGRect)
+  public func update(with theme: PBFrameworkVideoStories.Theme)
+  public func update(with modularTheme: PBFrameworkVideoStories.ModularTheme)
+  public func updateFailedDownload(url: Swift.String)
+  public func showThemeDetailsView()
+  public func hideThemeDetailsView()
+  @objc deinit
+  @objc override dynamic public init(frame: CoreGraphics.CGRect)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+extension PBVideoStoryView : UIKit.UITableViewDataSource {
+  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+}
+extension PBVideoStoryView : UIKit.UITableViewDelegate {
+  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGFloat
 }
 @objc public protocol PBImageSelectionDelegate : ObjectiveC.NSObjectProtocol {
   @objc func didSelect(images: [UIKit.UIImage], picker: PBFrameworkVideoStories.PBImageSelectionListController)
   @objc func didCancel(picker: PBFrameworkVideoStories.PBImageSelectionListController)
 }
-@objc public class PBImageSelectionListController : UIKit.UIViewController {
+@objc @_inheritsConvenienceInitializers public class PBImageSelectionListController : UIKit.UIViewController {
   weak public var delegate: PBFrameworkVideoStories.PBImageSelectionDelegate?
   @objc override dynamic public func viewDidLoad()
   @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
   @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
   @objc override dynamic public func viewWillLayoutSubviews()
   @objc override dynamic public func viewDidLayoutSubviews()
+  @objc deinit
   @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
   @objc required dynamic public init?(coder: Foundation.NSCoder)
-  @objc deinit
 }
 extension PBImageSelectionListController : UIKit.UICollectionViewDelegateFlowLayout {
   @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
@@ -336,7 +450,7 @@ public enum PBVideoFileName : Swift.String {
   }
   public init?(rawValue: Swift.String)
 }
-@objc public class PBVideoStoriesViewController : UIKit.UIViewController {
+@objc @_inheritsConvenienceInitializers public class PBVideoStoriesViewController : UIKit.UIViewController, PBFrameworkVideoStories.ScannerViewControllerDelegate {
   @objc public static func create() -> PBFrameworkVideoStories.PBVideoStoriesViewController
   @objc override dynamic public func viewDidLoad()
   @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
@@ -345,12 +459,20 @@ public enum PBVideoFileName : Swift.String {
   @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
   @objc override dynamic public func viewWillTransition(to size: CoreGraphics.CGSize, with coordinator: UIKit.UIViewControllerTransitionCoordinator)
   @objc deinit
+  public func qrScanned(urlString: Swift.String)
+  public func qrCanceled()
   @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
   @objc required dynamic public init?(coder: Foundation.NSCoder)
 }
 extension PBVideoStoriesViewController : PBFrameworkUILibraries.iCarouselDataSource {
   @objc dynamic public func numberOfItems(in carousel: PBFrameworkUILibraries.iCarousel) -> Swift.Int
   @objc dynamic public func carousel(_ carousel: PBFrameworkUILibraries.iCarousel, viewForItemAt index: Swift.Int, reusing view: UIKit.UIView?) -> UIKit.UIView
+}
+extension PBVideoStoriesViewController : PBFrameworkVideoStories.PBVideoStoryViewDelegate {
+  public func reloadThemeInfo()
+  public func playAudioButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, theme: PBFrameworkVideoStories.Theme?)
+  public func selectPhotosButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, modularTheme: PBFrameworkVideoStories.ModularTheme?)
+  public func selectPhotosButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, theme: PBFrameworkVideoStories.Theme?)
 }
 extension PBVideoStoriesViewController : PBFrameworkUILibraries.iCarouselDelegate {
   @objc dynamic public func carouselItemWidth(_ carousel: PBFrameworkUILibraries.iCarousel) -> CoreGraphics.CGFloat
@@ -363,8 +485,59 @@ extension PBVideoStoriesViewController : PBFrameworkUILibraries.iCarouselDelegat
 extension PBVideoStoriesViewController {
   @objc override dynamic public func touchesBegan(_ touches: Swift.Set<UIKit.UITouch>, with event: UIKit.UIEvent?)
 }
+public protocol ScannerViewControllerDelegate : AnyObject {
+  func qrScanned(urlString: Swift.String)
+  func qrCanceled()
+}
+@objc @_inheritsConvenienceInitializers public class ScannerViewController : UIKit.UIViewController, AVFoundation.AVCaptureMetadataOutputObjectsDelegate {
+  weak public var delegate: PBFrameworkVideoStories.ScannerViewControllerDelegate?
+  @objc override dynamic public func viewDidLoad()
+  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  @objc public func metadataOutput(_ output: AVFoundation.AVCaptureMetadataOutput, didOutput metadataObjects: [AVFoundation.AVMetadataObject], from connection: AVFoundation.AVCaptureConnection)
+  @objc override dynamic public var preferredInterfaceOrientationForPresentation: UIKit.UIInterfaceOrientation {
+    @objc get
+  }
+  @objc override dynamic public var prefersStatusBarHidden: Swift.Bool {
+    @objc get
+  }
+  @objc override dynamic public var shouldAutorotate: Swift.Bool {
+    @objc get
+  }
+  @objc override dynamic public var supportedInterfaceOrientations: UIKit.UIInterfaceOrientationMask {
+    @objc get
+    @objc set
+  }
+  @objc deinit
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+public typealias TimePoint = CoreMedia.CMTime
+public typealias ProgressHandler = (Swift.Double) -> Swift.Void
+public enum RegiftError : Swift.String, Swift.Error {
+  case DestinationNotFound
+  case SourceFormatInvalid
+  case AddFrameToDestination
+  case DestinationFinalize
+  public typealias RawValue = Swift.String
+  public init?(rawValue: Swift.String)
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct Regift {
+  public static func createGIFFromSource(_ sourceFileURL: Foundation.URL, destinationFileURL: Foundation.URL? = nil, frameCount: Swift.Int, delayTime: Swift.Float, loopCount: Swift.Int = 0, size: CoreGraphics.CGSize? = nil, progress: PBFrameworkVideoStories.ProgressHandler? = nil, completion: (Foundation.URL?) -> Swift.Void)
+  public static func createGIFFromSource(_ sourceFileURL: Foundation.URL, destinationFileURL: Foundation.URL? = nil, startTime: Swift.Float, duration: Swift.Float, frameRate: Swift.Int, loopCount: Swift.Int = 0, size: CoreGraphics.CGSize? = nil, progress: PBFrameworkVideoStories.ProgressHandler? = nil, completion: (Foundation.URL?) -> Swift.Void)
+  public static func createGIF(fromAsset asset: AVFoundation.AVAsset, destinationFileURL: Foundation.URL? = nil, startTime: Swift.Float, duration: Swift.Float, frameRate: Swift.Int, loopCount: Swift.Int = 0, completion: (Foundation.URL?) -> Swift.Void)
+  public init(sourceFileURL: Foundation.URL, destinationFileURL: Foundation.URL? = nil, frameCount: Swift.Int, delayTime: Swift.Float, loopCount: Swift.Int = 0, size: CoreGraphics.CGSize? = nil, progress: PBFrameworkVideoStories.ProgressHandler? = nil)
+  public init(sourceFileURL: Foundation.URL, destinationFileURL: Foundation.URL? = nil, startTime: Swift.Float, duration: Swift.Float, frameRate: Swift.Int, loopCount: Swift.Int = 0, size: CoreGraphics.CGSize? = nil, progress: PBFrameworkVideoStories.ProgressHandler? = nil)
+  public init(asset: AVFoundation.AVAsset, destinationFileURL: Foundation.URL? = nil, startTime: Swift.Float, duration: Swift.Float, frameRate: Swift.Int, loopCount: Swift.Int = 0, size: CoreGraphics.CGSize? = nil, progress: PBFrameworkVideoStories.ProgressHandler? = nil)
+  public func createGif() -> Foundation.URL?
+  public func createGIFForTimePoints(_ timePoints: [PBFrameworkVideoStories.TimePoint], fileProperties: [Swift.String : Swift.AnyObject], frameProperties: [Swift.String : Swift.AnyObject], frameCount: Swift.Int, size: CoreGraphics.CGSize? = nil) throws -> Foundation.URL
+}
 public typealias VideoStoryDownloaderSuccessBlock = (Foundation.URL?, Foundation.URL?, Foundation.URL?, Foundation.URL?, Foundation.URL?, Swift.Dictionary<Swift.String, Any>?) -> Swift.Void
-@objc public class PBVideoStoryDownloaderService : ObjectiveC.NSObject, Foundation.URLSessionDownloadDelegate, Foundation.URLSessionDelegate, Foundation.URLSessionTaskDelegate {
+@_inheritsConvenienceInitializers @objc public class PBVideoStoryDownloaderService : ObjectiveC.NSObject, Foundation.URLSessionDownloadDelegate, Foundation.URLSessionDelegate, Foundation.URLSessionTaskDelegate {
+  public static let shared: PBFrameworkVideoStories.PBVideoStoryDownloaderService
   public var progressClosure: ((Swift.Float, Swift.Float) -> Swift.Void)?
   public var downloadFailureBlock: ((Swift.Error?) -> Swift.Void)?
   public var downloadSuccessBlockFromZIP: (PBFrameworkVideoStories.VideoStoryDownloaderSuccessBlock)?
@@ -383,6 +556,7 @@ public typealias VideoStoryDownloaderSuccessBlock = (Foundation.URL?, Foundation
   @objc deinit
 }
 extension PBVideoStoryDownloaderService {
+  public func testDownloadModularTheme(uuid: Swift.String, progressBlock: ((Swift.Float, Swift.Float) -> Swift.Void)?, successBlock: (() -> ())?, failureBlock: ((Swift.Error?) -> Swift.Void)?)
   @objc dynamic public func downloadVideoStoryAndUpdateImages(videoStoryThemeURL: Foundation.URL, uuid: Swift.String, imagesToCopy: [Swift.Dictionary<Swift.String, Any>]? = nil, successBlock: (PBFrameworkVideoStories.VideoStoryDownloaderSuccessBlock)?, failureBlock: ((Swift.Error?) -> Swift.Void)?, progressBlock: ((Swift.Float, Swift.Float) -> Swift.Void)?)
 }
 public struct Marker {
@@ -432,9 +606,9 @@ public class PBVideoQualityService {
   public func finishedFileURL(quality: PBFrameworkVideoStories.PBVideoQuality) -> Foundation.URL
   @objc deinit
 }
-@objc(Filter) public class Filter : CoreData.NSManagedObject {
-  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+@_inheritsConvenienceInitializers @objc(Filter) public class Filter : CoreData.NSManagedObject {
   @objc deinit
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
 }
 extension Filter {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.Filter>
@@ -451,7 +625,7 @@ extension Filter {
     @objc set
   }
 }
-@objc(ModularTheme) public class ModularTheme : CoreData.NSManagedObject {
+@_inheritsConvenienceInitializers @objc(ModularTheme) public class ModularTheme : CoreData.NSManagedObject {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
@@ -530,7 +704,7 @@ extension ModularTheme {
   @objc(addVideos:) @NSManaged dynamic public func addToVideos(_ values: Foundation.NSOrderedSet)
   @objc(removeVideos:) @NSManaged dynamic public func removeFromVideos(_ values: Foundation.NSOrderedSet)
 }
-@objc(Tag) public class Tag : CoreData.NSManagedObject {
+@_inheritsConvenienceInitializers @objc(Tag) public class Tag : CoreData.NSManagedObject {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
@@ -559,7 +733,7 @@ extension Tag {
   @objc(addThemes:) @NSManaged dynamic public func addToThemes(_ values: Foundation.NSSet)
   @objc(removeThemes:) @NSManaged dynamic public func removeFromThemes(_ values: Foundation.NSSet)
 }
-@objc(Theme) public class Theme : CoreData.NSManagedObject {
+@_inheritsConvenienceInitializers @objc(Theme) public class Theme : CoreData.NSManagedObject {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
@@ -682,9 +856,9 @@ extension Theme {
   @objc(addThemeAsset:) @NSManaged dynamic public func addToThemeAsset(_ values: Foundation.NSSet)
   @objc(removeThemeAsset:) @NSManaged dynamic public func removeFromThemeAsset(_ values: Foundation.NSSet)
 }
-@objc(ThemeAsset) public class ThemeAsset : CoreData.NSManagedObject {
-  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+@_inheritsConvenienceInitializers @objc(ThemeAsset) public class ThemeAsset : CoreData.NSManagedObject {
   @objc deinit
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
 }
 extension ThemeAsset {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.ThemeAsset>
@@ -723,9 +897,9 @@ extension ThemeAsset {
   @objc(addFilter:) @NSManaged dynamic public func addToFilter(_ values: Foundation.NSSet)
   @objc(removeFilter:) @NSManaged dynamic public func removeFromFilter(_ values: Foundation.NSSet)
 }
-@objc(Video) public class Video : CoreData.NSManagedObject {
-  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+@_inheritsConvenienceInitializers @objc(Video) public class Video : CoreData.NSManagedObject {
   @objc deinit
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
 }
 extension Video {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.Video>
@@ -753,8 +927,12 @@ extension PBFrameworkVideoStories.PBEnvironment : Swift.RawRepresentable {}
 extension PBFrameworkVideoStories.PBVideoFileName : Swift.Equatable {}
 extension PBFrameworkVideoStories.PBVideoFileName : Swift.Hashable {}
 extension PBFrameworkVideoStories.PBVideoFileName : Swift.RawRepresentable {}
+extension PBFrameworkVideoStories.RegiftError : Swift.Equatable {}
+extension PBFrameworkVideoStories.RegiftError : Swift.Hashable {}
+extension PBFrameworkVideoStories.RegiftError : Swift.RawRepresentable {}
 extension PBFrameworkVideoStories.CropperStatusField : Swift.Equatable {}
 extension PBFrameworkVideoStories.CropperStatusField : Swift.Hashable {}
 extension PBFrameworkVideoStories.CropperStatusField : Swift.RawRepresentable {}
+extension PBFrameworkVideoStories.PBVideoQuality : Swift.Equatable {}
 extension PBFrameworkVideoStories.PBVideoQuality : Swift.Hashable {}
 extension PBFrameworkVideoStories.PBVideoQuality : Swift.RawRepresentable {}
