@@ -259,6 +259,10 @@ public class CDManager : ObjectiveC.NSObject {
   public var shareClosure: ((Foundation.URL) -> ())?
   public var sendClosure: ((Foundation.URL) -> ())?
   public var theme: PBFrameworkVideoStories.Theme!
+  public var isLoading: Swift.Bool {
+    get
+    set
+  }
   public var touchViewIsEnabled: Swift.Bool {
     get
     set
@@ -271,6 +275,7 @@ public class CDManager : ObjectiveC.NSObject {
   @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
   @objc override dynamic public func viewDidLayoutSubviews()
   @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  @objc deinit
   @objc override dynamic public var prefersHomeIndicatorAutoHidden: Swift.Bool {
     @objc get
   }
@@ -288,7 +293,6 @@ public class CDManager : ObjectiveC.NSObject {
   public func saveVideosInBackground()
   public func resetSavedVideos()
   public func stopVideoGeneration()
-  @objc deinit
   @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
   @objc required dynamic public init?(coder: Foundation.NSCoder)
 }
@@ -444,6 +448,7 @@ public enum PBVideoFileName : Swift.String {
   case unfinished
   case finishedNoAudio
   case finished
+  case partVideo
   public typealias RawValue = Swift.String
   public var rawValue: Swift.String {
     get

@@ -240,6 +240,8 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories13AdjustAndPlay")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
+
 @class UIImagePickerController;
 
 @interface AdjustAndPlay (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -657,12 +659,12 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly) CGFloat widthView;)
 @end
 
 
-
-
 @interface PBVideoStoryView (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITableViewDataSource>
 - (NSInteger)tableView:(UITableView * _Nonnull)tableView numberOfRowsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (UITableViewCell * _Nonnull)tableView:(UITableView * _Nonnull)tableView cellForRowAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
 @end
+
+
 
 
 
@@ -719,18 +721,18 @@ SWIFT_CLASS_NAMED("Theme")
 
 
 @interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)addThemeAssetObject:(ThemeAsset * _Nonnull)value;
-- (void)removeThemeAssetObject:(ThemeAsset * _Nonnull)value;
-- (void)addThemeAsset:(NSSet * _Nonnull)values;
-- (void)removeThemeAsset:(NSSet * _Nonnull)values;
-@end
-
-
-@interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)addTagsObject:(Tag * _Nonnull)value;
 - (void)removeTagsObject:(Tag * _Nonnull)value;
 - (void)addTags:(NSSet * _Nonnull)values;
 - (void)removeTags:(NSSet * _Nonnull)values;
+@end
+
+
+@interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)addThemeAssetObject:(ThemeAsset * _Nonnull)value;
+- (void)removeThemeAssetObject:(ThemeAsset * _Nonnull)value;
+- (void)addThemeAsset:(NSSet * _Nonnull)values;
+- (void)removeThemeAsset:(NSSet * _Nonnull)values;
 @end
 
 
@@ -805,13 +807,13 @@ SWIFT_CLASS_NAMED("ThemeAsset")
 @end
 
 
+
+
+
+
 @interface UIImageView (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)awakeFromNib;
 @end
-
-
-
-
 
 
 
@@ -1083,6 +1085,8 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories13AdjustAndPlay")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
+
 @class UIImagePickerController;
 
 @interface AdjustAndPlay (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -1500,12 +1504,12 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly) CGFloat widthView;)
 @end
 
 
-
-
 @interface PBVideoStoryView (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITableViewDataSource>
 - (NSInteger)tableView:(UITableView * _Nonnull)tableView numberOfRowsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (UITableViewCell * _Nonnull)tableView:(UITableView * _Nonnull)tableView cellForRowAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
 @end
+
+
 
 
 
@@ -1562,18 +1566,18 @@ SWIFT_CLASS_NAMED("Theme")
 
 
 @interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)addThemeAssetObject:(ThemeAsset * _Nonnull)value;
-- (void)removeThemeAssetObject:(ThemeAsset * _Nonnull)value;
-- (void)addThemeAsset:(NSSet * _Nonnull)values;
-- (void)removeThemeAsset:(NSSet * _Nonnull)values;
-@end
-
-
-@interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)addTagsObject:(Tag * _Nonnull)value;
 - (void)removeTagsObject:(Tag * _Nonnull)value;
 - (void)addTags:(NSSet * _Nonnull)values;
 - (void)removeTags:(NSSet * _Nonnull)values;
+@end
+
+
+@interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)addThemeAssetObject:(ThemeAsset * _Nonnull)value;
+- (void)removeThemeAssetObject:(ThemeAsset * _Nonnull)value;
+- (void)addThemeAsset:(NSSet * _Nonnull)values;
+- (void)removeThemeAsset:(NSSet * _Nonnull)values;
 @end
 
 
@@ -1648,13 +1652,13 @@ SWIFT_CLASS_NAMED("ThemeAsset")
 @end
 
 
+
+
+
+
 @interface UIImageView (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)awakeFromNib;
 @end
-
-
-
-
 
 
 
@@ -1930,6 +1934,8 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories13AdjustAndPlay")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
+
 @class UIImagePickerController;
 
 @interface AdjustAndPlay (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -2347,12 +2353,12 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly) CGFloat widthView;)
 @end
 
 
-
-
 @interface PBVideoStoryView (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITableViewDataSource>
 - (NSInteger)tableView:(UITableView * _Nonnull)tableView numberOfRowsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (UITableViewCell * _Nonnull)tableView:(UITableView * _Nonnull)tableView cellForRowAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
 @end
+
+
 
 
 
@@ -2409,18 +2415,18 @@ SWIFT_CLASS_NAMED("Theme")
 
 
 @interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)addThemeAssetObject:(ThemeAsset * _Nonnull)value;
-- (void)removeThemeAssetObject:(ThemeAsset * _Nonnull)value;
-- (void)addThemeAsset:(NSSet * _Nonnull)values;
-- (void)removeThemeAsset:(NSSet * _Nonnull)values;
-@end
-
-
-@interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)addTagsObject:(Tag * _Nonnull)value;
 - (void)removeTagsObject:(Tag * _Nonnull)value;
 - (void)addTags:(NSSet * _Nonnull)values;
 - (void)removeTags:(NSSet * _Nonnull)values;
+@end
+
+
+@interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)addThemeAssetObject:(ThemeAsset * _Nonnull)value;
+- (void)removeThemeAssetObject:(ThemeAsset * _Nonnull)value;
+- (void)addThemeAsset:(NSSet * _Nonnull)values;
+- (void)removeThemeAsset:(NSSet * _Nonnull)values;
 @end
 
 
@@ -2495,13 +2501,13 @@ SWIFT_CLASS_NAMED("ThemeAsset")
 @end
 
 
+
+
+
+
 @interface UIImageView (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)awakeFromNib;
 @end
-
-
-
-
 
 
 
@@ -2773,6 +2779,8 @@ SWIFT_CLASS("_TtC23PBFrameworkVideoStories13AdjustAndPlay")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
+
 @class UIImagePickerController;
 
 @interface AdjustAndPlay (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -3190,12 +3198,12 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly) CGFloat widthView;)
 @end
 
 
-
-
 @interface PBVideoStoryView (SWIFT_EXTENSION(PBFrameworkVideoStories)) <UITableViewDataSource>
 - (NSInteger)tableView:(UITableView * _Nonnull)tableView numberOfRowsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 - (UITableViewCell * _Nonnull)tableView:(UITableView * _Nonnull)tableView cellForRowAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
 @end
+
+
 
 
 
@@ -3252,18 +3260,18 @@ SWIFT_CLASS_NAMED("Theme")
 
 
 @interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
-- (void)addThemeAssetObject:(ThemeAsset * _Nonnull)value;
-- (void)removeThemeAssetObject:(ThemeAsset * _Nonnull)value;
-- (void)addThemeAsset:(NSSet * _Nonnull)values;
-- (void)removeThemeAsset:(NSSet * _Nonnull)values;
-@end
-
-
-@interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)addTagsObject:(Tag * _Nonnull)value;
 - (void)removeTagsObject:(Tag * _Nonnull)value;
 - (void)addTags:(NSSet * _Nonnull)values;
 - (void)removeTags:(NSSet * _Nonnull)values;
+@end
+
+
+@interface Theme (SWIFT_EXTENSION(PBFrameworkVideoStories))
+- (void)addThemeAssetObject:(ThemeAsset * _Nonnull)value;
+- (void)removeThemeAssetObject:(ThemeAsset * _Nonnull)value;
+- (void)addThemeAsset:(NSSet * _Nonnull)values;
+- (void)removeThemeAsset:(NSSet * _Nonnull)values;
 @end
 
 
@@ -3338,13 +3346,13 @@ SWIFT_CLASS_NAMED("ThemeAsset")
 @end
 
 
+
+
+
+
 @interface UIImageView (SWIFT_EXTENSION(PBFrameworkVideoStories))
 - (void)awakeFromNib;
 @end
-
-
-
-
 
 
 
