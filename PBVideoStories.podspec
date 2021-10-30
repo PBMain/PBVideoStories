@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = 'PBVideoStories'
-  s.version          = '1.5.4.3'
-  s.summary          = 'For building animation objects from BodyMovin JSON.'
+  s.version          = '1.6.0.0'
+  s.summary          = 'UI surrounding the video stories engine.'
 
   s.description      = <<-DESC
 This pod allows the implementor to make use of Photo Butler's wrapper functions around downloadin and using Photo Butler Video Themes.
@@ -21,5 +21,9 @@ This pod allows the implementor to make use of Photo Butler's wrapper functions 
   s.dependency "TOCropViewController"
   s.dependency "SSZipArchive"
   s.dependency "PBAnimation"
+  s.dependency "PBVideoEngine"
+
+  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   
 end
