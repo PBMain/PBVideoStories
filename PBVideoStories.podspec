@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'PBVideoStories'
-  s.version          = '1.6.0.2'
+  s.version          = '1.6.0.3'
   s.summary          = 'UI surrounding the video stories engine.'
 
   s.description      = <<-DESC
