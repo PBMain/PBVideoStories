@@ -1,6 +1,6 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.4 (swiftlang-1205.0.26.9 clang-1205.0.19.55)
-// swift-module-flags: -target arm64-apple-ios10.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name PBFrameworkVideoStories
+// swift-compiler-version: Apple Swift version 5.5.1 (swiftlang-1300.0.31.4 clang-1300.0.29.6)
+// swift-module-flags: -target arm64-apple-ios11.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name PBFrameworkVideoStories
 import AVFoundation
 import AVKit
 import AssetsLibrary
@@ -26,6 +26,7 @@ import Swift
 import TOCropViewController
 import UIKit
 import WebKit
+import _Concurrency
 public struct FilePath {
 }
 @_inheritsConvenienceInitializers @objc public class PBPhotoService : ObjectiveC.NSObject {
@@ -57,7 +58,7 @@ public struct FilePath {
   @objc override dynamic public init()
   @objc deinit
 }
-extension UIImage {
+extension UIKit.UIImage {
   public var brightness: Swift.Double {
     get
   }
@@ -71,28 +72,28 @@ extension UIImage {
   convenience public init?(color: UIKit.UIColor, size: CoreGraphics.CGSize = CGSize(width: 1, height: 1))
   public func image(byDrawingImage image: UIKit.UIImage, inRect rect: CoreGraphics.CGRect) -> UIKit.UIImage!
 }
-extension UIWindow {
-  public func capture() -> UIKit.UIImage?
+extension UIKit.UIWindow {
+  @_Concurrency.MainActor(unsafe) public func capture() -> UIKit.UIImage?
 }
-extension String {
+extension Swift.String {
   public func isVersion(equalTo targetVersion: Swift.String) -> Swift.Bool
   public func isVersion(greaterThan targetVersion: Swift.String) -> Swift.Bool
   public func isVersion(greaterThanOrEqualTo targetVersion: Swift.String) -> Swift.Bool
   public func isVersion(lessThan targetVersion: Swift.String) -> Swift.Bool
   public func isVersion(lessThanOrEqualTo targetVersion: Swift.String) -> Swift.Bool
 }
-extension String {
+extension Swift.String {
   public static func validate(email: Swift.String?) -> Swift.Bool
 }
 @objc public protocol PBAdjustImageDelegate : ObjectiveC.NSObjectProtocol {
   @objc func didAdjust(images: [UIKit.UIImage], controller: PBFrameworkVideoStories.PBAdjustContainerViewController)
   @objc func didEdited(image: UIKit.UIImage, position: Swift.Int, controller: PBFrameworkVideoStories.PBAdjustContainerViewController)
 }
-@objc @_inheritsConvenienceInitializers public class PBAdjustContainerViewController : UIKit.UIViewController {
-  weak public var delegate: PBFrameworkVideoStories.PBAdjustImageDelegate?
-  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
-  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
-  @objc required dynamic public init?(coder: Foundation.NSCoder)
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class PBAdjustContainerViewController : UIKit.UIViewController {
+  @_Concurrency.MainActor(unsafe) weak public var delegate: PBFrameworkVideoStories.PBAdjustImageDelegate?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
   @objc deinit
 }
 public enum PBVideoStoriesError : Swift.Error {
@@ -118,15 +119,15 @@ public enum PBVideoStoriesError : Swift.Error {
     get
   }
 }
-extension PBVideoStoriesError : Foundation.LocalizedError {
+extension PBFrameworkVideoStories.PBVideoStoriesError : Foundation.LocalizedError {
   public var errorDescription: Swift.String? {
     get
   }
 }
-extension CGRect {
+extension CoreGraphics.CGRect {
   public init(center: CoreGraphics.CGPoint, size: CoreGraphics.CGSize)
 }
-extension CGSize {
+extension CoreGraphics.CGSize {
   public init(side: CoreGraphics.CGFloat)
 }
 public enum PBThemeDownloadStatus {
@@ -152,7 +153,7 @@ public enum PBThemeDownloadStatus {
   public class var groupUserDefaults: Foundation.UserDefaults {
     get
   }
-  public class func initWithServer(success: (() -> ())?, failure: @escaping (Swift.Error?) -> Swift.Void?)
+  public class func initWithServer(success: (() -> ())?, failure: @escaping (_ error: Swift.Error?) -> Swift.Void?)
   public class func set(clientId: Swift.String, clientKey: Swift.String, clientName: Swift.String)
   public class func set(authHeader: Swift.String)
   public class var clientId: Swift.String {
@@ -170,103 +171,100 @@ public enum PBThemeDownloadStatus {
   public class var email: Swift.String {
     get
   }
-  public class func send(email: Swift.String, success: (() -> ())?, failure: @escaping (Swift.Error?) -> Swift.Void?)
-  public class func verify(email: Swift.String, code: Swift.String, success: @escaping ([[Swift.String : Any]]?) -> Swift.Void?, failure: @escaping (Swift.Error?) -> Swift.Void?)
+  public class func send(email: Swift.String, success: (() -> ())?, failure: @escaping (_ error: Swift.Error?) -> Swift.Void?)
+  public class func verify(email: Swift.String, code: Swift.String, success: @escaping (_ meta: [[Swift.String : Any]]?) -> Swift.Void?, failure: @escaping (_ error: Swift.Error?) -> Swift.Void?)
   public class func logout()
   public class func themes() -> [PBFrameworkVideoStories.Theme]
-  public class func isThemeDownloaded(themeId: Swift.String, failure: ((Swift.Error?) -> Swift.Void)?) -> Swift.Bool
-  public class func downloadTheme(by themeId: Swift.String, progress: ((Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
-  public class func downloadTheme(url: Swift.String, downloadThemeId: Swift.String? = nil, themeTitle: Swift.String? = nil, version: Swift.String? = nil, progress: ((Swift.Float, Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
-  public class func loadThemeFromBundle(filename: Swift.String, bundle: Foundation.Bundle, progress: ((Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
-  public class func setTheme(themeId: Swift.String, isVisible: Swift.Bool, success: (() -> Swift.Void)?, failure: ((Swift.Error?) -> Swift.Void)?)
-  public class func deleteTheme(themeId: Swift.String, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
+  public class func isThemeDownloaded(themeId: Swift.String, failure: ((_ error: Swift.Error?) -> Swift.Void)?) -> Swift.Bool
+  public class func downloadTheme(by themeId: Swift.String, progress: ((_ progress: Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
+  public class func downloadTheme(url: Swift.String, downloadThemeId: Swift.String? = nil, themeTitle: Swift.String? = nil, version: Swift.String? = nil, progress: ((_ current: Swift.Float, _ total: Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
+  public class func loadThemeFromBundle(filename: Swift.String, bundle: Foundation.Bundle, progress: ((_ progress: Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
+  public class func setTheme(themeId: Swift.String, isVisible: Swift.Bool, success: (() -> Swift.Void)?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
+  public class func deleteTheme(themeId: Swift.String, success: (() -> ())?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
   public class func deleteCategories(categoryNameList: [Swift.String])
-  public class func loadPendingThemesIfNeeded(progress: ((Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
+  public class func loadPendingThemesIfNeeded(progress: ((_ progress: Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
   public class func pendingThemesCount() -> Swift.Int
   public var theme: PBFrameworkVideoStories.Theme? {
     get
   }
-  public init(themeId: Swift.String, success: ((PBFrameworkVideoStories.PBPodVideoStories) -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
+  public init(themeId: Swift.String, success: ((PBFrameworkVideoStories.PBPodVideoStories) -> ())?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
   public func dismantle()
-  public func getAnimationView(success: ((PBFrameworkVideoStories.PBAnimationView) -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
-  public func getAnimationViewForPlaying(success: ((PBFrameworkVideoStories.PBAnimationView) -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
-  public func getImagePickerController(photosCount: Swift.Int, success: ((PBFrameworkVideoStories.PBImageSelectionListController) -> Swift.Void)?, failure: ((Swift.Error?) -> Swift.Void)?)
-  public func getImagePickerController(success: ((PBFrameworkVideoStories.PBImageSelectionListController) -> Swift.Void)?, failure: ((Swift.Error?) -> Swift.Void)?)
+  public func getAnimationView(success: ((PBFrameworkVideoStories.PBAnimationView) -> ())?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
+  public func getAnimationViewForPlaying(success: ((PBFrameworkVideoStories.PBAnimationView) -> ())?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
+  public func getImagePickerController(photosCount: Swift.Int, success: ((_ selectionVC: PBFrameworkVideoStories.PBImageSelectionListController) -> Swift.Void)?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
+  public func getImagePickerController(success: ((_ selectionVC: PBFrameworkVideoStories.PBImageSelectionListController) -> Swift.Void)?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
   public func getAdjustImagesController(images: [UIKit.UIImage]) -> PBFrameworkVideoStories.PBAdjustContainerViewController?
   public func getAdjustSingleImageController(image: UIKit.UIImage, position: Swift.Int) -> PBFrameworkVideoStories.PBAdjustContainerViewController?
-  public func saveImagesLocally(images: [UIKit.UIImage], success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
-  public func save(image: UIKit.UIImage, index: Swift.Int, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
-  public func createVideoStory(quality: PBFrameworkVideoStories.PBVideoQuality, progress: ((Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
+  public func saveImagesLocally(images: [UIKit.UIImage], success: (() -> ())?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
+  public func save(image: UIKit.UIImage, index: Swift.Int, success: (() -> ())?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
+  public func createVideoStory(quality: PBFrameworkVideoStories.PBVideoQuality, progress: ((_ progress: Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
   public class func migrateDataIfNeeded()
   public class func migrateUserDefaults()
   public class func migrateDataToSharedContainer()
-  public func saveVideoStoryToCameraRoll(quality: PBFrameworkVideoStories.PBVideoQuality, progress: ((Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
+  public func saveVideoStoryToCameraRoll(quality: PBFrameworkVideoStories.PBVideoQuality, progress: ((_ progress: Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
   public func clearUsedVideoStoryParts()
   public func stopProcessingVideoStories()
   public func playAudio(theme: PBFrameworkVideoStories.Theme)
   public func stopAudio()
   @objc deinit
 }
-extension PBPodVideoStories : PBFrameworkVideoStories.PBAdjustImageDelegate {
+extension PBFrameworkVideoStories.PBPodVideoStories : PBFrameworkVideoStories.PBAdjustImageDelegate {
   @objc dynamic public func didEdited(image: UIKit.UIImage, position: Swift.Int, controller: PBFrameworkVideoStories.PBAdjustContainerViewController)
   @objc dynamic public func didAdjust(images: [UIKit.UIImage], controller: PBFrameworkVideoStories.PBAdjustContainerViewController)
 }
-@objc @_hasMissingDesignatedInitializers public class PBAnimationView : PBFrameworkVideoStories.BaseLoadingFromXIBView {
-  public var autoplay: Swift.Bool
-  @objc override dynamic public func removeFromSuperview()
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class PBAnimationView : PBFrameworkVideoStories.BaseLoadingFromXIBView {
+  @_Concurrency.MainActor(unsafe) public var autoplay: Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func removeFromSuperview()
   @objc deinit
-  @objc override dynamic public func layoutSubviews()
-  public func reloadImages()
-  public func setControls(hidden: Swift.Bool)
-  public func setAlwaysShowControls(show: Swift.Bool)
-  public func play()
-  public func pause()
-  public func stop()
-  public func setVolume(_ volume: Swift.Float)
-  public func mute()
-  public func unMute()
-  public func goToFrame(_ frame: Swift.Int)
-  public func goToTime(_ seconds: Swift.Double)
-  public func totalFrames() -> Swift.Int
-  public func totalTime() -> Swift.Double
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func layoutSubviews()
+  @_Concurrency.MainActor(unsafe) public func reloadImages()
+  @_Concurrency.MainActor(unsafe) public func setControls(hidden: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) public func setAlwaysShowControls(show: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) public func play()
+  @_Concurrency.MainActor(unsafe) public func pause()
+  @_Concurrency.MainActor(unsafe) public func stop()
+  @_Concurrency.MainActor(unsafe) public func setVolume(_ volume: Swift.Float)
+  @_Concurrency.MainActor(unsafe) public func mute()
+  @_Concurrency.MainActor(unsafe) public func unMute()
+  @_Concurrency.MainActor(unsafe) public func goToFrame(_ frame: Swift.Int)
+  @_Concurrency.MainActor(unsafe) public func goToTime(_ seconds: Swift.Double)
+  @_Concurrency.MainActor(unsafe) public func totalFrames() -> Swift.Int
+  @_Concurrency.MainActor(unsafe) public func totalTime() -> Swift.Double
 }
-extension UIImageView {
+extension UIKit.UIImageView {
   @objc override dynamic open func awakeFromNib()
 }
-@objc @_hasMissingDesignatedInitializers public class PBSpinnerLoadingImageView : UIKit.UIImageView {
-  public func baseInit()
-  public func reset()
-  @objc override dynamic public init(image: UIKit.UIImage?)
-  @available(iOS 3.0, *)
-  @objc override dynamic public init(image: UIKit.UIImage?, highlightedImage: UIKit.UIImage?)
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class PBSpinnerLoadingImageView : UIKit.UIImageView {
+  @_Concurrency.MainActor(unsafe) public func baseInit()
+  @_Concurrency.MainActor(unsafe) public func reset()
   @objc deinit
 }
-@objc @_inheritsConvenienceInitializers public class PBThemeDetailsViewController : UIKit.UIViewController {
-  public var theme: PBFrameworkVideoStories.Theme!
-  public var stream: [Swift.String : Any]?
-  @objc public static func create(with theme: PBFrameworkVideoStories.Theme, themeFilePathURL: Foundation.URL? = nil, dataJSONFilePathURL: Foundation.URL? = nil, audioFilePathURL: Foundation.URL? = nil, indexHTMLFilePathURL: Foundation.URL? = nil) -> PBFrameworkVideoStories.PBThemeDetailsViewController
-  @objc public func assignStream(stream: [Swift.String : Any])
-  @objc override dynamic public func viewDidLoad()
-  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
-  @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
-  @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
-  @objc override dynamic public func viewWillTransition(to size: CoreGraphics.CGSize, with coordinator: UIKit.UIViewControllerTransitionCoordinator)
-  @objc override dynamic public func viewWillLayoutSubviews()
-  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
-  @objc required dynamic public init?(coder: Foundation.NSCoder)
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class PBThemeDetailsViewController : UIKit.UIViewController {
+  @_Concurrency.MainActor(unsafe) public var theme: PBFrameworkVideoStories.Theme!
+  @_Concurrency.MainActor(unsafe) public var stream: [Swift.String : Any]?
+  @objc @_Concurrency.MainActor(unsafe) public static func create(with theme: PBFrameworkVideoStories.Theme, themeFilePathURL: Foundation.URL? = nil, dataJSONFilePathURL: Foundation.URL? = nil, audioFilePathURL: Foundation.URL? = nil, indexHTMLFilePathURL: Foundation.URL? = nil) -> PBFrameworkVideoStories.PBThemeDetailsViewController
+  @objc @_Concurrency.MainActor(unsafe) public func assignStream(stream: [Swift.String : Any])
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillTransition(to size: CoreGraphics.CGSize, with coordinator: UIKit.UIViewControllerTransitionCoordinator)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillLayoutSubviews()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
   @objc deinit
 }
-extension PBThemeDetailsViewController : UIKit.UITableViewDataSource {
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+extension PBFrameworkVideoStories.PBThemeDetailsViewController : UIKit.UITableViewDataSource {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
 }
-extension PBThemeDetailsViewController : UIKit.UITableViewDelegate {
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGFloat
+extension PBFrameworkVideoStories.PBThemeDetailsViewController : UIKit.UITableViewDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGFloat
 }
-extension PBThemeDetailsViewController : PBFrameworkVideoStories.PBImageSelectionDelegate {
-  @objc dynamic public func didSelect(images: [UIKit.UIImage], picker: PBFrameworkVideoStories.PBImageSelectionListController)
-  @objc dynamic public func didCancel(picker: PBFrameworkVideoStories.PBImageSelectionListController)
+extension PBFrameworkVideoStories.PBThemeDetailsViewController : PBFrameworkVideoStories.PBImageSelectionDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func didSelect(images: [UIKit.UIImage], picker: PBFrameworkVideoStories.PBImageSelectionListController)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func didCancel(picker: PBFrameworkVideoStories.PBImageSelectionListController)
 }
 @objc @_inheritsConvenienceInitializers @available(iOS 10.0, *)
 public class CDManager : ObjectiveC.NSObject {
@@ -277,9 +275,9 @@ public class CDManager : ObjectiveC.NSObject {
   public func fetchModularThemes(isVisible: Swift.Bool, in context: CoreData.NSManagedObjectContext? = nil) -> [PBFrameworkVideoStories.ModularTheme]
   @objc public func fetchAllModularThemes(in context: CoreData.NSManagedObjectContext? = nil, predicate: Foundation.NSPredicate? = nil) -> [PBFrameworkVideoStories.ModularTheme]
   @objc public func fetchAllThemes(in context: CoreData.NSManagedObjectContext? = nil, predicate: Foundation.NSPredicate? = nil) -> [PBFrameworkVideoStories.Theme]
-  @objc public func fetchModularTheme(byUUID uuid: Swift.String, in context: CoreData.NSManagedObjectContext? = nil, failure: ((Swift.Error?) -> Swift.Void)? = nil) -> PBFrameworkVideoStories.ModularTheme?
-  @objc public func fetchTheme(byUUID uuid: Swift.String, in context: CoreData.NSManagedObjectContext? = nil, failure: ((Swift.Error?) -> Swift.Void)? = nil) -> PBFrameworkVideoStories.Theme?
-  @objc public func fetchTheme(byID id: Swift.String, in context: CoreData.NSManagedObjectContext? = nil, failure: ((Swift.Error?) -> Swift.Void)? = nil) -> PBFrameworkVideoStories.Theme?
+  @objc public func fetchModularTheme(byUUID uuid: Swift.String, in context: CoreData.NSManagedObjectContext? = nil, failure: ((_ error: Swift.Error?) -> Swift.Void)? = nil) -> PBFrameworkVideoStories.ModularTheme?
+  @objc public func fetchTheme(byUUID uuid: Swift.String, in context: CoreData.NSManagedObjectContext? = nil, failure: ((_ error: Swift.Error?) -> Swift.Void)? = nil) -> PBFrameworkVideoStories.Theme?
+  @objc public func fetchTheme(byID id: Swift.String, in context: CoreData.NSManagedObjectContext? = nil, failure: ((_ error: Swift.Error?) -> Swift.Void)? = nil) -> PBFrameworkVideoStories.Theme?
   @objc public func fetchTheme(byAssetLocationURL assetLocationURL: Swift.String, in context: CoreData.NSManagedObjectContext? = nil) -> PBFrameworkVideoStories.Theme?
   @objc public func fetchAllTags(includeUncategorized: Swift.Bool, in context: CoreData.NSManagedObjectContext? = nil, predicate: Foundation.NSPredicate? = nil) -> [PBFrameworkVideoStories.Tag]
   @objc public func fetchAllTags(in context: CoreData.NSManagedObjectContext? = nil, predicate: Foundation.NSPredicate? = nil) -> [PBFrameworkVideoStories.Tag]
@@ -298,127 +296,127 @@ public class CDManager : ObjectiveC.NSObject {
 @_hasMissingDesignatedInitializers open class Application {
   @objc deinit
 }
-@objc @_inheritsConvenienceInitializers public class AdjustAndPlay : UIKit.UIViewController, Foundation.FileManagerDelegate {
-  public var shareClosure: ((Foundation.URL) -> ())?
-  public var sendClosure: ((Foundation.URL) -> ())?
-  public var dismissClosure: (() -> ())?
-  public var theme: PBFrameworkVideoStories.Theme!
-  final public let shouldUseUnityScrolling: Swift.Bool
-  public var isUnityTheme: Swift.Bool
-  public var isLoading: Swift.Bool {
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class AdjustAndPlay : UIKit.UIViewController, Foundation.FileManagerDelegate {
+  @_Concurrency.MainActor(unsafe) public var shareClosure: ((Foundation.URL) -> ())?
+  @_Concurrency.MainActor(unsafe) public var sendClosure: ((Foundation.URL) -> ())?
+  @_Concurrency.MainActor(unsafe) public var dismissClosure: (() -> ())?
+  @_Concurrency.MainActor(unsafe) public var theme: PBFrameworkVideoStories.Theme!
+  @_Concurrency.MainActor(unsafe) final public let shouldUseUnityScrolling: Swift.Bool
+  @_Concurrency.MainActor(unsafe) public var isUnityTheme: Swift.Bool
+  @_Concurrency.MainActor(unsafe) public var isLoading: Swift.Bool {
     get
     set
   }
-  public var touchViewIsEnabled: Swift.Bool {
+  @_Concurrency.MainActor(unsafe) public var touchViewIsEnabled: Swift.Bool {
     get
     set
   }
-  public static func create(with theme: PBFrameworkVideoStories.Theme, themeFilePathURL: Foundation.URL? = nil, dataJSONFilePathURL: Foundation.URL? = nil, audioFilePathURL: Foundation.URL? = nil, indexHTMLFilePathURL: Foundation.URL? = nil) -> PBFrameworkVideoStories.AdjustAndPlay
-  @objc override dynamic public func viewWillLayoutSubviews()
-  public static func create(with themeId: Swift.String, assets: [Photos.PHAsset]?) -> PBFrameworkVideoStories.AdjustAndPlay?
-  @objc override dynamic public func didReceiveMemoryWarning()
-  @objc override dynamic public func viewDidLoad()
-  public func setPreviousScreenImage(img: UIKit.UIImage)
-  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
-  @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
-  @objc override dynamic public func viewDidLayoutSubviews()
-  @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
-  public func closeFromExternal()
-  public func dismissImageSelection()
+  @_Concurrency.MainActor(unsafe) public static func create(with theme: PBFrameworkVideoStories.Theme, themeFilePathURL: Foundation.URL? = nil, dataJSONFilePathURL: Foundation.URL? = nil, audioFilePathURL: Foundation.URL? = nil, indexHTMLFilePathURL: Foundation.URL? = nil) -> PBFrameworkVideoStories.AdjustAndPlay
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillLayoutSubviews()
+  @_Concurrency.MainActor(unsafe) public static func create(with themeId: Swift.String, assets: [Photos.PHAsset]?) -> PBFrameworkVideoStories.AdjustAndPlay?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func didReceiveMemoryWarning()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) public func setPreviousScreenImage(img: UIKit.UIImage)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLayoutSubviews()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) public func closeFromExternal()
+  @_Concurrency.MainActor(unsafe) public func dismissImageSelection()
   @objc deinit
-  @objc override dynamic public var prefersHomeIndicatorAutoHidden: Swift.Bool {
-    @objc get
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var prefersHomeIndicatorAutoHidden: Swift.Bool {
+    @_Concurrency.MainActor(unsafe) @objc get
   }
-  @objc override dynamic public var supportedInterfaceOrientations: UIKit.UIInterfaceOrientationMask {
-    @objc get
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var supportedInterfaceOrientations: UIKit.UIInterfaceOrientationMask {
+    @_Concurrency.MainActor(unsafe) @objc get
   }
-  @objc override dynamic public var shouldAutorotate: Swift.Bool {
-    @objc get
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var shouldAutorotate: Swift.Bool {
+    @_Concurrency.MainActor(unsafe) @objc get
   }
-  @objc override dynamic public func viewWillTransition(to size: CoreGraphics.CGSize, with coordinator: UIKit.UIViewControllerTransitionCoordinator)
-  @objc public func viewDidRotate()
-  public func updateNextPreviousNavButtonsForEdit()
-  @objc override dynamic public func traitCollectionDidChange(_ previousTraitCollection: UIKit.UITraitCollection?)
-  public func getPixelColor(image: UIKit.UIImage, pos: CoreGraphics.CGPoint) -> UIKit.UIColor
-  public func saveVideosInBackground()
-  public func resetSavedVideos()
-  public func stopVideoGeneration()
-  public func getCurrentSelectedAsset() -> Photos.PHAsset?
-  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
-  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillTransition(to size: CoreGraphics.CGSize, with coordinator: UIKit.UIViewControllerTransitionCoordinator)
+  @objc @_Concurrency.MainActor(unsafe) public func viewDidRotate()
+  @_Concurrency.MainActor(unsafe) public func updateNextPreviousNavButtonsForEdit()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func traitCollectionDidChange(_ previousTraitCollection: UIKit.UITraitCollection?)
+  @_Concurrency.MainActor(unsafe) public func getPixelColor(image: UIKit.UIImage, pos: CoreGraphics.CGPoint) -> UIKit.UIColor
+  @_Concurrency.MainActor(unsafe) public func saveVideosInBackground()
+  @_Concurrency.MainActor(unsafe) public func resetSavedVideos()
+  @_Concurrency.MainActor(unsafe) public func stopVideoGeneration()
+  @_Concurrency.MainActor(unsafe) public func getCurrentSelectedAsset() -> Photos.PHAsset?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
 }
-extension AdjustAndPlay : UIKit.UIImagePickerControllerDelegate, UIKit.UINavigationControllerDelegate {
-  @objc dynamic public func imagePickerControllerDidCancel(_ picker: UIKit.UIImagePickerController)
-  @objc dynamic public func imagePickerController(_ picker: UIKit.UIImagePickerController, didFinishPickingMediaWithInfo info: [UIKit.UIImagePickerController.InfoKey : Any])
+extension PBFrameworkVideoStories.AdjustAndPlay : UIKit.UIImagePickerControllerDelegate, UIKit.UINavigationControllerDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func imagePickerControllerDidCancel(_ picker: UIKit.UIImagePickerController)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func imagePickerController(_ picker: UIKit.UIImagePickerController, didFinishPickingMediaWithInfo info: [UIKit.UIImagePickerController.InfoKey : Any])
 }
-extension AdjustAndPlay : UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegate, UIKit.UICollectionViewDelegateFlowLayout {
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
-  public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath, hideNextButton: Swift.Bool = true)
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumLineSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, insetForSectionAt section: Swift.Int) -> UIKit.UIEdgeInsets
+extension PBFrameworkVideoStories.AdjustAndPlay : UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegate, UIKit.UICollectionViewDelegateFlowLayout {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath, hideNextButton: Swift.Bool = true)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumLineSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, insetForSectionAt section: Swift.Int) -> UIKit.UIEdgeInsets
 }
-@objc @_inheritsConvenienceInitializers public class MessagesViewController : Messages.MSMessagesAppViewController {
-  weak public var parentMessageVC: Messages.MSMessagesAppViewController?
-  weak public var selectedConversation: Messages.MSConversation?
-  public var templatesDataSource: PBFrameworkVideoStories.TemplatesDataSource!
-  @objc override dynamic public func viewDidLoad()
-  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class MessagesViewController : Messages.MSMessagesAppViewController {
+  @_Concurrency.MainActor(unsafe) weak public var parentMessageVC: Messages.MSMessagesAppViewController?
+  @_Concurrency.MainActor(unsafe) weak public var selectedConversation: Messages.MSConversation?
+  @_Concurrency.MainActor(unsafe) public var templatesDataSource: PBFrameworkVideoStories.TemplatesDataSource!
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
   @objc deinit
-  @objc override dynamic public func requestPresentationStyle(_ presentationStyle: Messages.MSMessagesAppPresentationStyle)
-  @objc override dynamic public func willTransition(to presentationStyle: Messages.MSMessagesAppPresentationStyle)
-  @objc public func textFieldShouldClear(_ textField: UIKit.UITextField) -> Swift.Bool
-  @objc public func textFieldShouldReturn(_ textField: UIKit.UITextField) -> Swift.Bool
-  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
-  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func requestPresentationStyle(_ presentationStyle: Messages.MSMessagesAppPresentationStyle)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func willTransition(to presentationStyle: Messages.MSMessagesAppPresentationStyle)
+  @_Concurrency.MainActor(unsafe) @objc public func textFieldShouldClear(_ textField: UIKit.UITextField) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc public func textFieldShouldReturn(_ textField: UIKit.UITextField) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
 }
-extension MessagesViewController : UIKit.UITextFieldDelegate {
-  @objc dynamic public func textField(_ textField: UIKit.UITextField, shouldChangeCharactersIn range: Foundation.NSRange, replacementString string: Swift.String) -> Swift.Bool
-  @objc dynamic public func textFieldDidBeginEditing(_ textField: UIKit.UITextField)
+extension PBFrameworkVideoStories.MessagesViewController : UIKit.UITextFieldDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textField(_ textField: UIKit.UITextField, shouldChangeCharactersIn range: Foundation.NSRange, replacementString string: Swift.String) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textFieldDidBeginEditing(_ textField: UIKit.UITextField)
 }
-extension MessagesViewController : PBFrameworkVideoStories.ScannerViewControllerDelegate {
-  public func qrScanned(urlString: Swift.String)
-  public func qrCanceled()
+extension PBFrameworkVideoStories.MessagesViewController : PBFrameworkVideoStories.ScannerViewControllerDelegate {
+  @_Concurrency.MainActor(unsafe) public func qrScanned(urlString: Swift.String)
+  @_Concurrency.MainActor(unsafe) public func qrCanceled()
 }
-extension MessagesViewController : PBFrameworkVideoStories.TemplatesDataSourceDelegate {
-  public func selectedCategoryChanged(to name: Swift.String)
-  public func show(template: [Swift.String : Any], at indexPath: Foundation.IndexPath)
-  public func didScrollTemplates()
-  public func updateGroupContainer(isHidden: Swift.Bool)
-  public func updateGroupContainerOnPresentationStyle()
+extension PBFrameworkVideoStories.MessagesViewController : PBFrameworkVideoStories.TemplatesDataSourceDelegate {
+  @_Concurrency.MainActor(unsafe) public func selectedCategoryChanged(to name: Swift.String)
+  @_Concurrency.MainActor(unsafe) public func show(template: [Swift.String : Any], at indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) public func didScrollTemplates()
+  @_Concurrency.MainActor(unsafe) public func updateGroupContainer(isHidden: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) public func updateGroupContainerOnPresentationStyle()
 }
-@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BaseLoadingFromXIBView : UIKit.UIView {
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class BaseLoadingFromXIBView : UIKit.UIView {
   @objc deinit
 }
-extension Theme {
+extension PBFrameworkVideoStories.Theme {
   public func mixProperties() -> [Swift.String : Swift.String]
   public func pathComponent() -> Swift.String?
   public func copy(context: CoreData.NSManagedObjectContext) -> PBFrameworkVideoStories.Theme
 }
-extension ModularTheme {
+extension PBFrameworkVideoStories.ModularTheme {
   public func mixProperties() -> [Swift.String : Swift.String]
   public func themesObjs() -> [PBFrameworkVideoStories.Theme]
 }
-extension Tag {
+extension PBFrameworkVideoStories.Tag {
   public func copy(context: CoreData.NSManagedObjectContext) -> PBFrameworkVideoStories.Tag
 }
 @available(iOS 10.0, *)
-extension UIView {
-  public func pbRemoveAllConstraints()
+extension UIKit.UIView {
+  @_Concurrency.MainActor(unsafe) public func pbRemoveAllConstraints()
 }
-@objc @_inheritsConvenienceInitializers public class ARExperience : UIKit.UIViewController {
-  public var isLoading: Swift.Bool {
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class ARExperience : UIKit.UIViewController {
+  @_Concurrency.MainActor(unsafe) public var isLoading: Swift.Bool {
     get
     set
   }
-  @objc public static func create() -> PBFrameworkVideoStories.ARExperience
-  @objc override dynamic public func viewDidLoad()
-  @objc override dynamic public func viewWillLayoutSubviews()
-  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
-  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc @_Concurrency.MainActor(unsafe) public static func create() -> PBFrameworkVideoStories.ARExperience
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillLayoutSubviews()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
   @objc deinit
 }
 @_hasMissingDesignatedInitializers public class PBThemeManager {
@@ -465,48 +463,48 @@ public protocol PBVideoStoryViewDelegate : AnyObject {
   func selectPhotosButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, category: [Swift.String : Any]?)
   func selectPhotosButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, categoryTheme: [Swift.String : Any]?)
 }
-@objc @_inheritsConvenienceInitializers public class PBVideoStoryView : UIKit.UIView {
-  weak public var delegate: PBFrameworkVideoStories.PBVideoStoryViewDelegate?
-  public var isThemeDetailsViewShown: Swift.Bool {
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class PBVideoStoryView : UIKit.UIView {
+  @_Concurrency.MainActor(unsafe) weak public var delegate: PBFrameworkVideoStories.PBVideoStoryViewDelegate?
+  @_Concurrency.MainActor(unsafe) public var isThemeDetailsViewShown: Swift.Bool {
     get
     set
   }
-  public func shouldShowThemeDetailsView(show: Swift.Bool, animated: Swift.Bool)
-  @objc public static func create(with frame: CoreGraphics.CGRect, theme: PBFrameworkVideoStories.Theme) -> PBFrameworkVideoStories.PBVideoStoryView?
-  @objc public static func create(with frame: CoreGraphics.CGRect, category: [Swift.String : Any]) -> PBFrameworkVideoStories.PBVideoStoryView?
-  @objc public static func create(with frame: CoreGraphics.CGRect, categoryTheme: [Swift.String : Any]) -> PBFrameworkVideoStories.PBVideoStoryView?
-  @objc public static func create(with frame: CoreGraphics.CGRect, modularTheme: PBFrameworkVideoStories.ModularTheme) -> PBFrameworkVideoStories.PBVideoStoryView?
-  @objc public static func createFailedDownload(with frame: CoreGraphics.CGRect) -> PBFrameworkVideoStories.PBVideoStoryView?
-  @objc public static func createUnloadedView(with frame: CoreGraphics.CGRect, coverURL: Swift.String) -> PBFrameworkVideoStories.PBVideoStoryView?
-  @objc public static func createComingSoonView(with frame: CoreGraphics.CGRect, image: UIKit.UIImage) -> PBFrameworkVideoStories.PBVideoStoryView?
-  @objc public static var widthView: CoreGraphics.CGFloat {
+  @_Concurrency.MainActor(unsafe) public func shouldShowThemeDetailsView(show: Swift.Bool, animated: Swift.Bool)
+  @objc @_Concurrency.MainActor(unsafe) public static func create(with frame: CoreGraphics.CGRect, theme: PBFrameworkVideoStories.Theme) -> PBFrameworkVideoStories.PBVideoStoryView?
+  @objc @_Concurrency.MainActor(unsafe) public static func create(with frame: CoreGraphics.CGRect, category: [Swift.String : Any]) -> PBFrameworkVideoStories.PBVideoStoryView?
+  @objc @_Concurrency.MainActor(unsafe) public static func create(with frame: CoreGraphics.CGRect, categoryTheme: [Swift.String : Any]) -> PBFrameworkVideoStories.PBVideoStoryView?
+  @objc @_Concurrency.MainActor(unsafe) public static func create(with frame: CoreGraphics.CGRect, modularTheme: PBFrameworkVideoStories.ModularTheme) -> PBFrameworkVideoStories.PBVideoStoryView?
+  @objc @_Concurrency.MainActor(unsafe) public static func createFailedDownload(with frame: CoreGraphics.CGRect) -> PBFrameworkVideoStories.PBVideoStoryView?
+  @objc @_Concurrency.MainActor(unsafe) public static func createUnloadedView(with frame: CoreGraphics.CGRect, coverURL: Swift.String) -> PBFrameworkVideoStories.PBVideoStoryView?
+  @objc @_Concurrency.MainActor(unsafe) public static func createComingSoonView(with frame: CoreGraphics.CGRect, image: UIKit.UIImage) -> PBFrameworkVideoStories.PBVideoStoryView?
+  @objc @_Concurrency.MainActor(unsafe) public static var widthView: CoreGraphics.CGFloat {
     @objc get
   }
-  @objc override dynamic public func draw(_ rect: CoreGraphics.CGRect)
-  public func update(categoryTheme: [Swift.String : Any])
-  public func update(category: [Swift.String : Any])
-  public func update(with theme: PBFrameworkVideoStories.Theme)
-  public func update(with modularTheme: PBFrameworkVideoStories.ModularTheme)
-  public func updateFailedDownload(url: Swift.String)
-  public func updateUnloadedTheme(coverURL: Swift.String)
-  public func showThemeDetailsView()
-  public func hideThemeDetailsView()
-  @objc override dynamic public init(frame: CoreGraphics.CGRect)
-  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func draw(_ rect: CoreGraphics.CGRect)
+  @_Concurrency.MainActor(unsafe) public func update(categoryTheme: [Swift.String : Any])
+  @_Concurrency.MainActor(unsafe) public func update(category: [Swift.String : Any])
+  @_Concurrency.MainActor(unsafe) public func update(with theme: PBFrameworkVideoStories.Theme)
+  @_Concurrency.MainActor(unsafe) public func update(with modularTheme: PBFrameworkVideoStories.ModularTheme)
+  @_Concurrency.MainActor(unsafe) public func updateFailedDownload(url: Swift.String)
+  @_Concurrency.MainActor(unsafe) public func updateUnloadedTheme(coverURL: Swift.String)
+  @_Concurrency.MainActor(unsafe) public func showThemeDetailsView()
+  @_Concurrency.MainActor(unsafe) public func hideThemeDetailsView()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreGraphics.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
   @objc deinit
 }
-extension PBVideoStoryView : UIKit.UITableViewDataSource {
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+extension PBFrameworkVideoStories.PBVideoStoryView : UIKit.UITableViewDataSource {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
 }
-extension PBVideoStoryView : UIKit.UITableViewDelegate {
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGFloat
+extension PBFrameworkVideoStories.PBVideoStoryView : UIKit.UITableViewDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGFloat
 }
 @objc public protocol PBImageSelectionDelegate : ObjectiveC.NSObjectProtocol {
   @objc func didSelect(images: [UIKit.UIImage], picker: PBFrameworkVideoStories.PBImageSelectionListController)
   @objc func didCancel(picker: PBFrameworkVideoStories.PBImageSelectionListController)
 }
-@objc @_inheritsConvenienceInitializers public class PBImageSelectionListController : UIKit.UIViewController {
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class PBImageSelectionListController : UIKit.UIViewController {
   public enum PBVideoStoriesPickerSortDirection : Swift.Int, Swift.CodingKey {
     case ascending
     case descending
@@ -524,38 +522,38 @@ extension PBVideoStoryView : UIKit.UITableViewDelegate {
       get
     }
   }
-  weak public var delegate: PBFrameworkVideoStories.PBImageSelectionDelegate?
-  @objc override dynamic public func viewDidLoad()
-  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
-  @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
-  @objc override dynamic public func viewWillLayoutSubviews()
-  @objc override dynamic public func viewDidLayoutSubviews()
-  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
-  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) weak public var delegate: PBFrameworkVideoStories.PBImageSelectionDelegate?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillLayoutSubviews()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLayoutSubviews()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
   @objc deinit
 }
-extension PBImageSelectionListController : UIKit.UICollectionViewDelegateFlowLayout {
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumLineSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, referenceSizeForHeaderInSection section: Swift.Int) -> CoreGraphics.CGSize
+extension PBFrameworkVideoStories.PBImageSelectionListController : UIKit.UICollectionViewDelegateFlowLayout {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumLineSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, referenceSizeForHeaderInSection section: Swift.Int) -> CoreGraphics.CGSize
 }
-extension PBImageSelectionListController : UIKit.UICollectionViewDataSource {
-  @objc dynamic public func numberOfSections(in collectionView: UIKit.UICollectionView) -> Swift.Int
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
+extension PBFrameworkVideoStories.PBImageSelectionListController : UIKit.UICollectionViewDataSource {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func numberOfSections(in collectionView: UIKit.UICollectionView) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
 }
-extension PBImageSelectionListController : UIKit.UICollectionViewDelegate {
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, viewForSupplementaryElementOfKind kind: Swift.String, at indexPath: Foundation.IndexPath) -> UIKit.UICollectionReusableView
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, willDisplay cell: UIKit.UICollectionViewCell, forItemAt indexPath: Foundation.IndexPath)
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
-  @objc dynamic public func scrollViewDidScroll(_ scrollView: UIKit.UIScrollView)
-  @objc dynamic public func scrollViewDidEndDecelerating(_ scrollView: UIKit.UIScrollView)
-  @objc dynamic public func scrollViewDidEndDragging(_ scrollView: UIKit.UIScrollView, willDecelerate decelerate: Swift.Bool)
-  @objc dynamic public func scrollViewWillBeginDragging(_ scrollView: UIKit.UIScrollView)
+extension PBFrameworkVideoStories.PBImageSelectionListController : UIKit.UICollectionViewDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, viewForSupplementaryElementOfKind kind: Swift.String, at indexPath: Foundation.IndexPath) -> UIKit.UICollectionReusableView
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, willDisplay cell: UIKit.UICollectionViewCell, forItemAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewDidScroll(_ scrollView: UIKit.UIScrollView)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewDidEndDecelerating(_ scrollView: UIKit.UIScrollView)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewDidEndDragging(_ scrollView: UIKit.UIScrollView, willDecelerate decelerate: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewWillBeginDragging(_ scrollView: UIKit.UIScrollView)
 }
-extension PBImageSelectionListController : UIKit.UITextFieldDelegate {
-  @objc dynamic public func textFieldShouldReturn(_ textField: UIKit.UITextField) -> Swift.Bool
+extension PBFrameworkVideoStories.PBImageSelectionListController : UIKit.UITextFieldDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textFieldShouldReturn(_ textField: UIKit.UITextField) -> Swift.Bool
 }
 @objc public enum PBEnvironment : Swift.Int {
   case prod
@@ -608,143 +606,142 @@ public protocol TemplatesDataSourceDelegate : ObjectiveC.NSObjectProtocol {
   }
   public var downloadingIndexPath: Foundation.IndexPath?
   public func reload()
-  @objc override dynamic public init()
   @objc deinit
 }
-extension TemplatesDataSource : UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegate, UIKit.UICollectionViewDelegateFlowLayout {
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, insetForSectionAt section: Swift.Int) -> UIKit.UIEdgeInsets
+extension PBFrameworkVideoStories.TemplatesDataSource : UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegate, UIKit.UICollectionViewDelegateFlowLayout {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, insetForSectionAt section: Swift.Int) -> UIKit.UIEdgeInsets
 }
-extension TemplatesDataSource : UIKit.UITableViewDataSource, UIKit.UITableViewDelegate {
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, willDisplayHeaderView view: UIKit.UIView, forSection section: Swift.Int)
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, titleForHeaderInSection section: Swift.Int) -> Swift.String?
-  @objc dynamic public func numberOfSections(in tableView: UIKit.UITableView) -> Swift.Int
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, heightForFooterInSection section: Swift.Int) -> CoreGraphics.CGFloat
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGFloat
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, viewForFooterInSection section: Swift.Int) -> UIKit.UIView?
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, canEditRowAt indexPath: Foundation.IndexPath) -> Swift.Bool
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+extension PBFrameworkVideoStories.TemplatesDataSource : UIKit.UITableViewDataSource, UIKit.UITableViewDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, willDisplayHeaderView view: UIKit.UIView, forSection section: Swift.Int)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, titleForHeaderInSection section: Swift.Int) -> Swift.String?
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func numberOfSections(in tableView: UIKit.UITableView) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, heightForFooterInSection section: Swift.Int) -> CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, viewForFooterInSection section: Swift.Int) -> UIKit.UIView?
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, canEditRowAt indexPath: Foundation.IndexPath) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
   @available(iOSApplicationExtension 11.0, iOS 11.0, *)
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: Foundation.IndexPath) -> UIKit.UISwipeActionsConfiguration?
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: Foundation.IndexPath) -> UIKit.UISwipeActionsConfiguration?
 }
-extension TemplatesDataSource : UIKit.UIScrollViewDelegate {
-  @objc dynamic public func scrollViewDidScroll(_ scrollView: UIKit.UIScrollView)
+extension PBFrameworkVideoStories.TemplatesDataSource : UIKit.UIScrollViewDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewDidScroll(_ scrollView: UIKit.UIScrollView)
 }
-@objc @_inheritsConvenienceInitializers public class PBVideoStoriesViewController : UIKit.UIViewController, PBFrameworkVideoStories.ScannerViewControllerDelegate {
-  @objc public var streamID: Swift.String?
-  @objc public var streamTemplateListURL: Swift.String?
-  @objc public var streamTemplateListFilter: [Swift.String] {
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class PBVideoStoriesViewController : UIKit.UIViewController, PBFrameworkVideoStories.ScannerViewControllerDelegate {
+  @objc @_Concurrency.MainActor(unsafe) public var streamID: Swift.String?
+  @objc @_Concurrency.MainActor(unsafe) public var streamTemplateListURL: Swift.String?
+  @objc @_Concurrency.MainActor(unsafe) public var streamTemplateListFilter: [Swift.String] {
     @objc get
     @objc set
   }
-  @objc public static func create() -> PBFrameworkVideoStories.PBVideoStoriesViewController
-  @objc override dynamic public func viewDidLoad()
-  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
-  @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
-  @objc override dynamic public func viewWillLayoutSubviews()
-  @objc override dynamic public func viewDidLayoutSubviews()
-  @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
-  @objc override dynamic public func viewWillTransition(to size: CoreGraphics.CGSize, with coordinator: UIKit.UIViewControllerTransitionCoordinator)
+  @objc @_Concurrency.MainActor(unsafe) public static func create() -> PBFrameworkVideoStories.PBVideoStoriesViewController
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillLayoutSubviews()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLayoutSubviews()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillTransition(to size: CoreGraphics.CGSize, with coordinator: UIKit.UIViewControllerTransitionCoordinator)
   @objc deinit
-  public func qrScanned(urlString: Swift.String)
-  public func qrCanceled()
-  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
-  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) public func qrScanned(urlString: Swift.String)
+  @_Concurrency.MainActor(unsafe) public func qrCanceled()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
 }
-extension PBVideoStoriesViewController : UIKit.UITextFieldDelegate {
-  @objc dynamic public func textFieldShouldReturn(_ textField: UIKit.UITextField) -> Swift.Bool
-  @objc dynamic public func textField(_ textField: UIKit.UITextField, shouldChangeCharactersIn range: Foundation.NSRange, replacementString string: Swift.String) -> Swift.Bool
-  @objc dynamic public func textFieldShouldBeginEditing(_ textField: UIKit.UITextField) -> Swift.Bool
+extension PBFrameworkVideoStories.PBVideoStoriesViewController : UIKit.UITextFieldDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textFieldShouldReturn(_ textField: UIKit.UITextField) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textField(_ textField: UIKit.UITextField, shouldChangeCharactersIn range: Foundation.NSRange, replacementString string: Swift.String) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textFieldShouldBeginEditing(_ textField: UIKit.UITextField) -> Swift.Bool
 }
-extension PBVideoStoriesViewController : UIKit.UICollectionViewDelegate, UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegateFlowLayout {
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, insetForSectionAt section: Swift.Int) -> UIKit.UIEdgeInsets
-  @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
+extension PBFrameworkVideoStories.PBVideoStoriesViewController : UIKit.UICollectionViewDelegate, UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegateFlowLayout {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, insetForSectionAt section: Swift.Int) -> UIKit.UIEdgeInsets
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
 }
-extension PBVideoStoriesViewController : PBFrameworkUILibraries.iCarouselDataSource {
-  @objc dynamic public func numberOfItems(in carousel: PBFrameworkUILibraries.iCarousel) -> Swift.Int
-  @objc dynamic public func carousel(_ carousel: PBFrameworkUILibraries.iCarousel, viewForItemAt index: Swift.Int, reusing view: UIKit.UIView?) -> UIKit.UIView
+extension PBFrameworkVideoStories.PBVideoStoriesViewController : PBFrameworkUILibraries.iCarouselDataSource {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func numberOfItems(in carousel: PBFrameworkUILibraries.iCarousel) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func carousel(_ carousel: PBFrameworkUILibraries.iCarousel, viewForItemAt index: Swift.Int, reusing view: UIKit.UIView?) -> UIKit.UIView
 }
-extension PBVideoStoriesViewController : PBFrameworkVideoStories.PBVideoStoryViewDelegate {
-  public func reloadThemeInfo()
-  public func playAudioButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, theme: PBFrameworkVideoStories.Theme?)
-  public func selectPhotosButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, modularTheme: PBFrameworkVideoStories.ModularTheme?)
-  public func selectPhotosButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, category: [Swift.String : Any]?)
-  public func selectPhotosButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, categoryTheme: [Swift.String : Any]?)
-  public func selectPhotosButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, theme: PBFrameworkVideoStories.Theme?)
+extension PBFrameworkVideoStories.PBVideoStoriesViewController : PBFrameworkVideoStories.PBVideoStoryViewDelegate {
+  @_Concurrency.MainActor(unsafe) public func reloadThemeInfo()
+  @_Concurrency.MainActor(unsafe) public func playAudioButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, theme: PBFrameworkVideoStories.Theme?)
+  @_Concurrency.MainActor(unsafe) public func selectPhotosButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, modularTheme: PBFrameworkVideoStories.ModularTheme?)
+  @_Concurrency.MainActor(unsafe) public func selectPhotosButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, category: [Swift.String : Any]?)
+  @_Concurrency.MainActor(unsafe) public func selectPhotosButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, categoryTheme: [Swift.String : Any]?)
+  @_Concurrency.MainActor(unsafe) public func selectPhotosButtonDidTouch(pbVideoStoryView: PBFrameworkVideoStories.PBVideoStoryView, theme: PBFrameworkVideoStories.Theme?)
 }
-extension PBVideoStoriesViewController : PBFrameworkUILibraries.iCarouselDelegate {
-  @objc dynamic public func carouselItemWidth(_ carousel: PBFrameworkUILibraries.iCarousel) -> CoreGraphics.CGFloat
-  @objc dynamic public func carousel(_ carousel: PBFrameworkUILibraries.iCarousel, itemTransformForOffset offset: CoreGraphics.CGFloat, baseTransform transform: QuartzCore.CATransform3D) -> QuartzCore.CATransform3D
-  @objc dynamic public func carouselCurrentItemIndexDidChange(_ carousel: PBFrameworkUILibraries.iCarousel)
-  @objc dynamic public func carousel(_ carousel: PBFrameworkUILibraries.iCarousel, valueFor option: PBFrameworkUILibraries.iCarouselOption, withDefault value: CoreGraphics.CGFloat) -> CoreGraphics.CGFloat
-  @objc dynamic public func carousel(_ carousel: PBFrameworkUILibraries.iCarousel, didSelectItemAt index: Swift.Int)
-  @objc dynamic public func carouselDidScroll(_ carousel: PBFrameworkUILibraries.iCarousel)
+extension PBFrameworkVideoStories.PBVideoStoriesViewController : PBFrameworkUILibraries.iCarouselDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func carouselItemWidth(_ carousel: PBFrameworkUILibraries.iCarousel) -> CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func carousel(_ carousel: PBFrameworkUILibraries.iCarousel, itemTransformForOffset offset: CoreGraphics.CGFloat, baseTransform transform: QuartzCore.CATransform3D) -> QuartzCore.CATransform3D
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func carouselCurrentItemIndexDidChange(_ carousel: PBFrameworkUILibraries.iCarousel)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func carousel(_ carousel: PBFrameworkUILibraries.iCarousel, valueFor option: PBFrameworkUILibraries.iCarouselOption, withDefault value: CoreGraphics.CGFloat) -> CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func carousel(_ carousel: PBFrameworkUILibraries.iCarousel, didSelectItemAt index: Swift.Int)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func carouselDidScroll(_ carousel: PBFrameworkUILibraries.iCarousel)
 }
-extension PBVideoStoriesViewController {
-  @objc override dynamic public func touchesBegan(_ touches: Swift.Set<UIKit.UITouch>, with event: UIKit.UIEvent?)
+extension PBFrameworkVideoStories.PBVideoStoriesViewController {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func touchesBegan(_ touches: Swift.Set<UIKit.UITouch>, with event: UIKit.UIEvent?)
 }
 public protocol ScannerViewControllerDelegate : AnyObject {
   func qrScanned(urlString: Swift.String)
   func qrCanceled()
 }
-@objc @_inheritsConvenienceInitializers public class ScannerViewController : UIKit.UIViewController, AVFoundation.AVCaptureMetadataOutputObjectsDelegate {
-  weak public var delegate: PBFrameworkVideoStories.ScannerViewControllerDelegate?
-  @objc override dynamic public func viewDidLoad()
-  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
-  @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
-  @objc public func metadataOutput(_ output: AVFoundation.AVCaptureMetadataOutput, didOutput metadataObjects: [AVFoundation.AVMetadataObject], from connection: AVFoundation.AVCaptureConnection)
-  @objc override dynamic public var preferredInterfaceOrientationForPresentation: UIKit.UIInterfaceOrientation {
-    @objc get
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class ScannerViewController : UIKit.UIViewController, AVFoundation.AVCaptureMetadataOutputObjectsDelegate {
+  @_Concurrency.MainActor(unsafe) weak public var delegate: PBFrameworkVideoStories.ScannerViewControllerDelegate?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc public func metadataOutput(_ output: AVFoundation.AVCaptureMetadataOutput, didOutput metadataObjects: [AVFoundation.AVMetadataObject], from connection: AVFoundation.AVCaptureConnection)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var preferredInterfaceOrientationForPresentation: UIKit.UIInterfaceOrientation {
+    @_Concurrency.MainActor(unsafe) @objc get
   }
-  @objc override dynamic public var prefersStatusBarHidden: Swift.Bool {
-    @objc get
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var prefersStatusBarHidden: Swift.Bool {
+    @_Concurrency.MainActor(unsafe) @objc get
   }
-  @objc override dynamic public var shouldAutorotate: Swift.Bool {
-    @objc get
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var shouldAutorotate: Swift.Bool {
+    @_Concurrency.MainActor(unsafe) @objc get
   }
-  @objc override dynamic public var supportedInterfaceOrientations: UIKit.UIInterfaceOrientationMask {
-    @objc get
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var supportedInterfaceOrientations: UIKit.UIInterfaceOrientationMask {
+    @_Concurrency.MainActor(unsafe) @objc get
     @objc set
   }
-  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
-  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
   @objc deinit
 }
-@objc @_inheritsConvenienceInitializers public class TemplatesViewController : UIKit.UIViewController {
-  @objc public var streamID: Swift.String?
-  @objc override dynamic public func viewDidLoad()
-  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class TemplatesViewController : UIKit.UIViewController {
+  @objc @_Concurrency.MainActor(unsafe) public var streamID: Swift.String?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
   @objc deinit
-  @objc public static func create() -> PBFrameworkVideoStories.TemplatesViewController
-  @objc public func textFieldShouldReturn(_ textField: UIKit.UITextField) -> Swift.Bool
-  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
-  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc @_Concurrency.MainActor(unsafe) public static func create() -> PBFrameworkVideoStories.TemplatesViewController
+  @_Concurrency.MainActor(unsafe) @objc public func textFieldShouldReturn(_ textField: UIKit.UITextField) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
 }
-extension TemplatesViewController : UIKit.UITextFieldDelegate {
-  @objc dynamic public func textField(_ textField: UIKit.UITextField, shouldChangeCharactersIn range: Foundation.NSRange, replacementString string: Swift.String) -> Swift.Bool
-  @objc dynamic public func textFieldShouldClear(_ textField: UIKit.UITextField) -> Swift.Bool
-  @objc dynamic public func textFieldDidBeginEditing(_ textField: UIKit.UITextField)
+extension PBFrameworkVideoStories.TemplatesViewController : UIKit.UITextFieldDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textField(_ textField: UIKit.UITextField, shouldChangeCharactersIn range: Foundation.NSRange, replacementString string: Swift.String) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textFieldShouldClear(_ textField: UIKit.UITextField) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textFieldDidBeginEditing(_ textField: UIKit.UITextField)
 }
-extension TemplatesViewController : PBFrameworkVideoStories.ScannerViewControllerDelegate {
-  public func qrScanned(urlString: Swift.String)
-  public func qrCanceled()
+extension PBFrameworkVideoStories.TemplatesViewController : PBFrameworkVideoStories.ScannerViewControllerDelegate {
+  @_Concurrency.MainActor(unsafe) public func qrScanned(urlString: Swift.String)
+  @_Concurrency.MainActor(unsafe) public func qrCanceled()
 }
-extension TemplatesViewController : PBFrameworkVideoStories.TemplatesDataSourceDelegate {
-  public func selectedCategoryChanged(to name: Swift.String)
-  public func show(template: [Swift.String : Any], at indexPath: Foundation.IndexPath)
-  public func didScrollTemplates()
-  public func updateGroupContainer(isHidden: Swift.Bool)
-  public func updateGroupContainerOnPresentationStyle()
+extension PBFrameworkVideoStories.TemplatesViewController : PBFrameworkVideoStories.TemplatesDataSourceDelegate {
+  @_Concurrency.MainActor(unsafe) public func selectedCategoryChanged(to name: Swift.String)
+  @_Concurrency.MainActor(unsafe) public func show(template: [Swift.String : Any], at indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) public func didScrollTemplates()
+  @_Concurrency.MainActor(unsafe) public func updateGroupContainer(isHidden: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) public func updateGroupContainerOnPresentationStyle()
 }
 public typealias TimePoint = CoreMedia.CMTime
 public typealias ProgressHandler = (Swift.Double) -> Swift.Void
@@ -760,9 +757,9 @@ public enum RegiftError : Swift.String, Swift.Error {
   }
 }
 public struct Regift {
-  public static func createGIFFromSource(_ sourceFileURL: Foundation.URL, destinationFileURL: Foundation.URL? = nil, frameCount: Swift.Int, delayTime: Swift.Float, loopCount: Swift.Int = 0, size: CoreGraphics.CGSize? = nil, progress: PBFrameworkVideoStories.ProgressHandler? = nil, completion: (Foundation.URL?) -> Swift.Void)
-  public static func createGIFFromSource(_ sourceFileURL: Foundation.URL, destinationFileURL: Foundation.URL? = nil, startTime: Swift.Float, duration: Swift.Float, frameRate: Swift.Int, loopCount: Swift.Int = 0, size: CoreGraphics.CGSize? = nil, progress: PBFrameworkVideoStories.ProgressHandler? = nil, completion: (Foundation.URL?) -> Swift.Void)
-  public static func createGIF(fromAsset asset: AVFoundation.AVAsset, destinationFileURL: Foundation.URL? = nil, startTime: Swift.Float, duration: Swift.Float, frameRate: Swift.Int, loopCount: Swift.Int = 0, completion: (Foundation.URL?) -> Swift.Void)
+  public static func createGIFFromSource(_ sourceFileURL: Foundation.URL, destinationFileURL: Foundation.URL? = nil, frameCount: Swift.Int, delayTime: Swift.Float, loopCount: Swift.Int = 0, size: CoreGraphics.CGSize? = nil, progress: PBFrameworkVideoStories.ProgressHandler? = nil, completion: (_ result: Foundation.URL?) -> Swift.Void)
+  public static func createGIFFromSource(_ sourceFileURL: Foundation.URL, destinationFileURL: Foundation.URL? = nil, startTime: Swift.Float, duration: Swift.Float, frameRate: Swift.Int, loopCount: Swift.Int = 0, size: CoreGraphics.CGSize? = nil, progress: PBFrameworkVideoStories.ProgressHandler? = nil, completion: (_ result: Foundation.URL?) -> Swift.Void)
+  public static func createGIF(fromAsset asset: AVFoundation.AVAsset, destinationFileURL: Foundation.URL? = nil, startTime: Swift.Float, duration: Swift.Float, frameRate: Swift.Int, loopCount: Swift.Int = 0, completion: (_ result: Foundation.URL?) -> Swift.Void)
   public init(sourceFileURL: Foundation.URL, destinationFileURL: Foundation.URL? = nil, frameCount: Swift.Int, delayTime: Swift.Float, loopCount: Swift.Int = 0, size: CoreGraphics.CGSize? = nil, progress: PBFrameworkVideoStories.ProgressHandler? = nil)
   public init(sourceFileURL: Foundation.URL, destinationFileURL: Foundation.URL? = nil, startTime: Swift.Float, duration: Swift.Float, frameRate: Swift.Int, loopCount: Swift.Int = 0, size: CoreGraphics.CGSize? = nil, progress: PBFrameworkVideoStories.ProgressHandler? = nil)
   public init(asset: AVFoundation.AVAsset, destinationFileURL: Foundation.URL? = nil, startTime: Swift.Float, duration: Swift.Float, frameRate: Swift.Int, loopCount: Swift.Int = 0, size: CoreGraphics.CGSize? = nil, progress: PBFrameworkVideoStories.ProgressHandler? = nil)
@@ -773,10 +770,10 @@ public struct Regift {
   public class func createMessagesInitialViewController() -> PBFrameworkVideoStories.MessagesViewController
   public class func prepareAdjustPlay(themeId: Swift.String, assets: [Photos.PHAsset]?) -> PBFrameworkVideoStories.AdjustAndPlay?
   public class func updateVidbits(code: Swift.String, completion: (() -> ())?)
-  public class func downloadZip(url: Swift.String, progress: ((Swift.Float, Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
+  public class func downloadZip(url: Swift.String, progress: ((_ current: Swift.Float, _ total: Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
   public class func getAllThemesDownloaded() -> [PBFrameworkVideoStories.Theme]
   public class func getAllThemesNotDownloaded() -> [[Swift.String : Any]]
-  public class func download(themeId: Swift.String, progress: ((Swift.Float, Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((Swift.Error?) -> Swift.Void)?)
+  public class func download(themeId: Swift.String, progress: ((_ current: Swift.Float, _ total: Swift.Float) -> Swift.Void)?, success: (() -> ())?, failure: ((_ error: Swift.Error?) -> Swift.Void)?)
   public class func deleteTheme(by id: Swift.String)
   public class func installMultiple(zips: [Swift.String], bundle: Foundation.Bundle, success: (([Swift.String]) -> ())?, failure: (([Swift.String]) -> ())?)
   public class func install(zip: Swift.String, bundle: Foundation.Bundle, success: (() -> ())?, failure: ((Swift.Error?) -> ())?)
@@ -785,7 +782,7 @@ public struct Regift {
   @objc override dynamic public init()
   @objc deinit
 }
-public typealias VideoStoryDownloaderSuccessBlock = (Foundation.URL?, Foundation.URL?, Foundation.URL?, Foundation.URL?, Foundation.URL?, Swift.Dictionary<Swift.String, Any>?, Foundation.URL?, [Swift.String : Any]?) -> Swift.Void
+public typealias VideoStoryDownloaderSuccessBlock = (_ themeFilePathURL: Foundation.URL?, _ dataJSONFilePathURL: Foundation.URL?, _ themeJSONFilePathURL: Foundation.URL?, _ audioFilePathURL: Foundation.URL?, _ indexHTMLFilePathURL: Foundation.URL?, _ themeJSON: Swift.Dictionary<Swift.String, Any>?, _ dataFolderPathURL: Foundation.URL?, _ metaJSON: [Swift.String : Any]?) -> Swift.Void
 @_inheritsConvenienceInitializers @objc public class PBVideoStoryDownloaderService : ObjectiveC.NSObject, Foundation.URLSessionDownloadDelegate, Foundation.URLSessionDelegate, Foundation.URLSessionTaskDelegate {
   public static let shared: PBFrameworkVideoStories.PBVideoStoryDownloaderService
   public var progressClosure: ((Swift.Float, Swift.Float) -> Swift.Void)?
@@ -800,14 +797,14 @@ public typealias VideoStoryDownloaderSuccessBlock = (Foundation.URL?, Foundation
   @objc public func urlSession(_ session: Foundation.URLSession, didBecomeInvalidWithError error: Swift.Error?)
   @objc public func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didCompleteWithError error: Swift.Error?)
   @objc public func urlSession(_ session: Foundation.URLSession, downloadTask: Foundation.URLSessionDownloadTask, didFinishDownloadingTo location: Foundation.URL)
-  public func downloadTheme(jsonUrl: Foundation.URL, successBlock: ((PBFrameworkVideoStories.Theme) -> ())?, failureBlock: ((Swift.Error?) -> Swift.Void)?)
-  public func downloadZip(zipUrl: Foundation.URL, themeObj: PBFrameworkVideoStories.Theme, successBlock: @escaping ((PBFrameworkVideoStories.Theme) -> ()), failureBlock: ((Swift.Error?) -> Swift.Void)?, progressBlock: ((Swift.Float, Swift.Float) -> Swift.Void)?)
+  public func downloadTheme(jsonUrl: Foundation.URL, successBlock: ((PBFrameworkVideoStories.Theme) -> ())?, failureBlock: ((_ error: Swift.Error?) -> Swift.Void)?)
+  public func downloadZip(zipUrl: Foundation.URL, themeObj: PBFrameworkVideoStories.Theme, successBlock: @escaping ((PBFrameworkVideoStories.Theme) -> ()), failureBlock: ((_ error: Swift.Error?) -> Swift.Void)?, progressBlock: ((_ progress: Swift.Float, _ total: Swift.Float) -> Swift.Void)?)
   @objc override dynamic public init()
   @objc deinit
 }
-extension PBVideoStoryDownloaderService {
-  public func testDownloadModularTheme(uuid: Swift.String, progressBlock: ((Swift.Float, Swift.Float) -> Swift.Void)?, successBlock: (() -> ())?, failureBlock: ((Swift.Error?) -> Swift.Void)?)
-  @objc dynamic public func downloadVideoStoryAndUpdateImages(videoStoryThemeURL: Foundation.URL, uuid: Swift.String, themeId: Swift.String? = nil, successBlock: (PBFrameworkVideoStories.VideoStoryDownloaderSuccessBlock)?, failureBlock: ((Swift.Error?) -> Swift.Void)?, progressBlock: ((Swift.Float, Swift.Float) -> Swift.Void)?)
+extension PBFrameworkVideoStories.PBVideoStoryDownloaderService {
+  public func testDownloadModularTheme(uuid: Swift.String, progressBlock: ((_ progress: Swift.Float, _ total: Swift.Float) -> Swift.Void)?, successBlock: (() -> ())?, failureBlock: ((_ error: Swift.Error?) -> Swift.Void)?)
+  @objc dynamic public func downloadVideoStoryAndUpdateImages(videoStoryThemeURL: Foundation.URL, uuid: Swift.String, themeId: Swift.String? = nil, successBlock: (PBFrameworkVideoStories.VideoStoryDownloaderSuccessBlock)?, failureBlock: ((_ error: Swift.Error?) -> Swift.Void)?, progressBlock: ((_ progress: Swift.Float, _ total: Swift.Float) -> Swift.Void)?)
 }
 public struct Marker {
 }
@@ -862,7 +859,7 @@ public class PBVideoQualityService {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
-extension Filter {
+extension PBFrameworkVideoStories.Filter {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.Filter>
   @objc @NSManaged dynamic public var displayOrder: Swift.Int16 {
     @objc get
@@ -881,7 +878,7 @@ extension Filter {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
-extension ModularTheme {
+extension PBFrameworkVideoStories.ModularTheme {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.ModularTheme>
   @objc @NSManaged dynamic public var audioTrackFileName: Swift.String? {
     @objc get
@@ -932,7 +929,7 @@ extension ModularTheme {
     @objc set
   }
 }
-extension ModularTheme {
+extension PBFrameworkVideoStories.ModularTheme {
   @objc(insertObject:inThemesAtIndex:) @NSManaged dynamic public func insertIntoThemes(_ value: PBFrameworkVideoStories.Theme, at idx: Swift.Int)
   @objc(removeObjectFromThemesAtIndex:) @NSManaged dynamic public func removeFromThemes(at idx: Swift.Int)
   @objc(insertThemes:atIndexes:) @NSManaged dynamic public func insertIntoThemes(_ values: [PBFrameworkVideoStories.Theme], at indexes: Foundation.NSIndexSet)
@@ -944,7 +941,7 @@ extension ModularTheme {
   @objc(addThemes:) @NSManaged dynamic public func addToThemes(_ values: Foundation.NSOrderedSet)
   @objc(removeThemes:) @NSManaged dynamic public func removeFromThemes(_ values: Foundation.NSOrderedSet)
 }
-extension ModularTheme {
+extension PBFrameworkVideoStories.ModularTheme {
   @objc(insertObject:inVideosAtIndex:) @NSManaged dynamic public func insertIntoVideos(_ value: PBFrameworkVideoStories.Video, at idx: Swift.Int)
   @objc(removeObjectFromVideosAtIndex:) @NSManaged dynamic public func removeFromVideos(at idx: Swift.Int)
   @objc(insertVideos:atIndexes:) @NSManaged dynamic public func insertIntoVideos(_ values: [PBFrameworkVideoStories.Video], at indexes: Foundation.NSIndexSet)
@@ -960,7 +957,7 @@ extension ModularTheme {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
-extension Tag {
+extension PBFrameworkVideoStories.Tag {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.Tag>
   @objc @NSManaged dynamic public var isEnabled: Swift.Bool {
     @objc get
@@ -979,7 +976,7 @@ extension Tag {
     @objc set
   }
 }
-extension Tag {
+extension PBFrameworkVideoStories.Tag {
   @objc(addThemesObject:) @NSManaged dynamic public func addToThemes(_ value: PBFrameworkVideoStories.Theme)
   @objc(removeThemesObject:) @NSManaged dynamic public func removeFromThemes(_ value: PBFrameworkVideoStories.Theme)
   @objc(addThemes:) @NSManaged dynamic public func addToThemes(_ values: Foundation.NSSet)
@@ -989,7 +986,7 @@ extension Tag {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
-extension Theme {
+extension PBFrameworkVideoStories.Theme {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.Theme>
   @objc @NSManaged dynamic public var assetLocationURL: Swift.String? {
     @objc get
@@ -1108,13 +1105,13 @@ extension Theme {
     @objc set
   }
 }
-extension Theme {
+extension PBFrameworkVideoStories.Theme {
   @objc(addTagsObject:) @NSManaged dynamic public func addToTags(_ value: PBFrameworkVideoStories.Tag)
   @objc(removeTagsObject:) @NSManaged dynamic public func removeFromTags(_ value: PBFrameworkVideoStories.Tag)
   @objc(addTags:) @NSManaged dynamic public func addToTags(_ values: Foundation.NSSet)
   @objc(removeTags:) @NSManaged dynamic public func removeFromTags(_ values: Foundation.NSSet)
 }
-extension Theme {
+extension PBFrameworkVideoStories.Theme {
   @objc(addThemeAssetObject:) @NSManaged dynamic public func addToThemeAsset(_ value: PBFrameworkVideoStories.ThemeAsset)
   @objc(removeThemeAssetObject:) @NSManaged dynamic public func removeFromThemeAsset(_ value: PBFrameworkVideoStories.ThemeAsset)
   @objc(addThemeAsset:) @NSManaged dynamic public func addToThemeAsset(_ values: Foundation.NSSet)
@@ -1124,7 +1121,7 @@ extension Theme {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
-extension ThemeAsset {
+extension PBFrameworkVideoStories.ThemeAsset {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.ThemeAsset>
   @objc @NSManaged dynamic public var displayOrder: Swift.Int16 {
     @objc get
@@ -1155,7 +1152,7 @@ extension ThemeAsset {
     @objc set
   }
 }
-extension ThemeAsset {
+extension PBFrameworkVideoStories.ThemeAsset {
   @objc(addFilterObject:) @NSManaged dynamic public func addToFilter(_ value: PBFrameworkVideoStories.Filter)
   @objc(removeFilterObject:) @NSManaged dynamic public func removeFromFilter(_ value: PBFrameworkVideoStories.Filter)
   @objc(addFilter:) @NSManaged dynamic public func addToFilter(_ values: Foundation.NSSet)
@@ -1165,7 +1162,7 @@ extension ThemeAsset {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
-extension Video {
+extension PBFrameworkVideoStories.Video {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<PBFrameworkVideoStories.Video>
   @objc @NSManaged dynamic public var maxLength: Swift.Int32 {
     @objc get
